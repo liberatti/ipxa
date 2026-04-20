@@ -5,7 +5,6 @@
 
 [![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
 
 ---
 
@@ -77,6 +76,7 @@ Returns comprehensive GeoIP, ASN, and reputation data.
 {
   "ip": {
     "address": "14.152.94.1",
+    "broadcast": "14.152.95.255",
     "network": "14.152.80.0",
     "prefix": 20,
     "version": 4
@@ -86,11 +86,18 @@ Returns comprehensive GeoIP, ASN, and reputation data.
     "country_code": "CN",
     "country_name": "China"
   },
+  "organization": {
+    "asn_description": "",
+    "asn_name": "CT-DONGGUAN-IDC CHINANET Guangdong province network",
+    "asn_number": 134763
+  },
   "security": {
     "action": "allow",
     "is_permitted": true,
-    "risk_score": 0,
-    "reasons": ["rbl:firehol_level1"]
+    "reasons": [
+      "rbl:firehol_level1"
+    ],
+    "risk_score": 0
   }
 }
 ```
@@ -120,6 +127,16 @@ Optimized for firewalls and middleware. Returns action in body and `X-Action` he
   "action": "allow"
 }
 ```
+
+---
+
+## 🛠️ Testing & Development
+
+IPXA includes an `api.rest` file for rapid API testing.
+
+1.  **VS Code**: Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension.
+2.  **Run**: Open `api.rest` and click `Send Request` above any endpoint.
+3.  **Explore**: Use these examples as a baseline for your own integrations.
 
 ---
 
