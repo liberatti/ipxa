@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM:-linux/amd64} node:lts AS build_frontend
+FROM --platform=$BUILDPLATFORM node:lts AS build_frontend
 
 WORKDIR /app/web
 
@@ -10,7 +10,7 @@ COPY *.json /app/web/
 
 RUN npm run build
 
-FROM --platform=${BUILDPLATFORM:-linux/amd64} alpine:3.23.3 AS main
+FROM --platform=$BUILDPLATFORM alpine:3.23.3 AS main
 
 RUN apk add --no-cache \
     python3 \
