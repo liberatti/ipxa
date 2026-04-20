@@ -6,7 +6,7 @@ import json
 
 APP_BASE = os.environ.get("APP_BASE", ".")
 
-APP_VERSION = json.load(open(os.path.join(APP_BASE, "web/package.json")))['version']
+APP_VERSION = json.load(open(os.path.join(APP_BASE, "package.json")))['version']
 
 DATETIME_FMT = "%Y-%m-%dT%H:%M:%S.%fZ"
 TZ = pytz.timezone("UTC")
@@ -26,7 +26,7 @@ cache = TTLCache(maxsize=1000, ttl=int(os.environ.get("CACHE_TTL", 30)))
 WORKERS = int(os.environ.get("WORKERS", 4))
 THREADS = int(os.environ.get("THREADS", 4))
 
-TELEMETRY_ENABLE = os.environ.get("TELEMETRY_ENABLE", "true") == "true"
+TELEMETRY_ENABLE = bool(os.environ.get("TELEMETRY_ENABLE", "true"))
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://tdyemcybdhpuuvkqmqox.supabase.co/rest/v1")
 SUPABASE_KEY = os.environ.get(
     "SUPABASE_KEY",

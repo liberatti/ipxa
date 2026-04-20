@@ -40,24 +40,23 @@ def register_instance(workspace):
     Args:
         workspace (dict): The workspace configuration containing 'instance_uid'.
     """
-    if not TELEMETRY_ENABLE:
-        return
-    try:
-        requests.post(
-            f"{SUPABASE_URL}/ipxa_instances",
-            json={
-                "instance_uid": workspace['instance_uid'],
-                "source_ip": get_source_ip(),
-                "version": APP_VERSION.replace("v", "")
-            },
-            headers={
-                "apikey": SUPABASE_KEY
-            },
-            timeout=10
-        )
-        logger.info(f"Instance registered successfully with id: {workspace['instance_uid']}")
-    except Exception as e:
-        logger.error(f"Error registering instance: {e}")
+    if TELEMETRY_ENABLE:
+        try:
+            requests.post(
+                f"{SUPABASE_URL}/ipxa_instances",
+                json={
+                    "instance_uid": workspace['instance_uid'],
+                    "source_ip": get_source_ip(),
+                    "version": APP_VERSION.replace("v", "")
+                },
+                headers={
+                    "apikey": SUPABASE_KEY
+                },
+                timeout=10
+            )
+            logger.info(f"Instance registered successfully with id: {workspace['instance_uid']}")
+        except Exception as e:
+            logger.error(f"Error registering instance: {e}")
 
 
 def send_telemetry():

@@ -32,6 +32,7 @@ RUN python3 -m venv /opt/ipxa/venv \
 
 COPY --from=build_frontend /app/web/dist static
 COPY --from=build_frontend /app/web/dist/index.html templates/
+COPY --from=build_frontend /app/web/package.json .
 
 COPY *.py .
 COPY api api

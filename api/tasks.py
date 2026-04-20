@@ -85,12 +85,12 @@ def update_task():
                 case 'iptoasn':
                     feed_tool.update_ip2asn(feed)
                 case 'maxmind':
-                    feed_tool.update_maxmind(
-                        config.MAXMIND_ACCOUNT_ID,
-                        config.MAXMIND_LICENSE_KEY
-                    )
+                    if config.MAXMIND_ACCOUNT_ID and config.MAXMIND_LICENSE_KEY:
+                        feed_tool.update_maxmind(config.MAXMIND_ACCOUNT_ID, config.MAXMIND_LICENSE_KEY)
+                    else:
+                        logger.warning("MaxMind credentials not provided")
                 case None:
-                    logger.info("Provider not supported")
+                    logger.warning("Provider not supported")
                 case _:
                     feed_tool.update_feed(feed)
             feed['updated_on'] = datetime.now(TZ)
