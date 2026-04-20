@@ -1,0 +1,12 @@
+{
+  "name": "feodo_tracker",
+  "slug": "feodo_tracker",
+  "provider": "abuse.ch",
+  "restricted": false,
+  "type": "network",
+  "action": "deny",
+  "source": "https://feodotracker.abuse.ch/downloads/ipblocklist.txt",
+  "description": "Lista de IPs de servidores C2 de botnets ativas, mantida pelo Abuse.ch.",
+  "format": "cdir_text",
+  "update_interval": "hourly"
+}

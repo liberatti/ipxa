@@ -1,0 +1,12 @@
+{
+  "name": "greensnow",
+  "slug": "greensnow",
+  "provider": "greensnow.co",
+  "restricted": false,
+  "type": "network",
+  "action": "deny",
+  "source": "https://blocklist.greensnow.co/greensnow.txt",
+  "description": "Lista focada em IPs que realizam ataques de força bruta colhidos globalmente.",
+  "format": "cdir_text",
+  "update_interval": "hourly"
+}

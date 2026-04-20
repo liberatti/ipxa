@@ -1,0 +1,12 @@
+{
+  "name": "ip2asn-combined",
+  "slug": "iptoasn",
+  "provider": "iptoasn",
+  "restricted": false,
+  "type": "network",
+  "action": "info",
+  "source": "https://iptoasn.com/data/ip2asn-combined.tsv.gz",
+  "description": "GeoInfo",
+  "format": "custom",
+  "update_interval": "daily"
+}

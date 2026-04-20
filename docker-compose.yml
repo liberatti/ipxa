@@ -1,0 +1,21 @@
+services:
+  ipxa:
+    build:
+      context: .
+    image: liberatti/ipxa:latest
+#    environment:
+#      - IBLOCKLIST_USERNAME=
+#      - IBLOCKLIST_PASSWORD=
+#      - MAXMIND_ACCOUNT_ID=
+#      - MAXMIND_LICENSE_KEY=
+    volumes:
+      - ipxa_data:/data
+    ports:
+      - "5002:5000"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+      replicas: 1
+volumes:
+  ipxa_data:

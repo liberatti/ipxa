@@ -1,0 +1,12 @@
+{
+  "name": "ci_bad_guys",
+  "slug": "ci_bad_guys",
+  "provider": "cinsscore",
+  "restricted": false,
+  "type": "network",
+  "action": "deny",
+  "source": "http://cinsscore.com/list/ci-badguys.txt",
+  "description": "RBL managed by cinsscore",
+  "format": "cdir_text",
+  "update_interval": "hourly"
+}
