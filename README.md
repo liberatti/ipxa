@@ -4,7 +4,7 @@
 **IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 50+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
 
 [![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 
 ---
 
