@@ -10,7 +10,7 @@ COPY *.json /app/web/
 
 RUN npm run build
 
-FROM --platform=$BUILDPLATFORM alpine:3.23.3 AS main
+FROM --platform=$TARGETPLATFORM alpine:3.23.3 AS main
 
 RUN apk add --no-cache \
     python3 \
@@ -18,10 +18,10 @@ RUN apk add --no-cache \
     git \
     gcc
   
-ENV PYTHONUSERBASE /opt/ipxa/site-packages
-ENV PATH /opt/ipxa/venv/bin:$PATH
-ENV APP_BASE /opt/ipxa
-ENV DB_PATH /data
+ENV PYTHONUSERBASE=/opt/ipxa/site-packages
+ENV PATH=/opt/ipxa/venv/bin:$PATH
+ENV APP_BASE=/opt/ipxa
+ENV DB_PATH=/data
 
 WORKDIR /opt/ipxa
 
@@ -39,7 +39,7 @@ COPY config config
 
 RUN adduser -D -H -s /sbin/nologin nxguard
 RUN mkdir -p /data \
-  && chown -R nxguard:nxguard /opt/ipxa\
+  && chown -R nxguard:nxguard /opt/ipxa \
   && chown -R nxguard:nxguard /data
   
 USER nxguard
