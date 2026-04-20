@@ -1,0 +1,12 @@
+{
+  "name": "blocklist_de",
+  "slug": "blocklist_de",
+  "provider": "blocklist.de",
+  "restricted": false,
+  "type": "network",
+  "action": "deny",
+  "source": "http://www.blocklist.de/lists/all.txt",
+  "description": "Agregação de IPs que realizaram ataques recentes reportados por diversos serviços.",
+  "format": "cdir_text",
+  "update_interval": "hourly"
+}

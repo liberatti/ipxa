@@ -1,0 +1,115 @@
+
+### 
+
+GET http://localhost:5000/api/ip/info/14.152.94.1
+content-type: application/json
+
+response:
+```json
+{
+  "ip": {
+    "address": "14.152.94.1",
+    "broadcast": "14.152.95.255",
+    "network": "14.152.80.0",
+    "prefix": 20,
+    "version": 4
+  },
+  "location": {
+    "continent": "Asia",
+    "country_code": "CN",
+    "country_name": "China"
+  },
+  "organization": {
+    "asn_description": "",
+    "asn_name": "CT-DONGGUAN-IDC CHINANET Guangdong province network",
+    "asn_number": 134763
+  },
+  "security": {
+    "action": "allow",
+    "is_permitted": true,
+    "reasons": [
+      "rbl:firehol_level1"
+    ],
+    "risk_score": 0
+  }
+}
+```
+###
+
+GET http://localhost:5000/api/ip/check/14.152.94.1
+
+response:
+```json
+{
+  "action": "allow",
+  "confidence": 1.0,
+  "ip": "14.152.94.1",
+  "reasons": [
+    "rbl:firehol_level1"
+  ],
+  "risk_score": 0
+}
+```
+###
+GET http://localhost:5000/api/ip/quick/14.152.94.1
+
+response_headers:
+```
+Server: gunicorn
+Date: Mon, 13 Apr 2026 23:21:31 GMT
+Connection: close
+Content-Type: application/json
+Content-Length: 19
+X-Action: allow
+Access-Control-Allow-Origin: *
+```
+
+response:
+```json
+{
+  "action": "allow"
+}
+```
+### 
+
+
+POST https://tdyemcybdhpuuvkqmqox.supabase.co/rest/v1/ipxa_instances
+content-type: application/json
+prefer: return=minimal
+headers:
+```
+apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkeWVtY3liZGhwdXV2a3FtcW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NDgzMjIsImV4cCI6MjA5MTQyNDMyMn0.I5-JgP2qdavo7o8ncH4TQqKmibfH8aeoRFXdRmQ0Cg0
+```
+
+{
+  "instance_uid": "fa15d6c3d-c349-45a3-85c9-4f115c2d86dc"
+}
+
+
+###
+
+POST https://tdyemcybdhpuuvkqmqox.supabase.co/rest/v1/ip
+content-type: application/json
+
+body:
+```json
+{
+    "ip": "[IP_ADDRESS]",
+    "is_threat": true,
+    "category": "threat",
+    "reasons": [
+        "rbl:firehol_level1"
+    ],
+    "confidence": 0.9
+}
+```
+
+###
+
+GET https://tdyemcybdhpuuvkqmqox.supabase.co/rest/v1/ip
+content-type: application/json
+
+body:
+```json
+
+```

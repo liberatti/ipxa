@@ -1,0 +1,208 @@
+import os
+
+from basic4web.controllers.base_controller import response_data
+from flask import Blueprint, Response
+from geoip2 import database
+
+import config
+from api.repository.geoip_model import GeoIpDao
+from api.repository.rbl_model import RBLDao
+from api.tools.telemetry import register_hit
+from api.tools.common import enrich_country, cached
+from api.tools.network_tool import NetworkTool
+from config import cache
+
+routes = Blueprint("ip", __name__)
+
+SCORE_ALLOW_MAX = 30
+SCORE_MONITOR_MAX = 70
+
+
+@routes.before_request
+def before_request():
+    register_hit()
+
+
+def _compute_action(risk_score: int) -> str:
+    if risk_score <= SCORE_ALLOW_MAX:
+        return "allow"
+    if risk_score <= SCORE_MONITOR_MAX:
+        return "monitor"
+    return "deny"
+
+
+def _fill_org(info: dict) -> dict:
+    org = {}
+    geoip = info["location"]
+    if geoip:
+        org.update({
+            "asn_number": geoip.pop("ans_number", ""),
+            "asn_name": geoip.pop("ans_description", ""),
+            "asn_description": geoip.pop("ans_description", ""),
+        })
+    else:
+        geoip.pop("ans_number", None)
+        geoip.pop("ans_description", None)
+    info.update({"organization": org})
+
+
+def _fill_geo(info: dict) -> dict:
+    geoip = {}
+    ip = info["ip"]["address"]
+    try:
+        with GeoIpDao() as dao:
+            row = dao.find_by_ip(ip)
+            if row:
+                geoip.update(row)
+    except Exception:
+        pass
+
+    for db_name in ["ASN", "City"]:
+        db_file = f"{config.DB_PATH}/GeoLite2-{db_name}.mmdb"
+        if os.path.exists(db_file):
+            with database.Reader(db_file) as reader:
+                try:
+                    if db_name == "ASN":
+                        r_asn = reader.asn(ip)
+                        info["organization"].update({
+                            "asn_number": r_asn.autonomous_system_number,
+                            "asn_name": r_asn.autonomous_system_organization,
+                            "asn_description": r_asn.autonomous_system_organization,
+                        })
+                    elif db_name == "City":
+                        r_city = reader.city(ip)
+                        geoip.update({
+                            "country_code": r_city.country.iso_code,
+                            "country": r_city.country.name,
+                            "region": (r_city.subdivisions.most_specific.name
+                                       if r_city.subdivisions else None),
+                            "city": r_city.city.name,
+                            "latitude": r_city.location.latitude,
+                            "longitude": r_city.location.longitude,
+                        })
+                except Exception:
+                    pass
+
+    if geoip:
+        info['ip'].update({
+            "version": geoip.pop("version", None),
+            "broadcast": geoip.pop("broadcast", None),
+            "network": geoip.pop("network", None),
+            "prefix": geoip.pop("prefix", None),
+        })
+
+        for field in ["source", "idx_s", "idx_e"]:
+            geoip.pop(field, None)
+
+        enrich_country(geoip)
+        info.update({"location": geoip})
+
+
+def _build_ip_info(ip: str) -> dict:
+    ipd = {"address": ip}
+
+    rep = {
+        "reasons": [],
+        "risk_score": 0,
+        "action": "allow",
+        "is_permitted": True
+    }
+
+    try:
+        with RBLDao() as dao:
+            rep_data = dao.get_by_ip(ip)
+            if rep_data:
+                for r in rep_data:
+                    act = r.pop("action", "allow")
+                    if act == "deny":
+                        rep.update({"action": act})
+                    feed = r.get("feed", "")
+                    rep["reasons"].append(f"rbl:{feed}")
+                    rep["risk_score"] += r.get("risk_score", 100)
+    except Exception:
+        pass
+
+    net_info = NetworkTool.extract_network_info(ip, prefix=32)
+    net_info.pop("idx_s", None)
+    net_info.pop("idx_e", None)
+    ipd.update(net_info)
+
+    risk = rep["risk_score"]
+    action = _compute_action(risk)
+    rep["action"] = action
+    rep["is_permitted"] = action == "allow"
+
+    return {
+        "ip": ipd,
+        "security": rep,
+    }
+
+
+@routes.route("/info/<ip>", methods=["GET"])
+@cached("info")
+def ip_info(ip: str) -> Response:
+    info = _build_ip_info(ip)
+    _fill_geo(info)
+    _fill_org(info)
+    cache[f"info:{ip}"] = info
+    headers = {
+        "X-Action": info['security']['action'],
+        "X-Cache": "MISS"
+    }
+    return response_data(info, headers=headers)
+
+
+@routes.route("/check/<ip>", methods=["GET"])
+@cached("check")
+def ip_check(ip: str) -> Response:
+    """Returns a summary risk assessment for the IP."""
+
+    info = _build_ip_info(ip)
+    security = info.get("security", {})
+    risk_score = security.get("risk_score", 0)
+    action = security.get("action", "allow")
+    reasons = security.get("reasons", [])
+
+    # Simple confidence score: the further from the thresholds, the higher the certainty
+    if action == "allow":
+        confidence = round(1.0 - (risk_score / (SCORE_ALLOW_MAX + 1)), 2)
+    elif action == "monitor":
+        mid = (SCORE_ALLOW_MAX + SCORE_MONITOR_MAX) / 2
+        confidence = round(1.0 - abs(risk_score - mid) / mid, 2)
+    else:
+        confidence = round((risk_score - SCORE_MONITOR_MAX) / (100 - SCORE_MONITOR_MAX), 2)
+    confidence = max(0.0, min(1.0, confidence))
+
+    result = {
+        "ip": ip,
+        "risk_score": risk_score,
+        "action": action,
+        "confidence": confidence,
+        "reasons": reasons
+    }
+    cache[f"check:{ip}"] = result
+    headers = {
+        "X-Action": action,
+        "X-Cache": "MISS"
+    }
+    return response_data(result, headers=headers)
+
+
+@routes.route("/quick/<ip>", methods=["GET"])
+@cached("quick")
+def ip_quick(ip: str) -> Response:
+    """Returns only the action and TTL for quick decisions (e.g., firewall)."""
+
+    info = _build_ip_info(ip)
+    security = info.get("security", {})
+    action = security.get("action", "allow")
+
+    result = {
+        "action": action
+    }
+    cache[f"quick:{ip}"] = result
+    headers = {
+        "X-Action": action,
+        "X-Cache": "MISS"
+    }
+    return response_data(result, headers=headers)

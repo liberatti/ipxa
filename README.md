@@ -1,0 +1,174 @@
+# 🛡️ IPXA
+> **IP Reputation and Network Intelligence Monitoring**
+
+**IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 50+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
+
+[![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](#)
+
+---
+
+## ⚡ Performance & Privacy
+
+- 🚀 **Ultra-low Latency**: Sub-5ms response times.
+- 🔒 **100% Private**: Runs entirely on your infrastructure with optional, anonymous telemetry.
+- 💰 **Zero Cost**: No per-request fees or subscription limits.
+- 🔌 **Air-gap Ready**: Optimized for restricted and high-security environments.
+
+---
+
+## 📸 Interface
+
+![Dashboard](docs/screenshot-01.png)
+*Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
+
+---
+
+## 🚀 Key Features
+
+*   🌍 **Intelligent GeoIP**: Local integration with MaxMind and ip2asn for lightning-fast lookups.
+*   🚫 **RBL Consolidation**: Automated crawlers for 50+ threat feed sources.
+*   ⚡ **Multiple API Flavors**: Specialized endpoints for exhaustive data, security checks, or high-speed header-based responses.
+*   🎨 **Modern Dashboard**: Intuitive interface built for rapid analysis and manual IP investigation.
+
+---
+
+## 🛠️ Quick Deploy
+
+IPXA is distributed as a lightweight Docker image.
+
+### Docker Compose
+
+```yaml
+services:
+  ipxa:
+    image: liberatti/ipxa:latest
+    container_name: ipxa
+    environment:
+      - IBLOCKLIST_USERNAME=${IBLOCKLIST_USERNAME}
+      - IBLOCKLIST_PASSWORD=${IBLOCKLIST_PASSWORD}
+      - MAXMIND_ACCOUNT_ID=${MAXMIND_ACCOUNT_ID}
+      - MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}
+    volumes:
+      - ipxa_data:/data
+    ports:
+      - "5000:5000"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+volumes:
+  ipxa_data:
+```
+
+---
+
+## 📡 API Reference
+
+### 1. Full IP Info
+`GET /api/ip/info/{address}`
+Returns comprehensive GeoIP, ASN, and reputation data.
+
+**Example Response:**
+```json
+{
+  "ip": {
+    "address": "14.152.94.1",
+    "network": "14.152.80.0",
+    "prefix": 20,
+    "version": 4
+  },
+  "location": {
+    "continent": "Asia",
+    "country_code": "CN",
+    "country_name": "China"
+  },
+  "security": {
+    "action": "allow",
+    "is_permitted": true,
+    "risk_score": 0,
+    "reasons": ["rbl:firehol_level1"]
+  }
+}
+```
+
+### 2. Security Check
+`GET /api/ip/check/{address}`
+Simplified response focused on reputation and risk assessment.
+
+**Example Response:**
+```json
+{
+  "ip": "14.152.94.1",
+  "action": "allow",
+  "risk_score": 0,
+  "confidence": 1.0,
+  "reasons": ["rbl:firehol_level1"]
+}
+```
+
+### 3. Quick Decision (Headless)
+`GET /api/ip/quick/{address}`
+Optimized for firewalls and middleware. Returns action in body and `X-Action` header.
+
+**Example Response:**
+```json
+{
+  "action": "allow"
+}
+```
+
+---
+
+## 🔌 RBL Feed Configuration
+
+The architectural design allows for dynamic addition of new feeds by adding JSON files in `config/`.
+
+| Field | Description |
+| :--- | :--- |
+| `name` | Human-friendly identifier for the feed |
+| `source` | Public URL for download (CIDR or IP list) |
+| `format` | `cdir_text` (plain text) or `cdir_gz` (compressed) |
+| `action` | Suggested action (e.g., `deny`) |
+
+---
+
+## 📦 Integrated Feeds
+
+Includes a pre-configured library of industry-standard feeds:
+
+- **FireHOL Level 1-4**: Highly curated aggregation.
+- **Cisco Talos & DShield**: Global threat intelligence.
+- **Abuse.ch Feodo**: Botnet C2 tracking.
+- **Spamhaus DROP**: SBL Advisory blocks.
+- **Emerging Threats**: Known compromised hosts.
+- **Blocklist.de & GreenSnow**: SSH/Mail brute force.
+
+---
+
+## 📊 Telemetry
+
+To help improve IPXA, the application collects anonymous usage data. This information is used to track version adoption and platform growth.
+
+**What is collected:**
+*   **Instance ID**: A randomly generated unique identifier for your installation.
+*   **Version**: The current version of IPXA you are running.
+*   **Source IP**: The public IP of the instance (used for geographic distribution analysis).
+*   **Hits**: The total number of IP lookups processed.
+
+**How to opt-out:**
+Telemetry is enabled by default. You can disable it at any time by setting the following environment variable in your `docker-compose.yml`:
+
+```yaml
+environment:
+  - TELEMETRY_ENABLE=false
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
