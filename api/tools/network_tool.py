@@ -202,3 +202,20 @@ class NetworkTool:
         else:
             raise ValueError("Unsupported IP version")
         return prefix
+
+    @classmethod
+    def in_network(cls, ip: str, ignore_list: str) -> bool:
+        """
+        Checks if an IP address is within any of the networks in the ignore list.
+
+        Args:
+            ip (str): The IP address to check.
+            ignore_list (str): Comma-separated list of networks in CIDR notation.
+
+        Returns:
+            bool: True if the IP is within any of the networks, False otherwise.
+        """
+        for net in ignore_list.split(","):
+            if ipaddress.ip_network(net.strip(), strict=False).overlaps(ipaddress.ip_network(ip, strict=False)):
+                return True
+        return False

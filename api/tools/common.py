@@ -22,7 +22,9 @@ def cached(prefix):
             if hit:
                 headers = {
                     "X-Risk-Score": hit['security']['risk_score'],
-                    "X-Cache": "HIT"
+                    "X-Cache": "HIT",
+                    "X-Country-Code": hit["location"]["country_code"],
+                    "X-Ignore": hit["security"]["ignore"],
                 }
                 return response_data(hit, headers=headers)
             result = f(ip, *args, **kwargs)

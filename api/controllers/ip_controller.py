@@ -95,17 +95,21 @@ def _build_ip_info(ip: str) -> dict:
 
     rep = {
         "reasons": [],
-        "risk_score": 0
+        "risk_score": 0,
+        "ignore": False,
     }
 
     try:
-        with RBLDao() as dao:
-            rep_data = dao.get_by_ip(ip)
-            if rep_data:
-                for r in rep_data:
-                    feed = r.get("feed", "")
-                    rep["reasons"].append(f"rbl:{feed}")
-                    rep["risk_score"] += r.get("risk_score", 0)
+        if NetworkTool.in_network(ip, config.IGNORE_IP_CIDRS):
+            rep["ignore"] = True
+        else:
+            with RBLDao() as dao:
+                rep_data = dao.get_by_ip(ip)
+                if rep_data:
+                    for r in rep_data:
+                        feed = r.get("feed", "")
+                        rep["reasons"].append(f"rbl:{feed}")
+                        rep["risk_score"] += r.get("risk_score", 0)
     except Exception:
         pass
 
@@ -131,7 +135,9 @@ def ip_info(ip: str) -> Response:
     cache[f"info:{ip}"] = info
     headers = {
         "X-Risk-Score": info["security"]["risk_score"],
-        "X-Cache": "MISS"
+        "X-Cache": "MISS",
+        "X-Country-Code": info["location"]["country_code"],
+        "X-Ignore": info["security"]["ignore"],
     }
     return response_data(info, headers=headers)
 
@@ -154,7 +160,9 @@ def ip_check(ip: str) -> Response:
     cache[f"check:{ip}"] = result
     headers = {
         "X-Risk-Score": security.get("risk_score", 0),
-        "X-Cache": "MISS"
+        "X-Cache": "MISS",
+        "X-Country-Code": info["location"]["country_code"],
+        "X-Ignore": info["security"]["ignore"],
     }
     return response_data(result, headers=headers)
 
@@ -173,6 +181,8 @@ def ip_quick(ip: str) -> Response:
     cache[f"quick:{ip}"] = result
     headers = {
         "X-Risk-Score": security.get("risk_score", 0),
-        "X-Cache": "MISS"
+        "X-Cache": "MISS",
+        "X-Country-Code": info["location"]["country_code"],
+        "X-Ignore": info["security"]["ignore"],
     }
     return response_data(result, headers=headers)

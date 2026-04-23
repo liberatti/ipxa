@@ -3,7 +3,8 @@ services:
     build:
       context: .
     image: liberatti/ipxa:latest
-#    environment:
+    environment:
+      - IGNORE_IP_CIDRS=127.0.0.1,192.168.0.0/16
 #      - IBLOCKLIST_USERNAME=
 #      - IBLOCKLIST_PASSWORD=
 #      - MAXMIND_ACCOUNT_ID=

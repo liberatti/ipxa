@@ -115,12 +115,12 @@ Simplified response focused on reputation and risk assessment.
 
 ### 3. Quick Decision (Headless)
 `GET /api/ip/quick/{address}`
-Optimized for firewalls and middleware. Returns action in body and `X-Action` header.
+Optimized for firewalls and middleware. Returns risk score in body and `X-Risk-Score` header.
 
 **Example Response:**
 ```json
 {
-  "risk_score": 0
+  "risk_score": 9
 }
 ```
 
@@ -145,7 +145,6 @@ The architectural design allows for dynamic addition of new feeds by adding JSON
 | `name` | Human-friendly identifier for the feed |
 | `source` | Public URL for download (CIDR or IP list) |
 | `format` | `cdir_text` (plain text) or `cdir_gz` (compressed) |
-| `action` | Suggested action (e.g., `deny`) |
 
 ---
 
