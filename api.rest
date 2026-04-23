@@ -1,15 +1,20 @@
-# @name FullIpInfo
+@baseUrl = http://localhost:5000
+@ip = 14.152.94.1
+
+###
+
+# @name Info
 # Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
-GET http://localhost:5002/api/ip/info/14.152.94.1
+GET {{baseUrl}}/api/ip/info/{{ip}}
 content-type: application/json
 
 response_headers:
 ```
 Content-Type: application/json
-X-Risk-Score: 9
-X-Country-Code: CN
-X-Cache: MISS
-X-Ignore: False
+x-risk-score: 9
+x-country-code: CN
+x-cache: miss
+x-ignore: false
 ```
 
 response:
@@ -42,16 +47,16 @@ response:
 ```
 ###
 
-# @name SecurityCheck
+# @name Check
 # Simplified response focused on reputation and risk assessment.
-GET http://localhost:5002/api/ip/check/14.152.94.1
+GET {{baseUrl}}/api/ip/check/{{ip}}
 
 response_headers:
 ```
 Content-Type: application/json
-X-Risk-Score: 9
-X-Cache: MISS
-X-Ignore: False
+x-risk-score: 9
+x-cache: miss
+x-ignore: false
 ```
 
 response:
@@ -66,16 +71,16 @@ response:
 ```
 ###
 
-# @name QuickDecision
-# Optimized for firewalls and middleware. Returns action in body and X-Action header.
-GET http://localhost:5002/api/ip/quick/14.152.94.1
+# @name Quick
+# Optimized for firewalls and middleware. Returns risk score in body and X-Risk-Score header.
+GET {{baseUrl}}/api/ip/quick/{{ip}}
 
 response_headers:
 ```
 Content-Type: application/json
-X-Risk-Score: 9
-X-Cache: MISS
-X-Ignore: False
+x-risk-score: 9
+x-cache: miss
+x-ignore: false
 ```
 
 response:

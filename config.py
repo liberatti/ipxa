@@ -16,7 +16,7 @@ MAINTENANCE_WINDOW = "01:00"
 LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
 DB_PATH = os.environ.get("DB_PATH", 'data')
 
-IGNORE_IP_CIDRS = os.environ.get("IGNORE_IP_CIDRS", "127.0.0.1,192.168.0.0/16,10.0.0.1")
+IGNORE_IP_CIDRS = os.environ.get("IGNORE_IP_CIDRS", "127.0.0.1")
 
 IBLOCKLIST_USERNAME = os.environ.get("IBLOCKLIST_USERNAME", None)
 IBLOCKLIST_PASSWORD = os.environ.get("IBLOCKLIST_PASSWORD", None)

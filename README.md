@@ -64,6 +64,61 @@ volumes:
   ipxa_data:
 ```
 
+The `IGNORE_IP_CIDRS` variable is a comma separated list of IP CIDRs that should be ignored by IPXA hooks. 
+In case the ip is in this list, the risk score will be 0 and country code will be `--`.
+
+---
+
+## 🔗 Server Integrations (Hooks)
+
+IPXA provides native, high-performance middleware hooks for popular web servers, allowing you to block malicious traffic at the edge before it reaches your application.
+
+### Apache (`mod_lua`)
+
+Integrate IPXA directly into your Apache configuration using `mod_lua` to evaluate IPs on the fly.
+
+**Quick Setup:**
+1. Install `mod_lua` and `lua-socket` (e.g., `yum install httpd mod_lua lua-socket`).
+2. Copy `hooks/httpd/lua/*.lua` to your Apache lua directory (e.g., `/etc/httpd/lua/`).
+3. Update `/etc/httpd/lua/config.lua` with your IPXA API URL and settings.
+4. Hook into your `VirtualHost`:
+   ```apacheconf
+   <VirtualHost *:80>
+       ServerName example.com
+       DocumentRoot /var/www/html
+       LuaHookAccessChecker /etc/httpd/lua/ipxa.lua ip_info_check
+   </VirtualHost>
+   ```
+
+*(See `hooks/httpd/README.md` for full details).*
+
+### OpenResty / Nginx
+
+Leverage the power of Lua in Nginx via OpenResty for ultra-low latency IP checking, complete with local caching.
+
+**Quick Setup:**
+1. Install the `lua-resty-http` package (via `luarocks`).
+2. Copy the contents of `hooks/openresty/lua/` to your OpenResty `lualib` path (e.g., `/usr/local/openresty/lualib/ipxa/`).
+3. Update `config.lua` with your IPXA API URL and blocklist settings.
+4. Configure your `nginx.conf`:
+   ```nginx
+   http {
+       # ...
+       lua_package_path "/usr/local/openresty/lualib/ipxa/?.lua;;";
+       lua_shared_dict ip_cache 10m; # Required for caching
+
+       server {
+           # ...
+           location / {
+               access_by_lua_file /usr/local/openresty/lualib/ipxa/ip_info_check.lua;
+               # ...
+           }
+       }
+   }
+   ```
+
+*(Check `hooks/openresty/nginx.conf` and `hooks/openresty/Dockerfile` for working examples).*
+
 ---
 
 ## 📡 API Reference
@@ -116,7 +171,7 @@ Simplified response focused on reputation and risk assessment.
 
 ### 3. Quick Decision (Headless)
 `GET /api/ip/quick/{address}`
-Optimized for firewalls and middleware. Returns risk score in body and `X-Risk-Score` header.
+Optimized for firewalls and middleware. Returns risk score in body and `x-risk-score` header.
 
 **Example Response:**
 ```json

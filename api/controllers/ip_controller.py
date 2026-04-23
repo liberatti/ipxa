@@ -134,10 +134,10 @@ def ip_info(ip: str) -> Response:
     _fill_org(info)
     cache[f"info:{ip}"] = info
     headers = {
-        "X-Risk-Score": info["security"]["risk_score"],
-        "X-Cache": "MISS",
-        "X-Country-Code": info["location"]["country_code"],
-        "X-Ignore": info["security"]["ignore"],
+        "x-risk-score": info["security"]["risk_score"],
+        "x-cache": "miss",
+        "x-country-code": info["location"]["country_code"],
+        "x-ignore": info["security"]["ignore"],
     }
     return response_data(info, headers=headers)
 
@@ -159,9 +159,9 @@ def ip_check(ip: str) -> Response:
     }
     cache[f"check:{ip}"] = result
     headers = {
-        "X-Risk-Score": security.get("risk_score", 0),
-        "X-Cache": "MISS",
-        "X-Ignore": info["security"]["ignore"],
+        "x-risk-score": security.get("risk_score", 0),
+        "x-cache": "miss",
+        "x-ignore": info["security"]["ignore"],
     }
     return response_data(result, headers=headers)
 
@@ -179,8 +179,8 @@ def ip_quick(ip: str) -> Response:
     }
     cache[f"quick:{ip}"] = result
     headers = {
-        "X-Risk-Score": security.get("risk_score", 0),
-        "X-Cache": "MISS",
-        "X-Ignore": info["security"]["ignore"],
+        "x-risk-score": security.get("risk_score", 0),
+        "x-cache": "miss",
+        "x-ignore": info["security"]["ignore"],
     }
     return response_data(result, headers=headers)
