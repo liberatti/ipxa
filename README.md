@@ -4,7 +4,11 @@
 **IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 50+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
 
 [![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
+<<<<<<< HEAD
+[![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
+=======
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+>>>>>>> main
 
 ---
 
@@ -45,10 +49,18 @@ services:
     image: liberatti/ipxa:latest
     container_name: ipxa
     environment:
+<<<<<<< HEAD
+      # - IBLOCKLIST_USERNAME=
+      # - IBLOCKLIST_PASSWORD=
+      # - MAXMIND_ACCOUNT_ID=
+      # - MAXMIND_LICENSE_KEY=
+      - IGNORE_IP_CIDRS=127.0.0.1,192.168.0.0/16,::1
+=======
       - IBLOCKLIST_USERNAME=${IBLOCKLIST_USERNAME}
       - IBLOCKLIST_PASSWORD=${IBLOCKLIST_PASSWORD}
       - MAXMIND_ACCOUNT_ID=${MAXMIND_ACCOUNT_ID}
       - MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}
+>>>>>>> main
     volumes:
       - ipxa_data:/data
     ports:
@@ -63,6 +75,64 @@ volumes:
   ipxa_data:
 ```
 
+<<<<<<< HEAD
+The `IGNORE_IP_CIDRS` variable is a comma separated list of IP CIDRs that should be ignored by IPXA hooks. 
+In case the ip is in this list, the risk score will be 0 and country code will be `--`.
+
+---
+
+## 🔗 Server Integrations (Hooks)
+
+IPXA provides native, high-performance middleware hooks for popular web servers, allowing you to block malicious traffic at the edge before it reaches your application.
+
+### Apache (`mod_lua`)
+
+Integrate IPXA directly into your Apache configuration using `mod_lua` to evaluate IPs on the fly.
+
+**Quick Setup:**
+1. Install `mod_lua` and `lua-socket` (e.g., `yum install httpd mod_lua lua-socket`).
+2. Copy `hooks/httpd/lua/*.lua` to your Apache lua directory (e.g., `/etc/httpd/lua/`).
+3. Update `/etc/httpd/lua/config.lua` with your IPXA API URL and settings.
+4. Hook into your `VirtualHost`:
+   ```apacheconf
+   <VirtualHost *:80>
+       ServerName example.com
+       DocumentRoot /var/www/html
+       LuaHookAccessChecker /etc/httpd/lua/ipxa.lua ip_info_check
+   </VirtualHost>
+   ```
+
+*(See `hooks/httpd/README.md` for full details).*
+
+### OpenResty / Nginx
+
+Leverage the power of Lua in Nginx via OpenResty for ultra-low latency IP checking, complete with local caching.
+
+**Quick Setup:**
+1. Install the `lua-resty-http` package (via `luarocks`).
+2. Copy the contents of `hooks/openresty/lua/` to your OpenResty `lualib` path (e.g., `/usr/local/openresty/lualib/ipxa/`).
+3. Update `config.lua` with your IPXA API URL and blocklist settings.
+4. Configure your `nginx.conf`:
+   ```nginx
+   http {
+       # ...
+       lua_package_path "/usr/local/openresty/lualib/ipxa/?.lua;;";
+       lua_shared_dict ip_cache 10m; # Required for caching
+
+       server {
+           # ...
+           location / {
+               access_by_lua_file /usr/local/openresty/lualib/ipxa/ip_info_check.lua;
+               # ...
+           }
+       }
+   }
+   ```
+
+*(Check `hooks/openresty/nginx.conf` and `hooks/openresty/Dockerfile` for working examples).*
+
+=======
+>>>>>>> main
 ---
 
 ## 📡 API Reference
@@ -92,8 +162,11 @@ Returns comprehensive GeoIP, ASN, and reputation data.
     "asn_number": 134763
   },
   "security": {
+<<<<<<< HEAD
+=======
     "action": "allow",
     "is_permitted": true,
+>>>>>>> main
     "reasons": [
       "rbl:firehol_level1"
     ],
@@ -110,21 +183,33 @@ Simplified response focused on reputation and risk assessment.
 ```json
 {
   "ip": "14.152.94.1",
+<<<<<<< HEAD
+  "risk_score": 0,
+=======
   "action": "allow",
   "risk_score": 0,
   "confidence": 1.0,
+>>>>>>> main
   "reasons": ["rbl:firehol_level1"]
 }
 ```
 
 ### 3. Quick Decision (Headless)
 `GET /api/ip/quick/{address}`
+<<<<<<< HEAD
+Optimized for firewalls and middleware. Returns risk score in body and `x-risk-score` header.
+=======
 Optimized for firewalls and middleware. Returns action in body and `X-Action` header.
+>>>>>>> main
 
 **Example Response:**
 ```json
 {
+<<<<<<< HEAD
+  "risk_score": 9
+=======
   "action": "allow"
+>>>>>>> main
 }
 ```
 
@@ -149,7 +234,10 @@ The architectural design allows for dynamic addition of new feeds by adding JSON
 | `name` | Human-friendly identifier for the feed |
 | `source` | Public URL for download (CIDR or IP list) |
 | `format` | `cdir_text` (plain text) or `cdir_gz` (compressed) |
+<<<<<<< HEAD
+=======
 | `action` | Suggested action (e.g., `deny`) |
+>>>>>>> main
 
 ---
 

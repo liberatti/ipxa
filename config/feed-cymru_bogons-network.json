@@ -3,10 +3,19 @@
   "slug": "cymru_bogons",
   "provider": "team-cymru",
   "restricted": false,
+<<<<<<< HEAD
+  "type": "reputation",
+  "source": "https://www.team-cymru.org/Services/Bogons/fullbogons-ipv4.txt",
+  "description": "Lista de 'Bogons' (IPs não alocados ou reservados) mantida pela Team Cymru. Essencial para bloquear tráfego de redes que não deveriam existir publicamente.",
+  "format": "cdir_text",
+  "update_interval": "hourly",
+  "risk_score": 5
+=======
   "type": "network",
   "action": "deny",
   "source": "https://www.team-cymru.org/Services/Bogons/fullbogons-ipv4.txt",
   "description": "Lista de 'Bogons' (IPs não alocados ou reservados) mantida pela Team Cymru. Essencial para bloquear tráfego de redes que não deveriam existir publicamente.",
   "format": "cdir_text",
   "update_interval": "hourly"
+>>>>>>> main
 }

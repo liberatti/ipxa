@@ -3,10 +3,19 @@
   "slug": "et_compromised",
   "provider": "proofpoint",
   "restricted": false,
+<<<<<<< HEAD
+  "type": "reputation",
+  "source": "https://rules.emergingthreats.net/blockrules/compromised-ips.txt",
+  "description": "IPs conhecidos por estarem comprometidos ou envolvidos em atividades de botnet (ET Open).",
+  "format": "cdir_text",
+  "update_interval": "hourly",
+  "risk_score": 8
+=======
   "type": "network",
   "action": "deny",
   "source": "https://rules.emergingthreats.net/blockrules/compromised-ips.txt",
   "description": "IPs conhecidos por estarem comprometidos ou envolvidos em atividades de botnet (ET Open).",
   "format": "cdir_text",
   "update_interval": "hourly"
+>>>>>>> main
 }

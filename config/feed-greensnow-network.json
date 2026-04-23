@@ -3,10 +3,19 @@
   "slug": "greensnow",
   "provider": "greensnow.co",
   "restricted": false,
+<<<<<<< HEAD
+  "type": "reputation",
+  "source": "https://blocklist.greensnow.co/greensnow.txt",
+  "description": "Lista focada em IPs que realizam ataques de força bruta colhidos globalmente.",
+  "format": "cdir_text",
+  "update_interval": "hourly",
+  "risk_score": 7
+=======
   "type": "network",
   "action": "deny",
   "source": "https://blocklist.greensnow.co/greensnow.txt",
   "description": "Lista focada em IPs que realizam ataques de força bruta colhidos globalmente.",
   "format": "cdir_text",
   "update_interval": "hourly"
+>>>>>>> main
 }
