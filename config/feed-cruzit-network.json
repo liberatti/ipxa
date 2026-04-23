@@ -3,10 +3,10 @@
   "slug": "cruzit",
   "provider": "iblocklist",
   "restricted": false,
-  "type": "network",
-  "action": "deny",
+  "type": "reputation",
   "source": "http://list.iblocklist.com/?list=czvaehmjpsnwwttrdoyl&fileformat=cidr&archiveformat=gz",
   "description": "Individual IP addresses of compromised machines scanning for vulnerabilities and DDOS attacks.",
   "format": "cdir_gz",
-  "update_interval": "hourly"
+  "update_interval": "hourly",
+  "risk_score": 8
 }

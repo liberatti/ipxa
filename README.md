@@ -92,8 +92,6 @@ Returns comprehensive GeoIP, ASN, and reputation data.
     "asn_number": 134763
   },
   "security": {
-    "action": "allow",
-    "is_permitted": true,
     "reasons": [
       "rbl:firehol_level1"
     ],
@@ -110,9 +108,7 @@ Simplified response focused on reputation and risk assessment.
 ```json
 {
   "ip": "14.152.94.1",
-  "action": "allow",
   "risk_score": 0,
-  "confidence": 1.0,
   "reasons": ["rbl:firehol_level1"]
 }
 ```
@@ -124,7 +120,7 @@ Optimized for firewalls and middleware. Returns action in body and `X-Action` he
 **Example Response:**
 ```json
 {
-  "action": "allow"
+  "risk_score": 0
 }
 ```
 

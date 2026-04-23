@@ -3,10 +3,10 @@
   "slug": "blocklist_de",
   "provider": "blocklist.de",
   "restricted": false,
-  "type": "network",
-  "action": "deny",
+  "type": "reputation",
   "source": "http://www.blocklist.de/lists/all.txt",
   "description": "Agregação de IPs que realizaram ataques recentes reportados por diversos serviços.",
   "format": "cdir_text",
-  "update_interval": "hourly"
+  "update_interval": "hourly",
+  "risk_score": 10
 }

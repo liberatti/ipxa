@@ -21,7 +21,7 @@ def cached(prefix):
             hit = cache.get(cache_key)
             if hit:
                 headers = {
-                    "X-Action": hit['security']['action'] if 'security' in hit else hit['action'],
+                    "X-Risk-Score": hit['security']['risk_score'],
                     "X-Cache": "HIT"
                 }
                 return response_data(hit, headers=headers)

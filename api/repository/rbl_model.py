@@ -26,7 +26,7 @@ class RBLDao(SQLite3DAO):
                 idx_s BLOB,
                 idx_e BLOB,
                 feed TEXT,
-                cls TEXT
+                risk_score INTEGER
             );
         """)
 
@@ -44,7 +44,7 @@ class RBLDao(SQLite3DAO):
         ip_packed = ip_obj.packed
         ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
         query = (f"""
-            SELECT network, broadcast, prefix,version, feed, cls
+            SELECT network, broadcast, prefix,version, feed,risk_score    
             FROM {self.table_name}
             WHERE idx_s <= ? AND idx_e >= ? and version= ?
             ORDER BY idx_s
@@ -80,7 +80,7 @@ class RBLDao(SQLite3DAO):
             ip_obj = ipaddress.ip_address(ip_str)
             ip_packed = ip_obj.packed
             ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
-            query = (f"select network, broadcast, prefix,version, feed,cls"
+            query = (f"select network, broadcast, prefix,version, feed,risk_score"
                      f" from {self.table_name}"
                      f" where idx_s <= ? and idx_e >= ? and version=?")
             return self._query(query, params=(ip_packed, ip_packed, ver), fetch=True)

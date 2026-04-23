@@ -85,7 +85,7 @@ def update_feed(feed):
                     if line.strip() and "#" not in line:
                         if NetworkTool.is_network(line):
                             addr = line.split("/")
-                            net = {"feed": feed["name"], "cls": feed["action"]}
+                            net = {"feed": feed["name"], "risk_score": feed.get("risk_score",0)}
                             if len(addr) <= 1:
                                 addr.append(32)
                             info_n = NetworkTool.extract_network_info(

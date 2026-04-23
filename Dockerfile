@@ -39,10 +39,11 @@ COPY api api
 COPY config config
 
 RUN adduser -D -H -s /sbin/nologin nxguard
+
+USER root
 RUN mkdir -p /data \
-  && chown -R nxguard:nxguard /opt/ipxa \
-  && chown -R nxguard:nxguard /data
-  
+  && chown nxguard:nxguard /data
+
 USER nxguard
 
 EXPOSE 5000

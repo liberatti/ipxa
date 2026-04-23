@@ -3,10 +3,10 @@
   "slug": "talos_intel",
   "provider": "cisco",
   "restricted": false,
-  "type": "network",
-  "action": "deny",
+  "type": "reputation",
   "source": "https://www.talosintelligence.com/documents/ip-blacklist",
   "description": "Cisco Talos Intelligence Group IP Blacklist. Uma das fontes mais confiáveis de reputação de IP do mundo.",
   "format": "cdir_text",
-  "update_interval": "hourly"
+  "update_interval": "hourly",
+  "risk_score": 9
 }

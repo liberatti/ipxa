@@ -4,9 +4,9 @@
   "provider": "spamhaus",
   "restricted": false,
   "type": "network",
-  "action": "deny",
   "source": "https://www.spamhaus.org/drop/drop.txt",
   "description": "Blocos de rede (CIDR) controlados inteiramente por atividades criminosas.",
   "format": "cdir_text",
-  "update_interval": "hourly"
+  "update_interval": "hourly",
+  "risk_score": 8
 }
