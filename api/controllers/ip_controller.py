@@ -23,17 +23,6 @@ def before_request():
     register_hit()
 
 
-<<<<<<< HEAD
-=======
-def _compute_action(risk_score: int) -> str:
-    if risk_score <= SCORE_ALLOW_MAX:
-        return "allow"
-    if risk_score <= SCORE_MONITOR_MAX:
-        return "monitor"
-    return "deny"
-
-
->>>>>>> main
 def _fill_org(info: dict) -> dict:
     org = {}
     geoip = info["location"]
@@ -107,7 +96,6 @@ def _build_ip_info(ip: str) -> dict:
     rep = {
         "reasons": [],
         "risk_score": 0,
-<<<<<<< HEAD
         "ignore": False,
     }
 
@@ -122,23 +110,6 @@ def _build_ip_info(ip: str) -> dict:
                         feed = r.get("feed", "")
                         rep["reasons"].append(f"rbl:{feed}")
                         rep["risk_score"] += r.get("risk_score", 0)
-=======
-        "action": "allow",
-        "is_permitted": True
-    }
-
-    try:
-        with RBLDao() as dao:
-            rep_data = dao.get_by_ip(ip)
-            if rep_data:
-                for r in rep_data:
-                    act = r.pop("action", "allow")
-                    if act == "deny":
-                        rep.update({"action": act})
-                    feed = r.get("feed", "")
-                    rep["reasons"].append(f"rbl:{feed}")
-                    rep["risk_score"] += r.get("risk_score", 100)
->>>>>>> main
     except Exception:
         pass
 
@@ -146,14 +117,6 @@ def _build_ip_info(ip: str) -> dict:
     net_info.pop("idx_s", None)
     net_info.pop("idx_e", None)
     ipd.update(net_info)
-
-    risk = rep["risk_score"]
-<<<<<<< HEAD
-=======
-    action = _compute_action(risk)
-    rep["action"] = action
-    rep["is_permitted"] = action == "allow"
->>>>>>> main
 
     return {
         "ip": ipd,
@@ -169,15 +132,10 @@ def ip_info(ip: str) -> Response:
     _fill_org(info)
     cache[f"info:{ip}"] = info
     headers = {
-<<<<<<< HEAD
         "x-risk-score": info["security"]["risk_score"],
         "x-cache": "miss",
         "x-country-code": info["location"]["country_code"],
         "x-ignore": info["security"]["ignore"],
-=======
-        "X-Action": info['security']['action'],
-        "X-Cache": "MISS"
->>>>>>> main
     }
     return response_data(info, headers=headers)
 
@@ -190,44 +148,18 @@ def ip_check(ip: str) -> Response:
     info = _build_ip_info(ip)
     security = info.get("security", {})
     risk_score = security.get("risk_score", 0)
-<<<<<<< HEAD
     reasons = security.get("reasons", [])
 
     result = {
         "ip": ip,
         "risk_score": risk_score,
-=======
-    action = security.get("action", "allow")
-    reasons = security.get("reasons", [])
-
-    # Simple confidence score: the further from the thresholds, the higher the certainty
-    if action == "allow":
-        confidence = round(1.0 - (risk_score / (SCORE_ALLOW_MAX + 1)), 2)
-    elif action == "monitor":
-        mid = (SCORE_ALLOW_MAX + SCORE_MONITOR_MAX) / 2
-        confidence = round(1.0 - abs(risk_score - mid) / mid, 2)
-    else:
-        confidence = round((risk_score - SCORE_MONITOR_MAX) / (100 - SCORE_MONITOR_MAX), 2)
-    confidence = max(0.0, min(1.0, confidence))
-
-    result = {
-        "ip": ip,
-        "risk_score": risk_score,
-        "action": action,
-        "confidence": confidence,
->>>>>>> main
         "reasons": reasons
     }
     cache[f"check:{ip}"] = result
     headers = {
-<<<<<<< HEAD
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
         "x-ignore": info["security"]["ignore"],
-=======
-        "X-Action": action,
-        "X-Cache": "MISS"
->>>>>>> main
     }
     return response_data(result, headers=headers)
 
@@ -235,7 +167,6 @@ def ip_check(ip: str) -> Response:
 @routes.route("/quick/<ip>", methods=["GET"])
 @cached("quick")
 def ip_quick(ip: str) -> Response:
-<<<<<<< HEAD
     """Returns only the risk_score and TTL for quick decisions (e.g., firewall)."""
 
     info = _build_ip_info(ip)
@@ -249,20 +180,5 @@ def ip_quick(ip: str) -> Response:
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
         "x-ignore": info["security"]["ignore"],
-=======
-    """Returns only the action and TTL for quick decisions (e.g., firewall)."""
-
-    info = _build_ip_info(ip)
-    security = info.get("security", {})
-    action = security.get("action", "allow")
-
-    result = {
-        "action": action
-    }
-    cache[f"quick:{ip}"] = result
-    headers = {
-        "X-Action": action,
-        "X-Cache": "MISS"
->>>>>>> main
     }
     return response_data(result, headers=headers)

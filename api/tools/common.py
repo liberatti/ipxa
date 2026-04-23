@@ -21,15 +21,10 @@ def cached(prefix):
             hit = cache.get(cache_key)
             if hit:
                 headers = {
-<<<<<<< HEAD
                     "x-risk-score": hit['security']['risk_score'],
                     "x-cache": "hit",
                     "x-country-code": hit["location"]["country_code"],
                     "x-ignore": hit["security"]["ignore"],
-=======
-                    "X-Action": hit['security']['action'] if 'security' in hit else hit['action'],
-                    "X-Cache": "HIT"
->>>>>>> main
                 }
                 return response_data(hit, headers=headers)
             result = f(ip, *args, **kwargs)
