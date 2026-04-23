@@ -9,7 +9,7 @@ Content-Type: application/json
 X-Risk-Score: 9
 X-Country-Code: CN
 X-Cache: MISS
-X-Ignore: false
+X-Ignore: False
 ```
 
 response:
@@ -51,6 +51,7 @@ response_headers:
 Content-Type: application/json
 X-Risk-Score: 9
 X-Cache: MISS
+X-Ignore: False
 ```
 
 response:
@@ -74,6 +75,7 @@ response_headers:
 Content-Type: application/json
 X-Risk-Score: 9
 X-Cache: MISS
+X-Ignore: False
 ```
 
 response:

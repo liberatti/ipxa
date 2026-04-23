@@ -161,7 +161,6 @@ def ip_check(ip: str) -> Response:
     headers = {
         "X-Risk-Score": security.get("risk_score", 0),
         "X-Cache": "MISS",
-        "X-Country-Code": info["location"]["country_code"],
         "X-Ignore": info["security"]["ignore"],
     }
     return response_data(result, headers=headers)
@@ -182,7 +181,6 @@ def ip_quick(ip: str) -> Response:
     headers = {
         "X-Risk-Score": security.get("risk_score", 0),
         "X-Cache": "MISS",
-        "X-Country-Code": info["location"]["country_code"],
         "X-Ignore": info["security"]["ignore"],
     }
     return response_data(result, headers=headers)

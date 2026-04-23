@@ -8,6 +8,25 @@ Install packages:
 yum install lua-socket
 ```
 
+
+## EL8x
+
+```bash
+yum install luasocket
+```
+
+## Configuration
+
+Config file `/etc/httpd/lua/config.lua`:
+
+```lua
+local config = {
+    API = "http://[IP_ADDRESS]",
+    BLOCKED_COUNTRIES = "CN,RU,KP"
+}
+return config
+```
+
 Run test:
 
 ```bash
@@ -22,11 +41,6 @@ Output:
 RESULT:	403
 ```
 
-## EL8x
-
-```bash
-yum install luasocket
-```
 
 ```bash
 cd /etc/httpd/lua

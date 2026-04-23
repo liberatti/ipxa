@@ -45,10 +45,11 @@ services:
     image: liberatti/ipxa:latest
     container_name: ipxa
     environment:
-      - IBLOCKLIST_USERNAME=${IBLOCKLIST_USERNAME}
-      - IBLOCKLIST_PASSWORD=${IBLOCKLIST_PASSWORD}
-      - MAXMIND_ACCOUNT_ID=${MAXMIND_ACCOUNT_ID}
-      - MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}
+      # - IBLOCKLIST_USERNAME=
+      # - IBLOCKLIST_PASSWORD=
+      # - MAXMIND_ACCOUNT_ID=
+      # - MAXMIND_LICENSE_KEY=
+      - IGNORE_IP_CIDRS=127.0.0.1,192.168.0.0/16,::1
     volumes:
       - ipxa_data:/data
     ports:

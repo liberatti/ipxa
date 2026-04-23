@@ -1,6 +1,8 @@
 local http = require "socket.http"
 local ltn12 = require "ltn12"
 
+local config = require("config")
+
 local function parse_countries(str)
     local t = {}
     if not str then return t end
@@ -28,12 +30,9 @@ end
 function ip_info_check(r)
     local ip = r.useragent_ip
 
-    local api_base = r.subprocess_env["IPXA_API"]
-    local blocked_env = r.subprocess_env["IPXA_BLOCKED_COUNTRIES"]
+    local blocked_countries = parse_countries(config.BLOCKED_COUNTRIES)
 
-    local blocked_countries = parse_countries(blocked_env)
-
-    local url = api_base .. "/api/ip/info/" .. ip
+    local url = config.API .. "/api/ip/info/" .. ip
     local response_body = {}
 
     local res, code, headers = http.request{
