@@ -3,6 +3,7 @@ __pycache__/
 *.py[codz]
 *$py.class
 data
+docker-compose-test.yml
 # C extensions
 *.so
 .idea
