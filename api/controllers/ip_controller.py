@@ -22,7 +22,6 @@ SCORE_MONITOR_MAX = 70
 def before_request():
     register_hit()
 
-
 def _fill_org(info: dict) -> dict:
     org = {}
     geoip = info["location"]
@@ -110,6 +109,20 @@ def _build_ip_info(ip: str) -> dict:
                         feed = r.get("feed", "")
                         rep["reasons"].append(f"rbl:{feed}")
                         rep["risk_score"] += r.get("risk_score", 0)
+        "ignore": False,
+    }
+
+    try:
+        if NetworkTool.in_network(ip, config.IGNORE_IP_CIDRS):
+            rep["ignore"] = True
+        else:
+            with RBLDao() as dao:
+                rep_data = dao.get_by_ip(ip)
+                if rep_data:
+                    for r in rep_data:
+                        feed = r.get("feed", "")
+                        rep["reasons"].append(f"rbl:{feed}")
+                        rep["risk_score"] += r.get("risk_score", 0)
     except Exception:
         pass
 
@@ -153,10 +166,18 @@ def ip_check(ip: str) -> Response:
     result = {
         "ip": ip,
         "risk_score": risk_score,
+    reasons = security.get("reasons", [])
+
+    result = {
+        "ip": ip,
+        "risk_score": risk_score,
         "reasons": reasons
     }
     cache[f"check:{ip}"] = result
     headers = {
+        "x-risk-score": security.get("risk_score", 0),
+        "x-cache": "miss",
+        "x-ignore": info["security"]["ignore"],
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
         "x-ignore": info["security"]["ignore"],
@@ -168,6 +189,18 @@ def ip_check(ip: str) -> Response:
 @cached("quick")
 def ip_quick(ip: str) -> Response:
     """Returns only the risk_score and TTL for quick decisions (e.g., firewall)."""
+      
+    info = _build_ip_info(ip)
+    security = info.get("security", {})
+
+    result = {
+        "risk_score": security.get("risk_score", 0)
+    }
+    cache[f"quick:{ip}"] = result
+    headers = {
+        "x-risk-score": security.get("risk_score", 0),
+        "x-cache": "miss",
+        "x-ignore": info["security"]["ignore"],
 
     info = _build_ip_info(ip)
     security = info.get("security", {})
