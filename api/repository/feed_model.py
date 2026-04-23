@@ -22,6 +22,10 @@ class FeedDao(SQLite3DAO):
                 provider TEXT,
                 restricted TEXT,
                 type TEXT,
+<<<<<<< HEAD
+=======
+                action TEXT,
+>>>>>>> main
                 source TEXT,
                 description TEXT,
                 format TEXT,

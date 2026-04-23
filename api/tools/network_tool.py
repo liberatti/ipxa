@@ -202,6 +202,7 @@ class NetworkTool:
         else:
             raise ValueError("Unsupported IP version")
         return prefix
+<<<<<<< HEAD
 
     @classmethod
     def in_network(cls, ip: str, ignore_list: str) -> bool:
@@ -219,3 +220,5 @@ class NetworkTool:
             if ipaddress.ip_network(net.strip(), strict=False).overlaps(ipaddress.ip_network(ip, strict=False)):
                 return True
         return False
+=======
+>>>>>>> main

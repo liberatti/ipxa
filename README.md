@@ -4,7 +4,11 @@
 **IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 50+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
 
 [![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
+<<<<<<< HEAD
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
+=======
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+>>>>>>> main
 
 ---
 
@@ -45,11 +49,18 @@ services:
     image: liberatti/ipxa:latest
     container_name: ipxa
     environment:
+<<<<<<< HEAD
       # - IBLOCKLIST_USERNAME=
       # - IBLOCKLIST_PASSWORD=
       # - MAXMIND_ACCOUNT_ID=
       # - MAXMIND_LICENSE_KEY=
       - IGNORE_IP_CIDRS=127.0.0.1,192.168.0.0/16,::1
+=======
+      - IBLOCKLIST_USERNAME=${IBLOCKLIST_USERNAME}
+      - IBLOCKLIST_PASSWORD=${IBLOCKLIST_PASSWORD}
+      - MAXMIND_ACCOUNT_ID=${MAXMIND_ACCOUNT_ID}
+      - MAXMIND_LICENSE_KEY=${MAXMIND_LICENSE_KEY}
+>>>>>>> main
     volumes:
       - ipxa_data:/data
     ports:
@@ -64,6 +75,7 @@ volumes:
   ipxa_data:
 ```
 
+<<<<<<< HEAD
 The `IGNORE_IP_CIDRS` variable is a comma separated list of IP CIDRs that should be ignored by IPXA hooks. 
 In case the ip is in this list, the risk score will be 0 and country code will be `--`.
 
@@ -119,6 +131,8 @@ Leverage the power of Lua in Nginx via OpenResty for ultra-low latency IP checki
 
 *(Check `hooks/openresty/nginx.conf` and `hooks/openresty/Dockerfile` for working examples).*
 
+=======
+>>>>>>> main
 ---
 
 ## 📡 API Reference
@@ -148,6 +162,11 @@ Returns comprehensive GeoIP, ASN, and reputation data.
     "asn_number": 134763
   },
   "security": {
+<<<<<<< HEAD
+=======
+    "action": "allow",
+    "is_permitted": true,
+>>>>>>> main
     "reasons": [
       "rbl:firehol_level1"
     ],
@@ -164,19 +183,33 @@ Simplified response focused on reputation and risk assessment.
 ```json
 {
   "ip": "14.152.94.1",
+<<<<<<< HEAD
   "risk_score": 0,
+=======
+  "action": "allow",
+  "risk_score": 0,
+  "confidence": 1.0,
+>>>>>>> main
   "reasons": ["rbl:firehol_level1"]
 }
 ```
 
 ### 3. Quick Decision (Headless)
 `GET /api/ip/quick/{address}`
+<<<<<<< HEAD
 Optimized for firewalls and middleware. Returns risk score in body and `x-risk-score` header.
+=======
+Optimized for firewalls and middleware. Returns action in body and `X-Action` header.
+>>>>>>> main
 
 **Example Response:**
 ```json
 {
+<<<<<<< HEAD
   "risk_score": 9
+=======
+  "action": "allow"
+>>>>>>> main
 }
 ```
 
@@ -201,6 +234,10 @@ The architectural design allows for dynamic addition of new feeds by adding JSON
 | `name` | Human-friendly identifier for the feed |
 | `source` | Public URL for download (CIDR or IP list) |
 | `format` | `cdir_text` (plain text) or `cdir_gz` (compressed) |
+<<<<<<< HEAD
+=======
+| `action` | Suggested action (e.g., `deny`) |
+>>>>>>> main
 
 ---
 

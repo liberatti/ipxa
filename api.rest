@@ -17,6 +17,11 @@ x-cache: miss
 x-ignore: false
 ```
 
+@name FullIpInfo
+# Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
+GET http://localhost:5000/api/ip/info/14.152.94.1
+content-type: application/json
+
 response:
 ```json
 {

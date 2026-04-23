@@ -3,7 +3,12 @@
   "slug": "ipverse",
   "provider": "ipverse",
   "restricted": false,
+<<<<<<< HEAD
   "type": "geo",
+=======
+  "type": "network",
+  "action": "info",
+>>>>>>> main
   "source": "https://github.com/ipverse/country-ip-blocks/releases/download/latest/country-ip-blocks.tar.gz",
   "description": "GeoInfo",
   "format": "custom",

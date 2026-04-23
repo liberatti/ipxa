@@ -14,6 +14,10 @@ from api.routes import register as register_api_routes
 app = Flask(__name__)
 
 cors = CORS(resources={r"/*": {"origins": "*"}})
+<<<<<<< HEAD
+=======
+# cors = CORS(resources=env_config.CORS)
+>>>>>>> main
 cors.init_app(app)
 
 ma = Marshmallow()
@@ -56,5 +60,9 @@ def handle_exception(error):
 
 with app.app_context():
     basic4web_config.init(
+<<<<<<< HEAD
         {"LOGLEVEL": config.LOGLEVEL}
+=======
+        {"LOGLEVEL": config.LOGLEVEL, "JWT_SECRET_KEY": "nxguard-dev"}
+>>>>>>> main
     )
