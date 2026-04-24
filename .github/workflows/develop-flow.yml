@@ -2,8 +2,9 @@ name: CI / develop
 
 on:
   push:
-    branches:
-      - "v[1-9]+.*"
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
 
 permissions:
   contents: write
