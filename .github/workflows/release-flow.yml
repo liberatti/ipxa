@@ -29,10 +29,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: liberatti/basic4web
+          images: liberatti/ipxa
           tags: |
             type=ref,event=tag
-            type=raw,value=latest
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
