@@ -46,9 +46,10 @@ def when_ready(server):
             if not os.path.exists(os.path.join(_config.DB_PATH, "app.sqlite")):
                 install_task()
             update_task()
-            schedule.every(1).hours.do(update_task)
+            schedule.every(6).hours.do(update_task)
             if _config.TELEMETRY_ENABLE:
-                schedule.every(6).hours.do(send_telemetry_task)
+                schedule.every(1).hours.do(send_telemetry_task)
+                send_telemetry_task()
             logger.info("Main task scheduled.")
         except BlockingIOError:
             logger.info("Initialization skipped: lock held by another worker.")

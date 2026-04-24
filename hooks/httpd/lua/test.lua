@@ -3,6 +3,7 @@ apache2 = {
 }
 local r = {
     useragent_ip = "14.152.94.1",
+    headers_out = {},
     err = function(self, msg)
         print("[LOG]", msg)
     end,

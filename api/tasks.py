@@ -11,7 +11,7 @@ from api.repository.geoip_model import GeoIpDao
 from api.repository.rbl_model import RBLDao
 from api.repository.workspace_model import WorkspaceDao
 from api.tools import feed_tool
-from api.tools.telemetry import get_instance_uid, register_instance, send_telemetry
+from api.tools.telemetry import get_instance_uid, send_telemetry
 from config import TZ
 
 INTERVALS = {
@@ -52,7 +52,6 @@ def install_task():
             "instance_uid": get_instance_uid()
         }
         dao.persist(workspace)
-        register_instance(workspace)
     with FeedDao() as dao:
         dao.create_schema()
         for c in os.listdir(config.APP_BASE + "/config"):

@@ -22,6 +22,7 @@ SCORE_MONITOR_MAX = 70
 def before_request():
     register_hit()
 
+
 def _fill_org(info: dict) -> dict:
     org = {}
     geoip = info["location"]
@@ -167,10 +168,8 @@ def ip_check(ip: str) -> Response:
 @cached("quick")
 def ip_quick(ip: str) -> Response:
     """Returns only the risk_score and TTL for quick decisions (e.g., firewall)."""
-      
     info = _build_ip_info(ip)
     security = info.get("security", {})
-    
     result = {
         "risk_score": security.get("risk_score", 0)
     }

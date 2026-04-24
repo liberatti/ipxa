@@ -25,6 +25,8 @@ MAXMIND_ACCOUNT_ID = os.environ.get("MAXMIND_ACCOUNT_ID", None)
 MAXMIND_LICENSE_KEY = os.environ.get("MAXMIND_LICENSE_KEY", None)
 
 cache = TTLCache(maxsize=1000, ttl=int(os.environ.get("CACHE_TTL", 30)))
+tlc = TTLCache(maxsize=10, ttl=int(3600*24))
+
 WORKERS = int(os.environ.get("WORKERS", 4))
 THREADS = int(os.environ.get("THREADS", 4))
 
