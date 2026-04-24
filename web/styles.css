@@ -1,0 +1,182 @@
+@import 'material-icons/iconfont/material-icons.css';
+@import 'flag-icons/css/flag-icons.css';
+
+.full-width {
+    width: 100%;
+}
+
+.container {
+    padding: 32px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Modern 12-Column Grid */
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+}
+
+.col-1 {
+    grid-column: span 1;
+}
+
+.col-2 {
+    grid-column: span 2;
+}
+
+.col-3 {
+    grid-column: span 3;
+}
+
+.col-4 {
+    grid-column: span 4;
+}
+
+.col-5 {
+    grid-column: span 5;
+}
+
+.col-6 {
+    grid-column: span 6;
+}
+
+.col-7 {
+    grid-column: span 7;
+}
+
+.col-8 {
+    grid-column: span 8;
+}
+
+.col-9 {
+    grid-column: span 9;
+}
+
+.col-10 {
+    grid-column: span 10;
+}
+
+.col-11 {
+    grid-column: span 11;
+}
+
+.col-12 {
+    grid-column: span 12;
+}
+
+@media (max-width: 1024px) {
+
+    .col-1,
+    .col-2,
+    .col-3,
+    .col-4,
+    .col-5,
+    .col-6,
+    .col-7,
+    .col-8,
+    .col-9,
+    .col-10,
+    .col-11 {
+        grid-column: span 12;
+    }
+}
+
+/* Typography Refinement */
+h1,
+h2,
+h3,
+h4,
+b,
+strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Material Component Neutralization */
+.mat-mdc-icon-button {
+    color: var(--text-secondary) !important;
+}
+
+/* Premium Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-in {
+    animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Spacing Utilities */
+.mt-2 {
+    margin-top: 16px !important;
+}
+
+.mt-4 {
+    margin-top: 32px !important;
+}
+
+.mb-4 {
+    margin-bottom: 32px !important;
+}
+
+.display-flex {
+    display: flex !important;
+}
+
+.align-center {
+    align-items: center !important;
+}
+
+.gap-2 {
+    gap: 8px !important;
+}
+
+/* Custom Dialog Styles */
+.custom-dialog-container .mat-mdc-dialog-container,
+.full-screen-dialog .mat-mdc-dialog-container {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.custom-dialog-container .mat-mdc-dialog-container {
+    --mdc-dialog-container-shape: 24px;
+}
+
+.full-screen-dialog .mat-mdc-dialog-container {
+    --mdc-dialog-container-shape: 0px;
+}
+
+.custom-dialog-container .mat-mdc-dialog-surface,
+.full-screen-dialog .mat-mdc-dialog-surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+.custom-dialog-container .mat-mdc-dialog-surface {
+    border-radius: 24px !important;
+}
+
+.full-screen-dialog .mat-mdc-dialog-surface {
+    border-radius: 0px !important;
+}
+
+.cdk-overlay-backdrop {
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.7) !important;
+}

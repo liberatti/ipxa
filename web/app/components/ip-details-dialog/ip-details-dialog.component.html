@@ -1,0 +1,152 @@
+<div class="dialog-container animate-in">
+  <!-- Dynamic Background Decoration -->
+  <div class="header-glow"></div>
+
+  <div class="dialog-header">
+    <div class="title-group">
+      <div class="icon-wrapper main-accent">
+        <mat-icon>info_outline</mat-icon>
+      </div>
+      <div class="title-texts">
+        <h2>IP Information Details</h2>
+        <div class="subtitle-group">
+          <span class="status-indicator"></span>
+          <p class="subtitle">Detailed analysis for <code>{{ data.ip.address }}</code></p>
+        </div>
+      </div>
+    </div>
+    <button mat-icon-button (click)="close()" class="close-btn" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="dialog-content">
+    <div class="info-grid">
+      <!-- Network & Carrier Section -->
+      <section class="glass-section network-section">
+        <div class="section-badge">
+          <mat-icon>business</mat-icon>
+          <span>Infrastructure</span>
+        </div>
+        <div class="data-items">
+          <div class="data-item">
+            <span class="label">Organization</span>
+            <span class="value">{{ data.organization.asn_name }}</span>
+          </div>
+          <div class="data-item">
+            <span class="label">ASN</span>
+            <span class="value highlight-box">AS{{ data.organization.asn_number }}</span>
+          </div>
+          <div class="data-item">
+            <span class="label">Description</span>
+            <span class="value secondary-text">{{ data.organization.asn_description || 'No description available' }}</span>
+          </div>
+          <div class="data-item">
+            <span class="label">Network Range</span>
+            <span class="value font-mono accent-text">{{ data.ip.network }}/{{ data.ip.prefix }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Risk Analysis Section -->
+      <section class="glass-section risk-section" [class.is-danger]="riskScore() >= 70" [class.is-warning]="riskScore() > 0 && riskScore() < 70" [class.is-safe]="riskScore() === 0">
+        <div class="section-badge">
+          <mat-icon>security</mat-icon>
+          <span>Security & Risk</span>
+        </div>
+        
+        <div class="risk-display">
+          @if (riskScore() > 0) {
+            <div class="security-card unsafe">
+              <div class="card-icon">
+                <mat-icon>report_problem</mat-icon>
+              </div>
+              <div class="security-info">
+                <span class="status-text">{{ data.security.action | uppercase }}</span>
+                <span class="status-desc">Active threats detected in reputation feeds.</span>
+              </div>
+            </div>
+
+            <div class="risk-meter-container">
+              <div class="meter-header">
+                <span class="label">Threat Probability</span>
+                <span class="level-value" [class]="'level-' + riskLevel().toLowerCase()">{{ riskLevel() }} ({{ riskScore() }}%)</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill" [style.width.%]="riskScore()" [class]="'bg-' + riskLevel().toLowerCase()">
+                  <div class="fill-reflection"></div>
+                </div>
+              </div>
+            </div>
+
+            @if (data.security.reasons.length) {
+              <div class="tags-container">
+                <span class="label small">Identified Feeds</span>
+                <div class="threat-tags">
+                  @for (reason of data.security.reasons; track reason) {
+                    <span class="threat-tag">
+                      <mat-icon class="small-icon">flag</mat-icon>
+                      <span class="feed-name">{{ reason }}</span>
+                    </span>
+                  }
+                </div>
+              </div>
+            }
+          } @else {
+            <div class="security-card safe">
+              <div class="card-icon">
+                <mat-icon>verified_user</mat-icon>
+              </div>
+              <div class="security-info">
+                <span class="status-text">Safe Connection</span>
+                <span class="status-desc">Verified clean across all global blacklists.</span>
+              </div>
+            </div>
+            <div class="data-item mt-auto">
+              <span class="label">Recommended Action</span>
+              <span class="value success-tag">{{ data.security.action }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+      <!-- Location Intelligence Section -->
+      <section class="glass-section location-section">
+        <div class="section-badge">
+          <mat-icon>location_on</mat-icon>
+          <span>Geographic Intel</span>
+        </div>
+        <div class="location-layout">
+          <div class="country-hero">
+            <div class="flag-container">
+              <span class="fi fi-{{ data.location.country_code.toLowerCase() }} flag-main"></span>
+            </div>
+            <div class="country-names">
+              <span class="country-primary">{{ data.location.country_name }}</span>
+              <span class="country-secondary">{{ data.location.country_code }} &bull; {{ data.location.continent }}</span>
+            </div>
+          </div>
+          
+          <div class="geo-details">
+            <div class="detail-row">
+              <span class="label">Protocol</span>
+              <span class="value-pill">IPv{{ data.ip.version }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Broadcast</span>
+              <span class="value font-mono">{{ data.ip.broadcast }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<!--
+    <div class="dialog-actions">
+    <button mat-flat-button color="primary" (click)="close()" class="action-btn">
+      <span>Close Details</span>
+    </button>
+  </div>
+  -->
+</div>
