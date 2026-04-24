@@ -1,0 +1,12 @@
+{
+  "name": "binarydefense",
+  "slug": "binarydefense",
+  "provider": "binarydefense",
+  "restricted": false,
+  "type": "reputation",
+  "source": "https://www.binarydefense.com/banlist.txt",
+  "description": "IPs de atacantes detectados por honeypots Artillery distribuídos globalmente pela Binary Defense.",
+  "format": "cdir_text",
+  "update_interval": "hourly",
+  "risk_score": 8
+}

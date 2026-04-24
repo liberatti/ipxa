@@ -1,0 +1,11 @@
+{
+  "name": "ipverse-country-ip-blocks",
+  "slug": "ipverse",
+  "provider": "ipverse",
+  "restricted": false,
+  "type": "geo",
+  "source": "https://github.com/ipverse/country-ip-blocks/releases/download/latest/country-ip-blocks.tar.gz",
+  "description": "GeoInfo",
+  "format": "custom",
+  "update_interval": "daily"
+}

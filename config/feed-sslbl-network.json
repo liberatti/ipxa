@@ -1,0 +1,12 @@
+{
+  "name": "sslbl_abuse_ch",
+  "slug": "sslbl_abuse_ch",
+  "provider": "abuse.ch",
+  "restricted": false,
+  "type": "reputation",
+  "source": "https://sslbl.abuse.ch/blacklist/sslipblacklist.csv",
+  "description": "Abuse.ch SSL IP Blacklist. Identifica IPs associados a certificados SSL maliciosos/botnets.",
+  "format": "cdir_text",
+  "update_interval": "hourly",
+  "risk_score": 9
+}

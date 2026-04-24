@@ -1,0 +1,211 @@
+<!-- NAV -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-container">
+    <a class="nav-brand" href="#hero" aria-label="ipxa - home">
+      <img src="assets/logo.png" alt="ipxa" height="96px" />
+    </a>
+    <div class="nav-links" [class.open]="mobileMenuOpen()">
+      <a href="#features" class="nav-link" (click)="mobileMenuOpen.set(false)">Features</a>
+      <a href="#pricing" class="nav-link" (click)="mobileMenuOpen.set(false)">Advantages</a>
+      <a href="https://github.com/liberatti/ipxa" target="_blank" class="nav-link nav-github" aria-label="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+      </a>
+    </div>
+    <button class="nav-hamburger" [class.open]="mobileMenuOpen()" (click)="mobileMenuOpen.set(!mobileMenuOpen())" aria-label="Menu" [attr.aria-expanded]="mobileMenuOpen()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="hero-section" aria-labelledby="hero-headline">
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="hero-glow hero-glow-3"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Privacy by default · Zero external dependency
+    </div>
+
+    <h1 id="hero-headline" class="hero-title">
+      Local IP Query,<br>
+      <span class="gradient-text">fast and private</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      GeoIP + RBL verification running on your infrastructure.<br>
+      No external APIs, no data leaks, no per-request cost.
+    </p>
+
+    <div class="hero-search">
+      <app-ip-input
+        size="large"
+        placeholder="Enter an IP (e.g., 8.8.8.8 or 2001:4860::)"
+        (search)="onIpSearch($event)"
+      ></app-ip-input>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-value">< 5ms</span>
+        <span class="stat-label">Latency</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value">100%</span>
+        <span class="stat-label">Local</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value">Zero</span>
+        <span class="stat-label">Cost/req</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value">50+</span>
+        <span class="stat-label">RBL Lists</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="section features-section" aria-labelledby="features-title">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-tag">Features</span>
+      <h2 id="features-title" class="section-title">Everything you need.<br><span class="gradient-text">Without depending on anyone.</span></h2>
+      <p class="section-subtitle">Complete IP intelligence infrastructure, running on your network.</p>
+    </div>
+
+    <div class="features-grid">
+      @for (feat of features; track feat.title) {
+        <div class="feature-card glass-card">
+          <div class="feature-icon-wrap" [class]="'feat-' + feat.icon">
+            @switch (feat.icon) {
+              @case ('geo') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              }
+              @case ('shield') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              }
+              @case ('bolt') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              }
+              @case ('lock') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              }
+              @case ('api') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              }
+              @case ('cost') {
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              }
+            }
+          </div>
+          <h3 class="feature-title">{{ feat.title }}</h3>
+          <p class="feature-desc">{{ feat.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+
+
+<!-- COMPARISON / DIFERENCIAIS -->
+<section id="pricing" class="section comparison-section" aria-labelledby="comparison-title">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-tag">Advantages</span>
+      <h2 id="comparison-title" class="section-title">External API vs<br><span class="gradient-text">Local Solution</span></h2>
+      <p class="section-subtitle">Why running locally changes everything.</p>
+    </div>
+
+    <div class="comparison-table-wrap">
+      <table class="comparison-table" aria-label="Comparison between external API and local solution">
+        <thead>
+          <tr>
+            <th scope="col">Criterion</th>
+            <th scope="col" class="col-external">
+              <span class="th-label bad">🌐 External API</span>
+            </th>
+            <th scope="col" class="col-local">
+              <span class="th-label good">⚡ Local ipxa</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of comparison; track row.feature) {
+            <tr>
+              <td class="feature-col">{{ row.feature }}</td>
+              <td class="external-col"><span class="comp-bad">{{ row.external }}</span></td>
+              <td class="local-col"><span class="comp-good">{{ row.local }}</span></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="highlight-cards">
+      <div class="highlight-card glass-card">
+        <div class="highlight-icon">🔒</div>
+        <h3>Zero external dependency</h3>
+        <p>All IP intelligence runs within your network. Nothing is sent outside.</p>
+      </div>
+      <div class="highlight-card glass-card">
+        <div class="highlight-icon">⚡</div>
+        <h3>For restricted environments</h3>
+        <p>Works in air-gap, private networks, datacenters, and strict compliance environments.</p>
+      </div>
+      <div class="highlight-card glass-card">
+        <div class="highlight-icon">💸</div>
+        <h3>No request limits</h3>
+        <p>Query as many times as you need. No plans, no rate limiting, no surprises.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<section id="cta" class="section cta-section" aria-labelledby="cta-title">
+  <div class="cta-glow"></div>
+  <div class="section-container cta-content">
+    <h2 id="cta-title" class="cta-title">Ready to query IPs<br><span class="gradient-text">with total privacy?</span></h2>
+    <p class="cta-subtitle">Open source, self-hosted and no per-request cost.</p>
+    <div class="cta-buttons">
+<!--
+            <button id="cta-primary-btn" class="btn-primary btn-lg btn-glow" (click)="goToApp()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Start now
+      </button>
+      -->
+      <a id="cta-docs-btn" class="btn-outline btn-lg" href="https://github.com/liberatti/ipxa/blob/main/README.md" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Documentation
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="landing-footer" role="contentinfo">
+
+
+  <div class="footer-bottom">
+    <span>© {{ currentYear }} ipxa · Open Source · MIT License</span>
+    <div class="footer-bottom-links">
+      <a href="https://github.com/liberatti/ipxa" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>

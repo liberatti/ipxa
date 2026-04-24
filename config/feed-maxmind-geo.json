@@ -1,0 +1,11 @@
+{
+  "name": "maxmind-GeoLite2",
+  "slug": "maxmind",
+  "provider": "maxmind",
+  "restricted": false,
+  "type": "geo",
+  "source": "https://download.maxmind.com",
+  "description": "GeoInfo",
+  "format": "custom",
+  "update_interval": "daily"
+}

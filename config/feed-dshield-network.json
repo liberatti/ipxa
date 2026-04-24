@@ -1,0 +1,12 @@
+{
+  "name": "dshield",
+  "slug": "dshield",
+  "provider": "iblocklist",
+  "restricted": false,
+  "type": "reputation",
+  "source": "http://list.iblocklist.com/?list=xpbqleszmajjesnzddhv&fileformat=cidr&archiveformat=gz",
+  "description": "Contains known Hackers and such people in it.",
+  "format": "cdir_gz",
+  "update_interval": "hourly",
+  "risk_score": 8
+}
