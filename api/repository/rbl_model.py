@@ -45,6 +45,7 @@ class RBLDao(SQLite3DAO):
         ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
         query = (f"""
             SELECT network, broadcast, prefix,version, feed, risk_score
+            SELECT network, broadcast, prefix,version, feed,risk_score    
             FROM {self.table_name}
             WHERE idx_s <= ? AND idx_e >= ? and version= ?
             ORDER BY idx_s

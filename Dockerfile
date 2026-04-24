@@ -44,6 +44,11 @@ USER root
 RUN mkdir -p /data \
   && chown nxguard:nxguard /data
 
+
+USER root
+RUN mkdir -p /data \
+  && chown nxguard:nxguard /data
+
 USER nxguard
 
 EXPOSE 5000

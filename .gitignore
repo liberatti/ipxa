@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 docker-compose-test.yml
 data
+docker-compose-test.yml
 # C extensions
 *.so
 .idea
