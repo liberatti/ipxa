@@ -158,10 +158,7 @@ def ip_check(ip: str) -> Response:
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
-        "x-ignore": info["security"]["ignore"],
-        "x-risk-score": security.get("risk_score", 0),
-        "x-cache": "miss",
-        "x-ignore": info["security"]["ignore"],
+        "x-ignore": info["security"]["ignore"]
     }
     return response_data(result, headers=headers)
 
