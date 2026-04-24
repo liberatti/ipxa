@@ -1,6 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { IpInputComponent } from 'app/components/ip-input/ip-input.component';
 
 interface MockResult {
@@ -18,12 +19,13 @@ interface MockResult {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, IpInputComponent],
+  imports: [CommonModule, IpInputComponent, MatIconModule],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.css']
 })
 export class LandingComponent {
   activeTab = signal<'info' | 'check' | 'quick'>('info');
+  langTab = signal<'bash' | 'python'>('bash');
   mockResult = signal<MockResult | null>(null);
   isQuerying = signal(false);
   mobileMenuOpen = signal(false);
@@ -175,5 +177,22 @@ export class LandingComponent {
     return `{
   "action": "allow"
 }`;
+  });
+
+  curlSnippet = computed(() => {
+    const tab = this.activeTab();
+    const endpoint = tab === 'info' ? 'info' : (tab === 'check' ? 'check' : 'quick');
+    return `curl -X GET "http://localhost:5000/api/ip/${endpoint}/14.152.94.1" \\
+     -H "Content-Type: application/json"`;
+  });
+
+  pythonSnippet = computed(() => {
+    const tab = this.activeTab();
+    const endpoint = tab === 'info' ? 'info' : (tab === 'check' ? 'check' : 'quick');
+    return `import requests
+
+response = requests.get("http://localhost:5000/api/ip/${endpoint}/14.152.94.1")
+data = response.json()
+print(data)`;
   });
 }

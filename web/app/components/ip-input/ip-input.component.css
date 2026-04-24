@@ -3,11 +3,11 @@
   align-items: center;
   gap: 0;
   background: rgba(13, 17, 23, 0.8);
-  border: 1.5px solid rgba(48, 54, 61, 0.9);
+  border: 1.5px solid var(--border-color);
   border-radius: 14px;
   padding: 6px 6px 6px 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(12px);
+  transition: var(--transition-standard);
+  backdrop-filter: var(--glass-blur);
   position: relative;
   overflow: hidden;
 }
@@ -19,7 +19,7 @@
   border-radius: 14px;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: linear-gradient(135deg, rgba(88, 166, 255, 0.04) 0%, rgba(139, 92, 246, 0.04) 100%);
+  background: linear-gradient(135deg, var(--accent-blue-ghost) 0%, var(--accent-purple-ghost) 100%);
   pointer-events: none;
 }
 
@@ -30,7 +30,7 @@
 
 .ip-input-wrapper.focused {
   border-color: rgba(88, 166, 255, 0.6);
-  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .ip-input-wrapper.hovered:not(.focused) {
@@ -38,21 +38,21 @@
 }
 
 .ip-input-wrapper.valid {
-  border-color: rgba(63, 185, 80, 0.5);
+  border-color: var(--success-glow);
 }
 
 .ip-input-wrapper.valid.focused {
   border-color: rgba(63, 185, 80, 0.7);
-  box-shadow: 0 0 0 3px rgba(63, 185, 80, 0.1);
+  box-shadow: 0 0 0 3px var(--success-bg);
 }
 
 .ip-input-wrapper.invalid {
-  border-color: rgba(248, 81, 73, 0.5);
+  border-color: var(--danger-glow);
 }
 
 .ip-input-wrapper.invalid.focused {
   border-color: rgba(248, 81, 73, 0.7);
-  box-shadow: 0 0 0 3px rgba(248, 81, 73, 0.1);
+  box-shadow: 0 0 0 3px var(--danger-bg);
 }
 
 /* Large variant */
@@ -73,7 +73,7 @@
 }
 
 .ip-icon {
-  color: #8b949e;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   margin-right: 10px;
@@ -82,15 +82,15 @@
 }
 
 .ip-input-wrapper.focused .ip-icon {
-  color: #58a6ff;
+  color: var(--accent-color);
 }
 
 .ip-input-wrapper.valid .ip-icon {
-  color: #3fb950;
+  color: var(--success-color);
 }
 
 .ip-input-wrapper.invalid .ip-icon {
-  color: #f85149;
+  color: var(--danger-color);
 }
 
 .ip-input-field {
@@ -98,16 +98,16 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #f0f6fc;
+  color: var(--text-primary);
   font-size: 15px;
   font-family: 'JetBrains Mono', 'Courier New', monospace;
   letter-spacing: 0.5px;
   min-width: 0;
-  caret-color: #58a6ff;
+  caret-color: var(--accent-color);
 }
 
 .ip-input-field::placeholder {
-  color: #484f58;
+  color: var(--text-muted);
   font-family: 'Inter', sans-serif;
   letter-spacing: normal;
 }
@@ -127,14 +127,14 @@
   padding: 2px 7px;
   border-radius: 20px;
   letter-spacing: 0.5px;
-  background: rgba(88, 166, 255, 0.15);
-  color: #58a6ff;
-  border: 1px solid rgba(88, 166, 255, 0.3);
+  background: var(--accent-blue-dim);
+  color: var(--accent-color);
+  border: 1px solid var(--border-hover);
 }
 
 .ip-version-badge.v6 {
-  background: rgba(139, 92, 246, 0.15);
-  color: #a78bfa;
+  background: var(--accent-purple-dim);
+  color: var(--accent-purple);
   border-color: rgba(139, 92, 246, 0.3);
 }
 
@@ -148,13 +148,13 @@
 }
 
 .ip-status.valid {
-  color: #3fb950;
-  background: rgba(63, 185, 80, 0.12);
+  color: var(--success-color);
+  background: var(--success-bg);
 }
 
 .ip-status.invalid {
-  color: #f85149;
-  background: rgba(248, 81, 73, 0.12);
+  color: var(--danger-color);
+  background: var(--danger-bg);
 }
 
 .ip-clear-btn {
@@ -163,7 +163,7 @@
   justify-content: center;
   background: transparent;
   border: none;
-  color: #484f58;
+  color: var(--text-muted);
   cursor: pointer;
   padding: 4px;
   border-radius: 50%;
@@ -172,7 +172,7 @@
 }
 
 .ip-clear-btn:hover {
-  color: #8b949e;
+  color: var(--text-secondary);
   background: rgba(139, 148, 158, 0.12);
 }
 
@@ -180,7 +180,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -198,7 +198,7 @@
 .ip-search-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 4px 16px var(--accent-violet-glow);
 }
 
 .ip-search-btn:active:not(:disabled) {
@@ -214,7 +214,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #f85149;
+  color: var(--danger-color);
   font-size: 12px;
   font-family: 'Inter', sans-serif;
   margin: 8px 0 0 4px;

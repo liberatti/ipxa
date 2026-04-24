@@ -58,18 +58,17 @@ export class IpInputComponent implements ControlValueAccessor {
   isFocused = signal(false);
   isHovered = signal(false);
 
-  isValid = computed(() => {
-    return true;
+  get isValid() {
     const v = this.control.value?.trim() || '';
     return v.length > 0 && !this.control.errors;
-  });
+  }
 
-  isInvalid = computed(() => {
+  get isInvalid() {
     const v = this.control.value?.trim() || '';
     return v.length > 0 && !!this.control.errors;
-  });
+  }
 
-  ipVersion = computed(() => {
+  get ipVersion() {
     const v = this.control.value?.trim() || '';
     if (!v) return null;
     const ipv4 = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
@@ -77,7 +76,7 @@ export class IpInputComponent implements ControlValueAccessor {
     if (ipv4.test(v)) return 'IPv4';
     if (ipv6.test(v)) return 'IPv6';
     return null;
-  });
+  }
 
   private _onChange = (_: any) => {};
   private _onTouched = () => {};
@@ -99,7 +98,7 @@ export class IpInputComponent implements ControlValueAccessor {
 
   onSearch(): void {
     const ip = this.control.value?.trim() || '';
-    if (this.isValid() && !this.isLoading()) {
+    if (this.isValid && !this.isLoading()) {
       this.isLoading.set(true);
       this.ipService.getIpInfo(ip).subscribe({
         next: (info) => {

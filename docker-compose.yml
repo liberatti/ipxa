@@ -12,7 +12,7 @@ services:
     volumes:
       - ipxa_data:/data
     ports:
-      - "5002:5000"
+      - "5000:5000"
     deploy:
       resources:
         limits:

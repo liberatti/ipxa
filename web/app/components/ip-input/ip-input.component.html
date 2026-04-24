@@ -3,8 +3,8 @@
   [class.size-large]="size === 'large'"
   [class.focused]="isFocused()"
   [class.hovered]="isHovered()"
-  [class.valid]="isValid()"
-  [class.invalid]="isInvalid()"
+  [class.valid]="isValid"
+  [class.invalid]="isInvalid"
   (mouseenter)="onMouseEnter()"
   (mouseleave)="onMouseLeave()"
 >
@@ -12,7 +12,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"/>
       <line x1="2" y1="12" x2="22" y2="12"/>
-      <path d="M12 2a15.3(15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
     </svg>
   </div>
 
@@ -22,6 +22,7 @@
     [formControl]="control"
     [placeholder]="placeholder"
     type="text"
+    pattern="(?:((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)|(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])))"
     autocomplete="off"
     spellcheck="false"
     (input)="onInput()"
@@ -32,17 +33,17 @@
   />
 
   <div class="ip-badges">
-    @if (ipVersion()) {
-      <span class="ip-version-badge" [class.v6]="ipVersion() === 'IPv6'">{{ ipVersion() }}</span>
+    @if (ipVersion) {
+      <span class="ip-version-badge" [class.v6]="ipVersion === 'IPv6'">{{ ipVersion }}</span>
     }
-    @if (isValid()) {
+    @if (isValid) {
       <span class="ip-status valid">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </span>
     }
-    @if (isInvalid()) {
+    @if (isInvalid) {
       <span class="ip-status invalid">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="18" y1="6" x2="6" y2="18"/>
@@ -64,7 +65,7 @@
     id="ip-search-btn"
     class="ip-search-btn"
     type="button"
-    [disabled]="!isValid() || isLoading()"
+    [disabled]="!isValid || isLoading()"
     (click)="onSearch()"
     aria-label="Search IP"
   >
@@ -83,7 +84,7 @@
   </button>
 </div>
 
-@if (isInvalid()) {
+@if (isInvalid) {
   <p class="ip-error-msg" role="alert">
     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="10"/>
