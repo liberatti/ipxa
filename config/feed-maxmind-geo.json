@@ -3,12 +3,7 @@
   "slug": "maxmind",
   "provider": "maxmind",
   "restricted": false,
-<<<<<<< HEAD
   "type": "geo",
-=======
-  "type": "network",
-  "action": "info",
->>>>>>> main
   "source": "https://download.maxmind.com",
   "description": "GeoInfo",
   "format": "custom",

@@ -3,19 +3,10 @@
   "slug": "firehol_level1",
   "provider": "firehol",
   "restricted": false,
-<<<<<<< HEAD
   "type": "reputation",
   "source": "https://iplists.firehol.org/files/firehol_level1.netset",
   "description": "This IP list combines various sources to form a comprehensive blacklist for blocking malicious IPs without false positives. It integrates lists from fullbogons, Spamhaus, DShield, and malware sources, with automatic updates from FireHOL. <b>https://iplists.firehol.org/</b>",
   "format": "cdir_text",
   "update_interval": "hourly",
   "risk_score": 9
-=======
-  "type": "network",
-  "action": "deny",
-  "source": "https://iplists.firehol.org/files/firehol_level1.netset",
-  "description": "This IP list combines various sources to form a comprehensive blacklist for blocking malicious IPs without false positives. It integrates lists from fullbogons, Spamhaus, DShield, and malware sources, with automatic updates from FireHOL. <b>https://iplists.firehol.org/</b>",
-  "format": "cdir_text",
-  "update_interval": "hourly"
->>>>>>> main
 }

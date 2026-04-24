@@ -3,12 +3,7 @@
   "slug": "iptoasn",
   "provider": "iptoasn",
   "restricted": false,
-<<<<<<< HEAD
   "type": "geo",
-=======
-  "type": "network",
-  "action": "info",
->>>>>>> main
   "source": "https://iptoasn.com/data/ip2asn-combined.tsv.gz",
   "description": "GeoInfo",
   "format": "custom",

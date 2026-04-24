@@ -3,19 +3,10 @@
   "slug": "bruteforceblocker",
   "provider": "danger.rulez.sk",
   "restricted": false,
-<<<<<<< HEAD
   "type": "reputation",
   "source": "http://danger.rulez.sk/projects/bruteforceblocker/blist.php",
   "description": "Lista de IPs envolvidos em ataques de força bruta (SSH, etc), reportados pelo script BruteForceBlocker.",
   "format": "cdir_text",
   "update_interval": "hourly",
   "risk_score": 10
-=======
-  "type": "network",
-  "action": "deny",
-  "source": "http://danger.rulez.sk/projects/bruteforceblocker/blist.php",
-  "description": "Lista de IPs envolvidos em ataques de força bruta (SSH, etc), reportados pelo script BruteForceBlocker.",
-  "format": "cdir_text",
-  "update_interval": "hourly"
->>>>>>> main
 }
