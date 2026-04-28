@@ -2,7 +2,7 @@
 import uuid
 import requests
 from config import SUPABASE_KEY, SUPABASE_URL, APP_VERSION
-from basic4web.middleware.logging import logger
+from nxcore.middleware.logging import logger
 from api.repository.workspace_model import WorkspaceDao
 from config import tlc
 

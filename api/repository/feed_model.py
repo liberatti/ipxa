@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from basic4web.repository.sqlite3_base_dao import SQLite3DAO
+from nxcore.repository.sqlite3_base_dao import SQLite3DAO
 
 import config
 

@@ -2,7 +2,7 @@ from functools import wraps
 
 import pycountry
 import pycountry_convert as pc
-from basic4web.controllers.base_controller import response_data
+from nxcore.controllers.base_controller import response_data
 
 from config import cache
 

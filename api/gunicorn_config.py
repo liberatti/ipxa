@@ -5,7 +5,7 @@ import time
 import traceback
 
 import schedule
-from basic4web.middleware.logging import logger
+from nxcore.middleware.logging import logger
 
 import config as _config
 from api.tasks import install_task, update_task, send_telemetry_task

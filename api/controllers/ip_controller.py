@@ -1,6 +1,6 @@
 import os
 
-from basic4web.controllers.base_controller import response_data
+from nxcore.controllers.base_controller import response_data
 from flask import Blueprint, Response
 from geoip2 import database
 

@@ -9,7 +9,7 @@ import traceback
 from typing import Dict
 
 import requests
-from basic4web.middleware.logging import logger
+from nxcore.middleware.logging import logger
 
 import config
 from api.repository.geoip_model import GeoIpDao

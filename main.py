@@ -1,8 +1,8 @@
 import traceback
 
-import basic4web.config as basic4web_config
-from basic4web.controllers.base_controller import response_error_404, response_error_500
-from basic4web.middleware.logging import logger
+import nxcore.config as nxcore_config
+from nxcore.controllers.base_controller import response_error_404, response_error_500
+from nxcore.middleware.logging import logger
 from flask import Flask, Blueprint
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
@@ -55,6 +55,6 @@ def handle_exception(error):
 
 
 with app.app_context():
-    basic4web_config.init(
+    nxcore_config.init(
         {"LOGLEVEL": config.LOGLEVEL}
     )

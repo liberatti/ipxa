@@ -2,8 +2,8 @@ import json
 import os
 from datetime import timedelta, datetime
 
-from basic4web.common_utils import gen_random_string
-from basic4web.middleware.logging import logger
+from nxcore.common_utils import gen_random_string
+from nxcore.middleware.logging import logger
 
 import config
 from api.repository.feed_model import FeedDao
