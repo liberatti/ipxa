@@ -9,6 +9,8 @@ import { provideMomentDateAdapter } from "@angular/material-moment-adapter";
 export const REST_API_URL = new InjectionToken<string>('REST_API_URL');
 export const API_DATA_FORMAT = new InjectionToken<string>('API_DATA_FORMAT');
 
+import { authInterceptor } from './services/auth.interceptor';
+
 export const appConfig: ApplicationConfig = {
   providers: [
 
@@ -20,7 +22,7 @@ export const appConfig: ApplicationConfig = {
 
     provideRouter(routes),
     provideHttpClient(
-      withFetch(), withInterceptors([])
+      withFetch(), withInterceptors([authInterceptor])
     )
   ]
 };

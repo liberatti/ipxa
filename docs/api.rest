@@ -1,0 +1,242 @@
+@baseUrl = http://localhost:5000
+#@ip = 14.152.94.1
+@ip = 192.168.2.2
+@mail = admin@local
+@password = admin
+
+###
+# @name oauth_login
+POST {{baseUrl}}/api/oauth/login
+Content-Type: application/json
+
+{
+  "email": "{{mail}}",
+  "password": "{{password}}"
+}
+
+###
+# Captura automática dos tokens
+@access_token = {{oauth_login.response.body.access_token}}
+@refresh_token = {{oauth_login.response.body.refresh_token}}
+
+###
+# @name oauth_refresh
+GET {{baseUrl}}/api/oauth/token
+Content-Type: application/json
+Refresh-Token: {{refresh_token}}
+
+###
+# Captura automática dos tokens
+@access_token = {{oauth_refresh.response.body.access_token}}
+
+###
+
+# @name Info
+# Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
+GET {{baseUrl}}/api/ip/info/{{ip}}
+content-type: application/json
+
+response_headers:
+```
+Content-Type: application/json
+x-risk-score: 9
+x-country-code: CN
+x-cache: miss
+x-ignore: false
+```
+
+###
+
+# @name FullIpInfo
+# Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
+GET {{baseUrl}}/api/ip/info/14.152.94.1
+content-type: application/json
+
+response:
+```json
+{
+  "ip": {
+    "address": "14.152.94.1",
+    "broadcast": "14.152.95.255",
+    "network": "14.152.80.0",
+    "prefix": 20,
+    "version": 4
+  },
+  "location": {
+    "continent": "Asia",
+    "country_code": "CN",
+    "country_name": "China"
+  },
+  "organization": {
+    "asn_description": "",
+    "asn_name": "CT-DONGGUAN-IDC CHINANET Guangdong province network",
+    "asn_number": 134763
+  },
+  "security": {
+    "reasons": [
+      "rbl:firehol_level1"
+    ],
+    "risk_score": 9
+  }
+}
+```
+###
+
+# @name Check
+# Simplified response focused on reputation and risk assessment.
+GET {{baseUrl}}/api/ip/check/{{ip}}
+
+response_headers:
+```
+Content-Type: application/json
+x-risk-score: 9
+x-cache: miss
+x-ignore: false
+```
+
+response:
+```json
+{
+  "ip": "14.152.94.1",
+  "reasons": [
+    "rbl:firehol_level1"
+  ],
+  "risk_score": 9
+}
+```
+###
+
+# @name Quick
+# Optimized for firewalls and middleware. Returns risk score in body and X-Risk-Score header.
+GET {{baseUrl}}/api/ip/quick/{{ip}}
+
+response_headers:
+```
+Content-Type: application/json
+x-risk-score: 9
+x-cache: miss
+x-ignore: false
+```
+
+response:
+```json
+{
+  "risk_score": 9
+}
+```
+
+###
+# @name UsersList
+GET {{baseUrl}}/api/user
+Authorization: Bearer {{access_token}}
+
+###
+# @name UserCreate
+POST {{baseUrl}}/api/user
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "New User",
+  "email": "newuser@local",
+  "password": "password123",
+  "role": "viewer"
+}
+
+###
+# @name UserGet
+@user_id = {{UsersList.response.body.data[0]._id}}
+GET {{baseUrl}}/api/user/{{user_id}}
+Authorization: Bearer {{access_token}}
+
+###
+# @name UserUpdate
+PUT {{baseUrl}}/api/user/{{user_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "Updated User",
+  "role": "viewer"
+}
+
+###
+# @name UserDelete
+DELETE {{baseUrl}}/api/user/{{user_id}}
+Authorization: Bearer {{access_token}}
+
+###
+# @name WorkspaceList
+GET {{baseUrl}}/api/workspace
+Authorization: Bearer {{access_token}}
+
+###
+# @name WorkspaceCreate
+POST {{baseUrl}}/api/workspace
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "Default Workspace",
+  "apikey": "sk-1234567890",
+  "instance_uid": "uid-123"
+}
+
+###
+# @name WorkspaceUpdate
+@workspace_id = {{WorkspaceList.response.body.data[0]._id}}
+PUT {{baseUrl}}/api/workspace/{{workspace_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "Production Workspace"
+}
+
+###
+# @name WorkspaceDelete
+DELETE {{baseUrl}}/api/workspace/{{workspace_id}}
+Authorization: Bearer {{access_token}}
+
+###
+# @name FeedList
+GET {{baseUrl}}/api/feed?page=1&per_page=10
+Authorization: Bearer {{access_token}}
+
+###
+# @name FeedCreate
+POST {{baseUrl}}/api/feed
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "Custom Threat Intel",
+  "slug": "custom_intel",
+  "provider": "internal",
+  "type": "reputation",
+  "format": "cdir_text",
+  "source": "https://example.com/blocklist.txt",
+  "risk_score": 10,
+  "update_interval": 3600
+}
+
+###
+# @name FeedUpdate
+@feed_id = {{FeedList.response.body.data[0]._id}}
+PUT {{baseUrl}}/api/feed/{{feed_id}}
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "name": "Updated Threat Intel",
+  "risk_score": 8
+}
+
+###
+# @name FeedDelete
+DELETE {{baseUrl}}/api/feed/{{feed_id}}
+Authorization: Bearer {{access_token}}
+
+###
+# @name OAuth401
+GET {{baseUrl}}/api/oauth/401

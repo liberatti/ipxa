@@ -1,0 +1,11 @@
+{
+  "name": "lan_bypass",
+  "slug": "lan_bypass",
+  "provider": "ipxa",
+  "restricted": false,
+  "type": "bypass",
+  "data": ["127.0.0.0/8","192.168.0.0/16","10.0.0.0/8"],
+  "description": "Lista de redes privadas que devem sempre bypassear o proxy",
+  "format": "embedded",
+  "risk_score": 0
+}

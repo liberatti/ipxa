@@ -1,0 +1,41 @@
+<div class="admin-view-header">
+  <h2 class="gradient-text">Workspaces Management</h2>
+  <button mat-flat-button color="primary" (click)="openForm()">
+    <mat-icon>add</mat-icon> Create Workspace
+  </button>
+</div>
+
+<mat-card class="glass-card">
+  <div class="table-responsive">
+    <table mat-table [dataSource]="workspaceDS" class="admin-table">
+      <!-- ... existing containers ... -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let ws"> {{ws.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="apikey">
+        <th mat-header-cell *matHeaderCellDef> API Key </th>
+        <td mat-cell *matCellDef="let ws"> <code class="apikey-code">{{ws.apikey}}</code> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="instance_uid">
+        <th mat-header-cell *matHeaderCellDef> Instance UID </th>
+        <td mat-cell *matCellDef="let ws"> {{ws.instance_uid}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let ws">
+          <button mat-icon-button color="primary" (click)="openForm(ws)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button color="warn" (click)="onRemove(ws._id)"><mat-icon>delete</mat-icon></button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="workspaceDC"></tr>
+      <tr mat-row *matRowDef="let row; columns: workspaceDC;"></tr>
+    </table>
+  </div>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="workspacePA.per_page"
+    [length]="workspacePA.total_elements" (page)="nextPage($event)"></mat-paginator>
+</mat-card>

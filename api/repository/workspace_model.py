@@ -1,12 +1,27 @@
+from marshmallow import EXCLUDE, Schema, fields
 from nxcore.repository.sqlite3_base_dao import SQLite3DAO
 
 import config
 
 
+class WorkspaceSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    _id = fields.Integer()
+    name = fields.String()
+    apikey = fields.String()
+    instance_uid = fields.String()
+
+
 class WorkspaceDao(SQLite3DAO):
 
     def __init__(self):
-        super().__init__(db_path=config.DB_PATH, table_name="workspace")
+        super().__init__(
+            db_path=config.DB_PATH,
+            table_name="workspace",
+            schema=WorkspaceSchema
+        )
 
     def create_schema(self):
         """

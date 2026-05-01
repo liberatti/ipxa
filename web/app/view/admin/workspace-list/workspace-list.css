@@ -1,0 +1,25 @@
+.apikey-code {
+  background: var(--border-dim);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+mat-paginator {
+  background: transparent !important;
+  margin-top: 8px;
+  border-top: 1px solid var(--border-dim);
+}
+
+::ng-deep .mat-mdc-paginator {
+  color: var(--text-secondary) !important;
+}
+
+::ng-deep .mat-mdc-paginator-icon {
+  fill: var(--text-secondary) !important;
+}
+
+::ng-deep .mat-mdc-button.mat-mdc-button-base {
+  color: var(--text-secondary) !important;
+}

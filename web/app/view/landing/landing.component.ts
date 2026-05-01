@@ -1,6 +1,6 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { IpInputComponent } from 'app/components/ip-input/ip-input.component';
 
@@ -19,7 +19,7 @@ interface MockResult {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, IpInputComponent, MatIconModule],
+  imports: [CommonModule, IpInputComponent, MatIconModule, RouterModule],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.css']
 })

@@ -1,0 +1,76 @@
+<h2 mat-dialog-title class="gradient-text">{{ data ? 'Edit Feed' : 'New Feed' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-grid">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" placeholder="Ex: Spamhaus SBL">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Slug</mat-label>
+        <input matInput formControlName="slug" placeholder="spamhaus_sbl">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Provider</mat-label>
+        <input matInput formControlName="provider" placeholder="Ex: Spamhaus">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Risk Score (0-10)</mat-label>
+        <input matInput type="number" formControlName="risk_score">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let t of types" [value]="t">{{t | titlecase}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Format</mat-label>
+        <mat-select formControlName="format">
+          <mat-option *ngFor="let f of formats" [value]="f">{{f}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row" *ngIf="form.get('format')?.value !== 'embedded'">
+      <mat-form-field appearance="outline">
+        <mat-label>Source URL</mat-label>
+        <input matInput formControlName="source" placeholder="https://...">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Update Interval</mat-label>
+        <mat-select formControlName="update_interval">
+          <mat-option *ngFor="let i of intervals" [value]="i">{{i | titlecase}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" *ngIf="form.get('format')?.value === 'embedded'">
+      <mat-label>IP List (one per line)</mat-label>
+      <textarea matInput formControlName="data_raw" rows="5" placeholder="192.168.0.0/16"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="2"></textarea>
+    </mat-form-field>
+
+    <div class="form-toggle-row">
+      <mat-slide-toggle formControlName="restricted">Restricted Feed (requires credentials)</mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="onSave()">Save Feed</button>
+</mat-dialog-actions>

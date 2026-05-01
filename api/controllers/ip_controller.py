@@ -108,8 +108,13 @@ def _build_ip_info(ip: str) -> dict:
                 if rep_data:
                     for r in rep_data:
                         feed = r.get("feed", "")
-                        rep["reasons"].append(f"rbl:{feed}")
-                        rep["risk_score"] += r.get("risk_score", 0)
+                        feed_type = r.get("feed_type", None)
+                        if feed_type == "bypass":
+                            rep["ignore"] = True
+                            rep["reasons"].append(f"trust:{feed}")
+                        else:
+                            rep["reasons"].append(f"rbl:{feed}")
+                            rep["risk_score"] += r.get("risk_score", 0)
     except Exception:
         pass
 

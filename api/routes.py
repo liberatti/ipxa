@@ -1,9 +1,15 @@
 from flask import render_template, current_app
 
 from api.controllers.ip_controller import routes as ip_routes
+from api.controllers.oauth_controller import routes as oauth_routes
+from api.controllers.workspace_controller import routes as workspace_routes
+from api.controllers.feed_controller import routes as feed_routes
 
 routes = [
     (ip_routes, "/api/ip"),
+    (oauth_routes, "/api/oauth"),
+    (workspace_routes, "/api/workspace"),
+    (feed_routes, "/api/feed"),
 ]
 
 

@@ -1,5 +1,5 @@
 import os
-
+import secrets
 import pytz
 from cachetools import TTLCache
 import json
@@ -38,3 +38,12 @@ SUPABASE_KEY = os.environ.get(
     "WVtY3liZGhwdXV2a3FtcW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NDgzMjIsImV4cCI"
     "6MjA5MTQyNDMyMn0.I5-JgP2qdavo7o8ncH4TQqKmibfH8aeoRFXdRmQ0Cg0"
 )
+
+# Security config
+SECURITY_ENABLED = False
+KEY_SIZE = 2048
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", secrets.token_urlsafe(32))
+JWT_EXPIRE = 3600
+JWT_AUD = "ipxa"
+ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@local")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")

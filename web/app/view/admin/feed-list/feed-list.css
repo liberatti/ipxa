@@ -1,0 +1,36 @@
+.feed-name-cell {
+  display: flex;
+  flex-direction: column;
+}
+.feed-name { font-weight: 600; }
+.feed-slug { color: var(--text-secondary); font-size: 11px; }
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.badge.reputation { background: var(--danger-bg); color: var(--danger-color); }
+.badge.bypass { background: var(--success-bg); color: var(--success-color); }
+
+.small-code {
+  background: var(--border-dim);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.risk-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+}
+

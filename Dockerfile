@@ -38,14 +38,8 @@ COPY *.py .
 COPY api api
 COPY config config
 
-RUN adduser -D -H -s /sbin/nologin nxguard
+RUN adduser -D -s /sbin/nologin nxguard
 
-USER root
-RUN mkdir -p /data \
-  && chown nxguard:nxguard /data
-
-
-USER root
 RUN mkdir -p /data \
   && chown nxguard:nxguard /data
 

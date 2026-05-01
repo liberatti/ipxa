@@ -5,6 +5,7 @@ from datetime import timedelta, datetime
 from nxcore.common_utils import gen_random_string
 from nxcore.middleware.logging import logger
 
+import bcrypt
 import config
 from api.repository.feed_model import FeedDao
 from api.repository.geoip_model import GeoIpDao

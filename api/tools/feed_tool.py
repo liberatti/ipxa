@@ -70,7 +70,9 @@ def update_feed(feed):
         resp = requests.get(source_url, timeout=10)
         if resp and resp.status_code == 200:
             with RBLDao() as dao:
-                dao.delete_by_feed_name(feed["name"])
+                existing_feed = dao.exists_by_feed(feed["name"])
+                if existing_feed and feed.get("type", None) != "bypass":
+                    dao.delete_by_feed_name(feed["name"])
                 lines = []
                 if "cdir_text" in feed["format"]:
                     lines = resp.text.splitlines()
@@ -78,14 +80,15 @@ def update_feed(feed):
                     with gzip.GzipFile(fileobj=io.BytesIO(resp.content)) as gz:
                         for gzl in gz:
                             lines.append(gzl.decode("utf-8").strip())
-
+                if "embedded" in feed["format"] and not existing_feed:
+                    lines = feed["data"]
                 batch = []
                 i = 0
                 for line in lines:
                     if line.strip() and "#" not in line:
                         if NetworkTool.is_network(line):
                             addr = line.split("/")
-                            net = {"feed": feed["name"], "risk_score": feed.get("risk_score", 0)}
+                            net = {"feed": feed["name"], "risk_score": feed.get("risk_score", 0), "feed_type": feed.get("type",None)}
                             if len(addr) <= 1:
                                 addr.append(32)
                             info_n = NetworkTool.extract_network_info(

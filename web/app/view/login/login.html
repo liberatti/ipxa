@@ -1,0 +1,60 @@
+<div class="login-page">
+  <div class="login-background">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div class="login-container animate-in">
+    <mat-card class="glass-card login-card">
+      <div class="brand-section">
+        <div class="logo-box">
+          <mat-icon class="logo-icon">shield</mat-icon>
+        </div>
+        <h1 class="gradient-text">ipxa</h1>
+        <p class="subtitle">Acesso Restrito ao Dashboard</p>
+      </div>
+
+      <mat-progress-bar *ngIf="isLoading()" mode="indeterminate" class="login-progress"></mat-progress-bar>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+        <div *ngIf="errorMessage()" class="error-box animate-in">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="seu@email.com">
+          <mat-icon matPrefix>alternate_email</mat-icon>
+          <mat-error *ngIf="form.get('email')?.hasError('email')">E-mail inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password">
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <button mat-icon-button matSuffix (click)="togglePassword()" type="button" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="showPassword()">
+            <mat-icon>{{showPassword() ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isLoading()" class="btn-login btn-glow">
+            <span *ngIf="!isLoading()">Entrar no Dashboard</span>
+            <span *ngIf="isLoading()">Autenticando...</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="login-footer">
+        <a routerLink="/" class="back-link">
+          <mat-icon>arrow_back</mat-icon> Voltar para o Início
+        </a>
+      </div>
+    </mat-card>
+    
+    <div class="copyright">
+      &copy; {{ currentYear }} ipxa - Advanced IP Intelligence
+    </div>
+  </div>
+</div>

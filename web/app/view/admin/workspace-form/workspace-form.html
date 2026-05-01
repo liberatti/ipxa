@@ -1,0 +1,23 @@
+<h2 mat-dialog-title class="gradient-text">{{ data ? 'Edit Workspace' : 'New Workspace' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="form-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Workspace name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>API Key</mat-label>
+      <input matInput formControlName="apikey" placeholder="sk-...">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Instance UID</mat-label>
+      <input matInput formControlName="instance_uid" placeholder="Production / Staging">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="onSave()">Save</button>
+</mat-dialog-actions>

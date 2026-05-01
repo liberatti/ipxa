@@ -35,7 +35,7 @@ export interface Page {
 
 export class DefaultPageMeta implements PageMeta {
     page: number = 1;
-    per_page: number = 10;
+    per_page: number = 5;
     total_elements: number = 0;
     total_pages: number = 1;
 }

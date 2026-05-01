@@ -22,14 +22,21 @@
 ![Dashboard](docs/screenshot-01.png)
 *Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
 
+![Feeds Management](docs/screenshot-02.png)
+*Dynamic RBL orchestration and threat feed management.*
+
+![Workspaces](docs/screenshot-03.png)
+*Multi-workspace environment for isolated security configurations.*
+
 ---
 
 ## 🚀 Key Features
 
 *   🌍 **Intelligent GeoIP**: Local integration with MaxMind and ip2asn for lightning-fast lookups.
-*   🚫 **RBL Consolidation**: Automated crawlers for 50+ threat feed sources.
+*   🚫 **RBL Orchestration**: Dynamic management of 50+ threat feed sources (Reputation & Bypass).
 *   ⚡ **Multiple API Flavors**: Specialized endpoints for exhaustive data, security checks, or high-speed header-based responses.
-*   🎨 **Modern Dashboard**: Intuitive interface built for rapid analysis and manual IP investigation.
+*   🏢 **Multi-Workspace**: Isolate configurations and API keys across different environments or clients.
+*   🎨 **Admin Dashboard**: High-contrast, dark-mode interface for real-time monitoring and data management.
 
 ---
 
@@ -192,15 +199,18 @@ IPXA includes an `api.rest` file for rapid API testing.
 
 ---
 
-## 🔌 RBL Feed Configuration
+## 🔌 RBL Feed Management
 
-The architectural design allows for dynamic addition of new feeds by adding JSON files in `config/`.
+While advanced users can still add JSON files in `config/`, IPXA now features a complete **Admin Panel** to manage feeds dynamically through the UI.
 
 | Field | Description |
 | :--- | :--- |
 | `name` | Human-friendly identifier for the feed |
+| `slug` | Unique internal identifier |
+| `type` | `reputation` (for blocking) or `bypass` (for allowlisting) |
 | `source` | Public URL for download (CIDR or IP list) |
 | `format` | `cdir_text` (plain text) or `cdir_gz` (compressed) |
+| `risk_score` | Weight of this feed in the final decision (0-10) |
 
 ---
 
