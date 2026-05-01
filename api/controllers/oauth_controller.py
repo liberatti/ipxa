@@ -14,7 +14,6 @@ from nxcore.middleware.jwt import (
     jwt_create_refresh_token,
     jwt_get_refresh
 )
-from nxcore.middleware.logging import logger
 from flask import Blueprint, request, Response
 from marshmallow import ValidationError
 
@@ -26,11 +25,23 @@ routes = Blueprint("oauth", __name__)
 
 @routes.route("/401", methods=["GET"])
 def forbidden() -> Response:
+    """
+    Returns a 401 Unauthorized error response.
+
+    Returns:
+        Response: A Flask Response object with a 401 status code.
+    """
     return response_error_401()
 
 
 @routes.route("/token", methods=["GET"])
 def refresh_token() -> Response:
+    """
+    Refreshes the access token using a valid refresh token from the request.
+
+    Returns:
+        Response: A Flask Response object containing the new access token or an error message.
+    """
     r_token = jwt_get_refresh()
     try:
         payload = jwt_decode(r_token)
@@ -52,6 +63,12 @@ def refresh_token() -> Response:
 
 @routes.route("/login", methods=["POST"])
 def login() -> Response:
+    """
+    Authenticates a user with email and password and returns OIDC tokens.
+
+    Returns:
+        Response: A Flask Response object containing the OIDC tokens or an error message.
+    """
     try:
         with UserDao() as dao:
             user_dict = dao.json_load(request.json)
@@ -68,6 +85,15 @@ def login() -> Response:
 
 
 def _create_oidc_token(user: Dict) -> Dict:
+    """
+    Creates an OIDC token dictionary for a given user.
+
+    Args:
+        user (Dict): The user dictionary.
+
+    Returns:
+        Dict: A dictionary containing access and refresh tokens, expiration time, and token type.
+    """
     if "password" in user:
         user.pop("password")
     return {

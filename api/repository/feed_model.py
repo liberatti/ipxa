@@ -68,12 +68,22 @@ class FeedDao(SQLite3DAO):
 
         return row
 
-    def get_all_by_type(self, types=['reputation', 'bypass'], pagination=None) -> list[dict]:
-        sql = (f"select "
-                     f" _id,name,provider,slug,type,restricted,source,description,format,update_interval,updated_on,risk_score,data_json"
-                     f" from {self.table_name} where type IN ({', '.join(['?'] * len(types))})"
-                     f" order by _id asc")
-        count_sql = f"SELECT COUNT(*) AS total FROM {self.table_name} where type IN ({', '.join(['?'] * len(types))})"
+    def get_all_by_type(self, types=None, pagination=None) -> list[dict]:
+        """
+        Get all feeds by type with pagination.
+
+        Args:
+            types (list[str]): The types of feeds to retrieve.
+            pagination (dict): The pagination parameters.
+
+        Returns:
+            list[dict]: The list of feeds.
+        """
+        sql = (f"SELECT "
+               f" _id, name, provider, slug, type, restricted, source, description, format, update_interval, updated_on, risk_score, data_json"
+               f" FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
+               f" ORDER BY _id ASC")
+        count_sql = f"SELECT COUNT(*) AS total FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
         rows = []
         total = self._query(count_sql, params=types, fetch=True)[0]["total"]
 
@@ -95,4 +105,3 @@ class FeedDao(SQLite3DAO):
             "metadata": pagination,
             "data": rows,
         }
-    

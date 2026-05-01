@@ -8,7 +8,6 @@ from flask_cors import CORS
 from flask_restful import Api
 
 import config
-import marshmallow
 from api.routes import register as register_api_routes
 
 app = Flask(__name__)
@@ -58,6 +57,6 @@ with app.app_context():
             "LOGLEVEL": config.LOGLEVEL,
             "JWT_SECRET_KEY": config.JWT_SECRET_KEY,
             "JWT_AUD": config.JWT_AUD,
-            "SECURITY_ENABLED": config.SECURITY_ENABLED,    
+            "SECURITY_ENABLED": config.SECURITY_ENABLED,
         }
     )

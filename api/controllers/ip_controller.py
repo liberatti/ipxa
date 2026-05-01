@@ -20,10 +20,22 @@ SCORE_MONITOR_MAX = 70
 
 @routes.before_request
 def before_request():
+    """
+    Registers a hit for telemetry before processing any request in this blueprint.
+    """
     register_hit()
 
 
 def _fill_org(info: dict) -> dict:
+    """
+    Populates organization and ASN information into the IP info dictionary.
+
+    Args:
+        info (dict): The dictionary containing IP information to be updated.
+
+    Returns:
+        dict: The updated dictionary with organization details.
+    """
     org = {}
     geoip = info["location"]
     if geoip:
@@ -39,6 +51,15 @@ def _fill_org(info: dict) -> dict:
 
 
 def _fill_geo(info: dict) -> dict:
+    """
+    Populates geographical location information into the IP info dictionary using database lookups.
+
+    Args:
+        info (dict): The dictionary containing IP information to be updated.
+
+    Returns:
+        dict: The updated dictionary with geographical details.
+    """
     geoip = {}
     ip = info["ip"]["address"]
     try:
@@ -91,6 +112,15 @@ def _fill_geo(info: dict) -> dict:
 
 
 def _build_ip_info(ip: str) -> dict:
+    """
+    Builds the base IP information dictionary, including security reputation and network details.
+
+    Args:
+        ip (str): The IP address to analyze.
+
+    Returns:
+        dict: A dictionary containing base IP info and security assessment.
+    """
     ipd = {"address": ip}
 
     rep = {
@@ -132,6 +162,15 @@ def _build_ip_info(ip: str) -> dict:
 @routes.route("/info/<ip>", methods=["GET"])
 @cached("info")
 def ip_info(ip: str) -> Response:
+    """
+    Retrieves full information for a given IP, including location, organization, and security reputation.
+
+    Args:
+        ip (str): The IP address to look up.
+
+    Returns:
+        Response: A Flask Response object containing the full IP information.
+    """
     info = _build_ip_info(ip)
     _fill_geo(info)
     _fill_org(info)
@@ -148,7 +187,15 @@ def ip_info(ip: str) -> Response:
 @routes.route("/check/<ip>", methods=["GET"])
 @cached("check")
 def ip_check(ip: str) -> Response:
-    """Returns a summary risk assessment for the IP."""
+    """
+    Returns a summary risk assessment for the IP, including risk score and reasons.
+
+    Args:
+        ip (str): The IP address to check.
+
+    Returns:
+        Response: A Flask Response object containing the risk summary.
+    """
 
     info = _build_ip_info(ip)
     security = info.get("security", {})
@@ -172,7 +219,15 @@ def ip_check(ip: str) -> Response:
 @routes.route("/quick/<ip>", methods=["GET"])
 @cached("quick")
 def ip_quick(ip: str) -> Response:
-    """Returns only the risk_score and TTL for quick decisions (e.g., firewall)."""
+    """
+    Returns only the risk_score for quick decisions (e.g., firewall integration).
+
+    Args:
+        ip (str): The IP address to quickly check.
+
+    Returns:
+        Response: A Flask Response object containing the risk score.
+    """
     info = _build_ip_info(ip)
     security = info.get("security", {})
     result = {
