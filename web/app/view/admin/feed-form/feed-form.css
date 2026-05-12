@@ -1,0 +1,24 @@
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  min-width: 500px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+}
+
+.form-toggle-row {
+  padding: 8px 0;
+}
+
+textarea {
+  resize: none;
+}

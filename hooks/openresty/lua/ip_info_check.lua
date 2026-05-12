@@ -8,16 +8,18 @@ local BLOCKED_COUNTRIES = utils.parse_countries(config.BLOCKED_COUNTRIES)
 
 local ip = utils.get_client_ip()
 
+ngx.header["X-Request-Id"] = ngx.var.request_id
+
 ngx.ctx.country_code = "--"
 ngx.ctx.risk_score = -1
-ngx.ctx.ignore = false
+ngx.ctx.trusted = false
 
 local cached = cache.get(ip)
 local api_ok = false
 if cached then
     ngx.ctx.country_code = cached.country_code
     ngx.ctx.risk_score = cached.risk_score
-    ngx.ctx.ignore = cached.ignore
+    ngx.ctx.trusted = cached.trusted
     api_ok = "cached"
 else
     local httpc = http.new()
@@ -36,26 +38,26 @@ else
 
         ngx.ctx.country_code = utils.get_header(headers, "x-country-code") or "--"
         ngx.ctx.risk_score = tonumber(utils.get_header(headers, "x-risk-score")) or -1
-        ngx.ctx.ignore = (string.lower(tostring(utils.get_header(headers, "x-ignore"))) == "true")
+        ngx.ctx.trusted = (string.lower(tostring(utils.get_header(headers, "x-trusted"))) == "true")
     end
 
     if ngx.ctx.country_code and ngx.ctx.risk_score ~= -1 then
         cache.set(ip, {
             country_code = ngx.ctx.country_code,
             risk_score = ngx.ctx.risk_score,
-            ignore = ngx.ctx.ignore
+            trusted = ngx.ctx.trusted
         })
     end
 end
 
-if not ngx.ctx.ignore then
+if not ngx.ctx.trusted then
     if ngx.ctx.country_code and BLOCKED_COUNTRIES[ngx.ctx.country_code] then
         return utils.respond(ngx.HTTP_FORBIDDEN,
-            "ipxa [block/geo-ip]: " .. ip .. " country_code=" .. ngx.ctx.country_code)
+            "[block/geo-ip]: " .. ip .. " country_code=" .. ngx.ctx.country_code)
     end
 
     if tonumber(ngx.ctx.risk_score) > 0 then
         return utils.respond(ngx.HTTP_FORBIDDEN,
-            "ipxa [block/risk-score]: " .. ip .. " risk_score=" .. ngx.ctx.risk_score)
+            "[block/risk-score]: " .. ip .. " risk_score=" .. ngx.ctx.risk_score)
     end
 end

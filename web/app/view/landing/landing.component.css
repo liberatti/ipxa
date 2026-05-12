@@ -87,7 +87,20 @@
 .brand-logo { display: flex; align-items: center; gap: 12px; }
 .brand-logo-img { height: 64px; width: auto; display: block; object-fit: contain; }
 
+.version-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  background: rgba(96, 165, 250, 0.1);
+  border: 1px solid var(--accent-blue-dim);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0.8;
+}
+
 .brand-name {
+
   font-size: 24px;
   font-weight: 800;
   color: var(--text-primary);

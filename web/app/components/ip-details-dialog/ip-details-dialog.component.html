@@ -11,7 +11,15 @@
         <h2>IP Information Details</h2>
         <div class="subtitle-group">
           <span class="status-indicator"></span>
-          <p class="subtitle">Detailed analysis for <code>{{ data.ip.address }}</code></p>
+          <div class="subtitle-content">
+            <p class="subtitle">Detailed analysis for <code>{{ data.ip.address }}</code></p>
+            @if (data.security.trusted) {
+              <div class="header-trusted-badge">
+                <mat-icon>verified</mat-icon>
+                <span>Trusted IP</span>
+              </div>
+            }
+          </div>
         </div>
       </div>
     </div>
@@ -62,7 +70,15 @@
                 <mat-icon>report_problem</mat-icon>
               </div>
               <div class="security-info">
-                <span class="status-text">{{ data.security.action | uppercase }}</span>
+                <div class="status-header">
+                  <span class="status-text">{{ data.security.action | uppercase }}</span>
+                  @if (data.security.trusted) {
+                    <span class="trusted-badge">
+                      <mat-icon>verified</mat-icon>
+                      Trusted
+                    </span>
+                  }
+                </div>
                 <span class="status-desc">Active threats detected in reputation feeds.</span>
               </div>
             </div>
@@ -98,7 +114,15 @@
                 <mat-icon>verified_user</mat-icon>
               </div>
               <div class="security-info">
-                <span class="status-text">Safe Connection</span>
+                <div class="status-header">
+                  <span class="status-text">Safe Connection</span>
+                  @if (data.security.trusted) {
+                    <span class="trusted-badge">
+                      <mat-icon>verified</mat-icon>
+                      Trusted
+                    </span>
+                  }
+                </div>
                 <span class="status-desc">Verified clean across all global blacklists.</span>
               </div>
             </div>
@@ -128,10 +152,28 @@
           </div>
           
           <div class="geo-details">
+            @if (data.location.region) {
+              <div class="detail-row">
+                <span class="label">Region</span>
+                <span class="value">{{ data.location.region }}</span>
+              </div>
+            }
+            @if (data.location.city) {
+              <div class="detail-row">
+                <span class="label">City</span>
+                <span class="value">{{ data.location.city }}</span>
+              </div>
+            }
             <div class="detail-row">
               <span class="label">Protocol</span>
               <span class="value-pill">IPv{{ data.ip.version }}</span>
             </div>
+            @if (data.location.latitude) {
+              <div class="detail-row">
+                <span class="label">Coordinates</span>
+                <span class="value font-mono secondary-text small-coords">{{ data.location.latitude }}, {{ data.location.longitude }}</span>
+              </div>
+            }
             <div class="detail-row">
               <span class="label">Broadcast</span>
               <span class="value font-mono">{{ data.ip.broadcast }}</span>

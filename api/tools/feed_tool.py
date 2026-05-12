@@ -44,64 +44,9 @@ def update_maxmind(MAXMIND_ACCOUNT_ID, MAXMIND_LICENSE_KEY):
                             with open(dest_path, "wb") as out_f:
                                 out_f.write(extracted.read())
                         break
-            logger.info(f"[update] Download {edition_id}")
+            logger.info(f"Loaded {edition_id} geoip from MaxMind")
         else:
             logger.error(f"Failed to download {edition_id} {response}")
-
-
-def update_feed(feed):
-    """
-    Downloads and processes a standard IP blocklist feed.
-
-    Args:
-        feed (dict): The feed configuration dictionary.
-    """
-    try:
-        logger.info(f"Feed: {feed['name']}")
-        source_url = feed["source"]
-        if feed["restricted"]:
-            if "iblocklist" in feed["provider"]:
-                if config.IBLOCKLIST_USERNAME:
-                    source_url = f"{source_url}&username={config.IBLOCKLIST_USERNAME}&pin={config.IBLOCKLIST_PASSWORD}"
-                else:
-                    logger.info(
-                        f"Feed {feed['name']} skipped, no credentials"
-                    )
-        resp = requests.get(source_url, timeout=10)
-        if resp and resp.status_code == 200:
-            with RBLDao() as dao:
-                dao.delete_by_feed_name(feed["name"])
-                lines = []
-                if "cdir_text" in feed["format"]:
-                    lines = resp.text.splitlines()
-                if "cdir_gz" in feed["format"]:
-                    with gzip.GzipFile(fileobj=io.BytesIO(resp.content)) as gz:
-                        for gzl in gz:
-                            lines.append(gzl.decode("utf-8").strip())
-
-                batch = []
-                i = 0
-                for line in lines:
-                    if line.strip() and "#" not in line:
-                        if NetworkTool.is_network(line):
-                            addr = line.split("/")
-                            net = {"feed": feed["name"], "risk_score": feed.get("risk_score", 0)}
-                            if len(addr) <= 1:
-                                addr.append(32)
-                            info_n = NetworkTool.extract_network_info(
-                                addr[0], prefix=addr[1]
-                            )
-                            net.update(info_n)
-                            batch.append(net)
-                            i += 1
-                    if i % 500 == 0:
-                        dao.persist_many(batch)
-                        batch = []
-                dao.persist_many(batch)
-                logger.info(f"Loaded {i} records from {source_url}")
-    except Exception as e:
-        logger.error(f"Failed to load {feed['slug']}: %s", e)
-        logger.error(traceback.format_exc())
 
 
 def update_ipverse(feed: Dict):
@@ -113,7 +58,6 @@ def update_ipverse(feed: Dict):
     """
     response = requests.get(feed["source"])
     if response.status_code == 200:
-        logger.info(f"GeoIP (IPVerse): {feed['name']}")
         tar_content = io.BytesIO(response.content)
         with tarfile.open(fileobj=tar_content, mode="r:gz") as tar:
             with GeoIpDao(auto_commit=True) as dao:
@@ -162,7 +106,7 @@ def update_ipverse(feed: Dict):
                                 logger.error(f"Failed to parse JSON member {member.name}: {e}")
                 if batch:
                     dao.persist_many(batch)
-                logger.info(f"Loaded {count} records from IPVerse feed {feed['name']}")
+                logger.info(f"Loaded {count} geoip records from {feed['name']}")
 
 
 def update_ip2asn(feed: Dict):
@@ -175,7 +119,6 @@ def update_ip2asn(feed: Dict):
     src = f"https://iptoasn.com/data/{feed['name']}.tsv.gz"
     response = requests.get(src)
     if response.status_code == 200:
-        logger.info(f"GeoIP: {feed['name']}")
         zip_content = io.BytesIO(response.content)
         with gzip.open(zip_content, "rt", encoding="utf-8") as file:
             reader = csv.reader(file, delimiter="\t")
@@ -204,4 +147,65 @@ def update_ip2asn(feed: Dict):
                     except Exception:
                         logger.error(traceback.format_exc())
                 dao.persist_many(batch)
-            logger.info(f"Load {i} records from {src}")
+                logger.info(f"Loaded {i} geoip records from {feed['name']}")
+
+
+def update_feed(feed):
+    """
+    Downloads and processes a standard IP blocklist feed.
+
+    Args:
+        feed (dict): The feed configuration dictionary.
+    """
+    with RBLDao() as dao:
+        dao.delete_by_feed_name(feed["name"])
+    lines = []
+    if "embedded" in feed["format"]:
+        lines = feed["data"]
+    elif "source" in feed and feed["source"]:
+        source_url = feed["source"]
+        if feed["restricted"]:
+            if "iblocklist" in feed["provider"]:
+                if config.IBLOCKLIST_USERNAME and config.IBLOCKLIST_PASSWORD:
+                    source_url = f"{source_url}&username={config.IBLOCKLIST_USERNAME}&pin={config.IBLOCKLIST_PASSWORD}"
+                else:
+                    logger.warning(f"Feed {feed['name']} skipped, no credentials")
+        resp = requests.get(source_url, timeout=10)
+        if resp and resp.status_code == 200:
+            if "cdir_text" in feed["format"]:
+                lines = resp.text.splitlines()
+            if "cdir_gz" in feed["format"]:
+                with gzip.GzipFile(fileobj=io.BytesIO(resp.content)) as gz:
+                    for gzl in gz:
+                        lines.append(gzl.decode("utf-8").strip())
+    else:
+        logger.warning(f"Feed {feed['name']} skipped, no source or embedded data")
+        return
+    with RBLDao() as dao:
+        batch = []
+        i = 0
+        for line in lines:
+            if line.strip() and "#" not in line:
+                net = build_ip_info(line, feed)
+                if net:
+                    batch.append(net)
+                    i += 1
+            if i % 500 == 0:
+                dao.persist_many(batch)
+                batch = []
+        dao.persist_many(batch)
+        logger.info(f"Loaded {i} records from {feed['name']}")
+
+
+def build_ip_info(line: str, feed: Dict):
+    if NetworkTool.is_network(line):
+        addr = line.split("/")
+        net = {"feed": feed["name"], "risk_score": feed.get("risk_score", 0), "feed_type": feed.get("type", None)}
+        if len(addr) <= 1:
+            addr.append(32)
+        info_n = NetworkTool.extract_network_info(
+            addr[0], prefix=addr[1]
+        )
+        net.update(info_n)
+        return net
+    return None

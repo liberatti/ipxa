@@ -208,3 +208,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 README-dev.md
+hooks/httpd/**/config.lua
+hooks/openresty/**/config.lua
+hooks/httpd/**/httpd.conf

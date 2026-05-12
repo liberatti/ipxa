@@ -12,4 +12,5 @@ PyJWT>=2.12.1,<3
 pycountry
 pycountry-convert
 bson
-nxcore[web,sqlite] @ git+https://github.com/liberatti/nxcore@v1.0.2
+nxcore[web,sqlite] @ git+https://github.com/liberatti/nxcore@develop
+bcrypt

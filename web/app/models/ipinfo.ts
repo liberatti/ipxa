@@ -10,6 +10,10 @@ export interface LocationDetails {
     continent: string;
     country_code: string;
     country_name: string;
+    city?: string;
+    region?: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export interface OrgDetails {
@@ -23,6 +27,7 @@ export interface SecurityDetails {
     is_permitted: boolean;
     reasons: string[];
     risk_score: number;
+    trusted: boolean;
 }
 
 export interface IpInfo {
@@ -44,4 +49,6 @@ export interface GeoIPData {
     prefix: number;
     broadcast?: string;
     version: number;
+    latitude?: number;
+    longitude?: number;
 }

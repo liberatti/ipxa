@@ -204,7 +204,7 @@ class NetworkTool:
         return prefix
 
     @classmethod
-    def in_network(cls, ip: str, ignore_list: str) -> bool:
+    def in_networks(cls, ip: str, ignore_list: str) -> bool:
         """
         Checks if an IP address is within any of the networks in the ignore list.
 

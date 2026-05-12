@@ -1,8 +1,9 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { IpInputComponent } from 'app/components/ip-input/ip-input.component';
+import { environment } from 'environments/environment';
 
 interface MockResult {
   ip: string;
@@ -19,7 +20,7 @@ interface MockResult {
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, IpInputComponent, MatIconModule],
+  imports: [CommonModule, IpInputComponent, MatIconModule, RouterModule],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.css']
 })
@@ -29,7 +30,9 @@ export class LandingComponent {
   mockResult = signal<MockResult | null>(null);
   isQuerying = signal(false);
   mobileMenuOpen = signal(false);
+  version = signal(environment.version);
   currentYear = new Date().getFullYear();
+
 
   features = [
     {
@@ -100,82 +103,53 @@ export class LandingComponent {
     { feature: 'Rate limiting', external: 'Yes', local: 'No' }
   ];
 
-  constructor(private router: Router) {}
-
-  onIpSearch(ip: string): void {
-    this.isQuerying.set(true);
-    // Simulate API response
-    setTimeout(() => {
-      const isClean = Math.random() > 0.4;
-      this.mockResult.set({
-        ip,
-        country: 'United States',
-        country_code: 'US',
-        city: 'Mountain View',
-        asn: 'AS15169',
-        org: 'Google LLC',
-        rbl_clean: isClean,
-        rbl_lists: isClean ? [] : ['firehol_level1', 'spamhaus_sbl'],
-        risk_score: isClean ? 0 : 65
-      });
-      this.isQuerying.set(false);
-    }, 1200);
-  }
-
-  goToApp(): void {
-    this.router.navigate(['/ip-info']);
-  }
-
   setTab(tab: 'info' | 'check' | 'quick'): void {
+
     this.activeTab.set(tab);
   }
-
-  riskClass = computed(() => {
-    const score = this.mockResult()?.risk_score ?? 0;
-    if (score === 0) return 'clean';
-    if (score < 40) return 'low';
-    if (score < 70) return 'medium';
-    return 'high';
-  });
-
-  riskLabel = computed(() => {
-    const r = this.mockResult();
-    if (!r) return '';
-    if (r.risk_score === 0) return 'Clean';
-    if (r.risk_score < 40) return 'Low Risk';
-    if (r.risk_score < 70) return 'Medium Risk';
-    return 'High Risk';
-  });
 
   apiSnippet = computed(() => {
     const tab = this.activeTab();
     if (tab === 'info') return `{
-  "ip": { "address": "14.152.94.1", "version": 4 },
+  "ip": {
+    "address": "14.152.94.1",
+    "broadcast": "14.152.95.255",
+    "network": "14.152.80.0",
+    "prefix": 20,
+    "version": 4
+  },
   "location": {
+    "city": null,
     "continent": "Asia",
+    "country": "China",
     "country_code": "CN",
-    "country_name": "China"
+    "country_name": "China",
+    "latitude": 34.7732,
+    "longitude": 113.722,
+    "region": null
   },
   "organization": {
-    "asn_number": 134763,
-    "asn_name": "CT-DONGGUAN-IDC"
+    "asn_description": "",
+    "asn_name": "CT-DONGGUAN-IDC CHINANET Guangdong province network",
+    "asn_number": 134763
   },
   "security": {
-    "action": "allow",
-    "risk_score": 0,
-    "is_permitted": true,
-    "reasons": []
+    "reasons": [
+      "rbl:firehol_level1"
+    ],
+    "risk_score": 9,
+    "trusted": false
   }
 }`;
     if (tab === 'check') return `{
-  "action": "allow",
-  "confidence": 1.0,
   "ip": "14.152.94.1",
-  "risk_score": 0,
-  "reasons": []
+  "reasons": [
+    "rbl:firehol_level1"
+  ],
+  "risk_score": 9
 }`;
     return `{
-  "action": "allow"
+  "risk_score": 9
 }`;
   });
 

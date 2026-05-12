@@ -1,35 +1,50 @@
 # 🛡️ IPXA
 > **IP Reputation and Network Intelligence Monitoring**
 
-**IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 50+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
+**IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 15+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
 
 [![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
+
+![Dashboard](docs/screenshot-01.png)
+*Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
+
+![IpInfo](docs/screenshot-02.png)
+*Multi-workspace environment for isolated security configurations.*
 
 ---
 
 ## ⚡ Performance & Privacy
 
 - 🚀 **Ultra-low Latency**: Sub-5ms response times.
-- 🔒 **100% Private**: Runs entirely on your infrastructure with optional, anonymous telemetry.
+- 🔒 **100% Private**: Runs entirely on your infrastructure.
 - 💰 **Zero Cost**: No per-request fees or subscription limits.
 - 🔌 **Air-gap Ready**: Optimized for restricted and high-security environments.
 
 ---
 
-## 📸 Interface
 
-![Dashboard](docs/screenshot-01.png)
-*Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
+## 🎨 Admin Interface
+The administrative interface is accessible at the `/admin` context. It features a secure login system and a **one-click logout** to ensure session security in shared environments.
+
+You can configure the access credentials using the following environment variables:
+
+- **ADMIN_EMAIL**: Administrator email (Default: `admin@local`)
+- **ADMIN_PASSWORD**: Administrator password (Default: `admin`)
+
+![Admin Dashboard](docs/screenshot-03.png)
+*Manage your feeds, workspaces, and monitoring data through a premium, dark-mode administrative interface with secure session management.*
 
 ---
+
 
 ## 🚀 Key Features
 
 *   🌍 **Intelligent GeoIP**: Local integration with MaxMind and ip2asn for lightning-fast lookups.
-*   🚫 **RBL Consolidation**: Automated crawlers for 50+ threat feed sources.
+*   🚫 **RBL Orchestration**: Dynamic management of 15+ threat feed sources (Reputation & Bypass).
 *   ⚡ **Multiple API Flavors**: Specialized endpoints for exhaustive data, security checks, or high-speed header-based responses.
-*   🎨 **Modern Dashboard**: Intuitive interface built for rapid analysis and manual IP investigation.
+*   🏢 **Multi-Workspace**: Isolate configurations and API keys across different environments or clients.
+*   🎨 **Admin Dashboard**: High-contrast, dark-mode interface for real-time monitoring and data management.
 
 ---
 
@@ -44,12 +59,11 @@ services:
   ipxa:
     image: liberatti/ipxa:latest
     container_name: ipxa
-    environment:
-      # - IBLOCKLIST_USERNAME=
-      # - IBLOCKLIST_PASSWORD=
-      # - MAXMIND_ACCOUNT_ID=
-      # - MAXMIND_LICENSE_KEY=
-      - IGNORE_IP_CIDRS=127.0.0.1,192.168.0.0/16,::1
+#    environment:
+#      - IBLOCKLIST_USERNAME=
+#      - IBLOCKLIST_PASSWORD=
+#      - MAXMIND_ACCOUNT_ID=
+#      - MAXMIND_LICENSE_KEY=
     volumes:
       - ipxa_data:/data
     ports:
@@ -63,15 +77,11 @@ services:
 volumes:
   ipxa_data:
 ```
-
-The `IGNORE_IP_CIDRS` variable is a comma separated list of IP CIDRs that should be ignored by IPXA hooks. 
-In case the ip is in this list, the risk score will be 0 and country code will be `--`.
-
 ---
 
 ## 🔗 Server Integrations (Hooks)
 
-IPXA provides native, high-performance middleware hooks for popular web servers, allowing you to block malicious traffic at the edge before it reaches your application.
+IPXA provides native, high-performance middleware hooks for popular web servers, allowing you to block malicious traffic at the edge. These hooks support **standardized JSON error responses** with unique `request_id` tracking for enhanced observability.
 
 ### Apache (`mod_lua`)
 
@@ -86,7 +96,16 @@ Integrate IPXA directly into your Apache configuration using `mod_lua` to evalua
    <VirtualHost *:80>
        ServerName example.com
        DocumentRoot /var/www/html
+       
+       # IPXA Access Control
        LuaHookAccessChecker /etc/httpd/lua/ipxa.lua ip_info_check
+       
+       # IPXA JSON Error Handler
+       Alias /errors /etc/httpd/lua/errors.lua
+       <Location /errors>
+           SetHandler lua-script
+       </Location>
+       ErrorDocument 403 /errors
    </VirtualHost>
    ```
 
@@ -109,15 +128,35 @@ Leverage the power of Lua in Nginx via OpenResty for ultra-low latency IP checki
 
        server {
            # ...
+           error_page 403 /lua-error;
+
            location / {
                access_by_lua_file /usr/local/openresty/lualib/ipxa/ip_info_check.lua;
-               # ...
+           }
+
+           location = /lua-error {
+               internal;
+               content_by_lua_file /usr/local/openresty/lualib/ipxa/errors.lua;
            }
        }
    }
    ```
 
 *(Check `hooks/openresty/nginx.conf` and `hooks/openresty/Dockerfile` for working examples).*
+
+### 🛡️ Response Format
+
+When a request is blocked, the hooks return a machine-readable JSON response instead of default HTML error pages. This ensures consistent error handling for both browsers and API clients.
+
+**Example Blocked Response:**
+```json
+{
+  "error": "Forbidden",
+  "status": 403,
+  "request_id": "b10ed3a6f76ad62a75a956ce3e922336",
+  "message": "ipxa [block/risk-score]: 172.20.0.1 risk_score=14"
+}
+```
 
 ---
 
@@ -192,15 +231,18 @@ IPXA includes an `api.rest` file for rapid API testing.
 
 ---
 
-## 🔌 RBL Feed Configuration
+## 🔌 RBL Feed Management
 
-The architectural design allows for dynamic addition of new feeds by adding JSON files in `config/`.
+While advanced users can still add JSON files in `config/`, IPXA now features a complete **Admin Panel** to manage feeds dynamically through the UI.
 
 | Field | Description |
 | :--- | :--- |
 | `name` | Human-friendly identifier for the feed |
+| `slug` | Unique internal identifier |
+| `type` | `reputation` (for blocking) or `bypass` (for allowlisting) |
 | `source` | Public URL for download (CIDR or IP list) |
 | `format` | `cdir_text` (plain text) or `cdir_gz` (compressed) |
+| `risk_score` | Weight of this feed in the final decision (0-10) |
 
 ---
 
@@ -217,23 +259,11 @@ Includes a pre-configured library of industry-standard feeds:
 
 ---
 
-## 📊 Telemetry
+## ⚖️ Limitation of Liability
 
-To help improve IPXA, the application collects anonymous usage data. This information is used to track version adoption and platform growth.
+**Disclaimer of Warranty**: This software is provided "AS IS", without warranty of any kind, express or implied. The author(s) and contributor(s) shall not be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.
 
-**What is collected:**
-*   **Instance ID**: A randomly generated unique identifier for your installation.
-*   **Version**: The current version of IPXA you are running.
-*   **Source IP**: The public IP of the instance (used for geographic distribution analysis).
-*   **Hits**: The total number of IP lookups processed.
-
-**How to opt-out:**
-Telemetry is enabled by default. You can disable it at any time by setting the following environment variable in your `docker-compose.yml`:
-
-```yaml
-environment:
-  - TELEMETRY_ENABLE=false
-```
+**Use at Your Own Risk**: You are solely responsible for any decisions made or actions taken based on the data provided by IPXA. The software involves security-related functions; its misconfiguration or misuse could lead to service disruption or security gaps.
 
 ---
 

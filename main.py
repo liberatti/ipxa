@@ -5,19 +5,16 @@ from nxcore.controllers.base_controller import response_error_404, response_erro
 from nxcore.middleware.logging import logger
 from flask import Flask, Blueprint
 from flask_cors import CORS
-from flask_marshmallow import Marshmallow
 from flask_restful import Api
 
 import config
 from api.routes import register as register_api_routes
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 
-cors = CORS(resources={r"/*": {"origins": "*"}})
-cors.init_app(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-ma = Marshmallow()
-ma.init_app(app)
 
 api = Api(app)
 
@@ -56,5 +53,10 @@ def handle_exception(error):
 
 with app.app_context():
     nxcore_config.init(
-        {"LOGLEVEL": config.LOGLEVEL}
+        {
+            "LOGLEVEL": config.LOGLEVEL,
+            "JWT_SECRET_KEY": config.JWT_SECRET_KEY,
+            "JWT_AUD": config.JWT_AUD,
+            "SECURITY_ENABLED": config.SECURITY_ENABLED,
+        }
     )

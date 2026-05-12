@@ -7,20 +7,12 @@ from geoip2 import database
 import config
 from api.repository.geoip_model import GeoIpDao
 from api.repository.rbl_model import RBLDao
-from api.tools.telemetry import register_hit
 from api.tools.common import enrich_country, cached
 from api.tools.network_tool import NetworkTool
 from config import cache
+from nxcore.middleware.logging import logger
 
 routes = Blueprint("ip", __name__)
-
-SCORE_ALLOW_MAX = 30
-SCORE_MONITOR_MAX = 70
-
-
-@routes.before_request
-def before_request():
-    register_hit()
 
 
 def _fill_org(info: dict) -> dict:
@@ -96,18 +88,21 @@ def _build_ip_info(ip: str) -> dict:
     rep = {
         "reasons": [],
         "risk_score": 0,
-        "ignore": False,
+        "trusted": False,
     }
 
     try:
-        if NetworkTool.in_network(ip, config.IGNORE_IP_CIDRS):
-            rep["ignore"] = True
-        else:
-            with RBLDao() as dao:
-                rep_data = dao.get_by_ip(ip)
-                if rep_data:
-                    for r in rep_data:
-                        feed = r.get("feed", "")
+        with RBLDao() as dao:
+            rep_data = dao.get_by_ip(ip)
+            if rep_data:
+                for r in rep_data:
+                    feed = r.get("feed", "")
+                    feed_type = r.get("feed_type", None)
+                    logger.info(f"DEBUG: Feed: {feed}, Feed Type: {feed_type}")
+                    if "bypass" in feed_type:
+                        rep["trusted"] = True
+                        rep["reasons"].append(f"trust:{feed}")
+                    else:
                         rep["reasons"].append(f"rbl:{feed}")
                         rep["risk_score"] += r.get("risk_score", 0)
     except Exception:
@@ -135,7 +130,7 @@ def ip_info(ip: str) -> Response:
         "x-risk-score": info["security"]["risk_score"],
         "x-cache": "miss",
         "x-country-code": info["location"]["country_code"],
-        "x-ignore": info["security"]["ignore"],
+        "x-trusted": info["security"]["trusted"],
     }
     return response_data(info, headers=headers)
 
@@ -159,7 +154,7 @@ def ip_check(ip: str) -> Response:
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
-        "x-ignore": info["security"]["ignore"]
+        "x-trusted": info["security"]["trusted"]
     }
     return response_data(result, headers=headers)
 
@@ -177,6 +172,6 @@ def ip_quick(ip: str) -> Response:
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
-        "x-ignore": info["security"]["ignore"],
+        "x-trusted": info["security"]["trusted"],
     }
     return response_data(result, headers=headers)

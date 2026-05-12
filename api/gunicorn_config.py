@@ -8,7 +8,7 @@ import schedule
 from nxcore.middleware.logging import logger
 
 import config as _config
-from api.tasks import install_task, update_task, send_telemetry_task
+from api.tasks import install_task, update_task
 
 stop_event = threading.Event()
 
@@ -43,12 +43,12 @@ def when_ready(server):
     with open(lock_file, "a+") as f:
         try:
             fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            __override_existing = False
             if not os.path.exists(os.path.join(_config.DB_PATH, "app.sqlite")):
                 install_task()
-            update_task()
+                __override_existing = True
+            update_task(override_existing=__override_existing)
             schedule.every(6).hours.do(update_task)
-            if _config.TELEMETRY_ENABLE:
-                schedule.every(1).hours.do(send_telemetry_task)
             logger.info("Main task scheduled.")
         except BlockingIOError:
             logger.info("Initialization skipped: lock held by another worker.")

@@ -24,7 +24,7 @@ def cached(prefix):
                     "x-risk-score": hit['security']['risk_score'],
                     "x-cache": "hit",
                     "x-country-code": hit["location"]["country_code"],
-                    "x-ignore": hit["security"]["ignore"]
+                    "x-trusted": hit["security"]["trusted"]
                 }
                 return response_data(hit, headers=headers)
             result = f(ip, *args, **kwargs)

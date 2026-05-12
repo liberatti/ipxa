@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import json
 from nxcore.repository.sqlite3_base_dao import SQLite3DAO
 
 import config
@@ -7,8 +7,8 @@ import config
 
 class FeedDao(SQLite3DAO):
 
-    def __init__(self):
-        super().__init__(db_path=config.DB_PATH, table_name="feed")
+    def __init__(self, auto_commit=True):
+        super().__init__(db_path=config.DB_PATH, table_name="feed", auto_commit=auto_commit)
 
     def create_schema(self):
         """
@@ -20,14 +20,15 @@ class FeedDao(SQLite3DAO):
                 name TEXT,
                 slug TEXT,
                 provider TEXT,
-                restricted TEXT,
+                restricted BOOLEAN,
                 type TEXT,
                 source TEXT,
                 description TEXT,
                 format TEXT,
                 update_interval TEXT,
                 updated_on TEXT,
-                risk_score INTEGER
+                risk_score INTEGER,
+                data_json TEXT
             );
         """)
 
@@ -44,6 +45,9 @@ class FeedDao(SQLite3DAO):
         """
         if "updated_on" in vo:
             vo.update({"updated_on": vo["updated_on"].isoformat()})
+        if "data" in vo:
+            vo.update({"data_json": json.dumps(vo.pop("data"), ensure_ascii=False)})
+
         return super().from_dict(vo)
 
     def to_dict(self, row):
@@ -59,4 +63,45 @@ class FeedDao(SQLite3DAO):
         """
         if "updated_on" in row and row["updated_on"] is not None:
             row.update({"updated_on": datetime.fromisoformat(row["updated_on"])})
+        if "data_json" in row and row["data_json"] is not None:
+            row.update({"data": json.loads(row.pop("data_json"))})
+
         return row
+
+    def get_all_by_type(self, types=None, pagination=None) -> list[dict]:
+        """
+        Get all feeds by type with pagination.
+
+        Args:
+            types (list[str]): The types of feeds to retrieve.
+            pagination (dict): The pagination parameters.
+
+        Returns:
+            list[dict]: The list of feeds.
+        """
+        sql = (f"SELECT "
+               f" _id, name, provider, slug, type, restricted, source, description, format, update_interval, updated_on, risk_score, data_json"
+               f" FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
+               f" ORDER BY _id ASC")
+        count_sql = f"SELECT COUNT(*) AS total FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
+        rows = []
+        total = self._query(count_sql, params=types, fetch=True)[0]["total"]
+
+        if pagination:
+            page = pagination.get("page", 1)
+            per_page = pagination.get("per_page", 10)
+            offset = (page - 1) * per_page
+            sql += f" LIMIT {per_page} OFFSET {offset}"
+            pagination["total_elements"] = total
+        else:
+            pagination = {"total_elements": total, "page": 1, "per_page": total}
+
+        rs = self._query(sql, params=types, fetch=True)
+        if rs:
+            rows = [row for row in rs]
+            for r in rows:
+                self.to_dict(r)
+        return {
+            "metadata": pagination,
+            "data": rows,
+        }
