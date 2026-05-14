@@ -98,7 +98,6 @@ def _build_ip_info(ip: str) -> dict:
                 for r in rep_data:
                     feed = r.get("feed", "")
                     feed_type = r.get("feed_type", None)
-                    logger.info(f"DEBUG: Feed: {feed}, Feed Type: {feed_type}")
                     if "bypass" in feed_type:
                         rep["trusted"] = True
                         rep["reasons"].append(f"trust:{feed}")
