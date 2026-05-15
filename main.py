@@ -1,13 +1,23 @@
 import traceback
 
+import config
 import nxcore.config as nxcore_config
-from nxcore.controllers.base_controller import response_error_404, response_error_500
 from nxcore.middleware.logging import logger
+
+nxcore_config.init(
+    {
+        "LOGLEVEL": config.LOGLEVEL,
+        "JWT_SECRET_KEY": config.JWT_SECRET_KEY,
+        "JWT_AUD": config.JWT_AUD,
+        "SECURITY_ENABLED": config.SECURITY_ENABLED,
+    }
+)
+
+from nxcore.controllers.base_controller import response_error_404, response_error_500
 from flask import Flask, Blueprint
 from flask_cors import CORS
 from flask_restful import Api
 
-import config
 from api.routes import register as register_api_routes
 
 app = Flask(__name__)
@@ -49,14 +59,3 @@ def handle_exception(error):
     stack_trace = traceback.format_exc()
     logger.error(f"Internal Server Error: {stack_trace}")
     return response_error_500("Unexpected Server Error", details=stack_trace)
-
-
-with app.app_context():
-    nxcore_config.init(
-        {
-            "LOGLEVEL": config.LOGLEVEL,
-            "JWT_SECRET_KEY": config.JWT_SECRET_KEY,
-            "JWT_AUD": config.JWT_AUD,
-            "SECURITY_ENABLED": config.SECURITY_ENABLED,
-        }
-    )

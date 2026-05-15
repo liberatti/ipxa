@@ -3,7 +3,7 @@ FROM --platform=$BUILDPLATFORM node:lts AS build_frontend
 WORKDIR /app/web
 
 COPY web/package*.json .
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY web /app/web
 COPY *.json /app/web/

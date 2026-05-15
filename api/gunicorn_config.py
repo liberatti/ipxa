@@ -91,6 +91,7 @@ threads = _config.THREADS
 preload_app = False
 bind = "0.0.0.0:5000"
 scheduler_started = False
-accesslog = "-"
+accesslog = "-" if _config.LOGLEVEL in ["DEBUG", "INFO"] else None
 errorlog = "-"
 loglevel = _config.LOGLEVEL
+
