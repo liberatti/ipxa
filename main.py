@@ -10,6 +10,7 @@ nxcore_config.init(
         "JWT_SECRET_KEY": config.JWT_SECRET_KEY,
         "JWT_AUD": config.JWT_AUD,
         "SECURITY_ENABLED": config.SECURITY_ENABLED,
+        "API_KEY": config.API_KEY,
     }
 )
 

@@ -1,3 +1,4 @@
+from api.repository.rbl_model import RBLModuleDao
 import json
 import os
 import traceback
@@ -45,15 +46,22 @@ def install_task():
     initializing feeds and other repositories.
     """
     os.makedirs(config.DB_PATH, exist_ok=True)
+    with RBLModuleDao() as rdao:
+        rdao.create_schema()
     with UserDao() as dao:
         dao.create_schema()
-
     with FeedDao() as dao:
         dao.create_schema()
         for c in os.listdir(config.APP_BASE + "/config"):
             with open(config.APP_BASE + "/config/" + c) as f:
                 feed = json.load(f)
                 dao.persist(feed)
+            with RBLModuleDao() as rdao:
+                rdao.create_schema()
+                rdao.persist({
+                    "feed": feed["name"],
+                    "wid": 0
+                })
 
     with RBLDao() as dao:
         dao.create_schema()

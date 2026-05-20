@@ -7,6 +7,53 @@ from nxcore.repository.sqlite3_base_dao import SQLite3DAO
 import config
 from api.tools.network_tool import NetworkTool
 
+class RBLModuleDao(SQLite3DAO):
+
+    def __init__(self, auto_commit=True):
+        super().__init__(db_path=config.DB_PATH, table_name="rbl_module", auto_commit=auto_commit)
+
+    def create_schema(self):
+        """
+        Creates the database table for RBL data if it doesn't already exist.
+        """
+        self.ddl(f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name} (
+                feed text,
+                wid integer
+            );
+        """)
+
+    def get_by_wid(self, wid: int) -> Optional[Dict[str, Any]]:
+        """
+        Finds RBL information for a given wid.
+
+        Args:
+            wid (int): The wid to search for.
+
+        Returns:
+            Optional[Dict[str, Any]]: The RBL records if found, None otherwise.
+        """
+        try:
+            query = (f"select * from {self.table_name} a"
+                     f" where a.wid=?")
+            return self._query(query, params=(wid,), fetch=True)
+        except Exception as e:
+            logger.error(f"Error finding RBL data for wid {wid}: {str(e)}")
+            raise
+        
+    def delete_by_wid(self, wid: int) -> None:
+        """
+        Deletes all RBL records associated with a specific feed.
+
+        Args:
+            wid (int): The wid to delete.
+        """
+        try:
+            query = f"DELETE from {self.table_name} where wid = ?"
+            return self._query(query, params=(wid,), fetch=True)
+        except Exception as e:
+            logger.error(f"Error deleting RBL data for wid {wid}: {str(e)}")
+            raise
 
 class RBLDao(SQLite3DAO):
 
@@ -31,7 +78,7 @@ class RBLDao(SQLite3DAO):
             );
         """)
 
-    def get_by_ip(self, ip_str):
+    def get_by_ip(self, ip_str: str, wid: int = 0):
         """
         Retrieves all RBL records that contain the given IP address.
 
@@ -45,13 +92,21 @@ class RBLDao(SQLite3DAO):
         ip_packed = ip_obj.packed
         ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
         query = (f"""
-            SELECT network, broadcast, prefix, version, feed, risk_score, feed_type
-            FROM {self.table_name}
-            WHERE idx_s <= ? AND idx_e >= ? AND version = ?
+            SELECT 
+            a.network,
+            a.broadcast,
+            a.prefix,
+            a.version,
+            a.feed,
+            a.feed_type,
+            a.risk_score
+            FROM {self.table_name} a
+            LEFT JOIN rbl_module b ON a.feed = b.feed
+            WHERE idx_s <= ? AND idx_e >= ? AND version = ? and b.wid =?
             ORDER BY idx_s
         """)
 
-        return self._query(query, params=(ip_packed, ip_packed, ver), fetch=True)
+        return self._query(query, params=(ip_packed, ip_packed, ver, wid), fetch=True)
 
     def delete_by_feed_name(self, feed_name: str) -> None:
         """
@@ -67,7 +122,7 @@ class RBLDao(SQLite3DAO):
             logger.error(f"Error deleting RBL data for feed {feed_name}: {str(e)}")
             raise
 
-    def get_networks_from_feed_type(self, feed_type: str):
+    def get_networks_from_feed_type(self, feed_type: str, wid: int = 0):
         """
         Retrieves a complete record by its feed name.
 
@@ -77,8 +132,21 @@ class RBLDao(SQLite3DAO):
         Returns:
             list: A list of network
         """
-        sql = f"SELECT network, prefix, version FROM {self.table_name} WHERE feed_type = ?"
-        rs = self._query(sql, (feed_type,), fetch=True)
+        query = f"""
+            SELECT 
+            a.network,
+            a.broadcast,
+            a.prefix,
+            a.version,
+            a.feed,
+            a.feed_type,
+            a.risk_score
+            FROM {self.table_name} a
+            LEFT JOIN rbl_module b ON a.feed = b.feed
+            WHERE feed_type = ? and b.wid = ?
+            ORDER BY idx_s
+        """
+        rs = self._query(query, (feed_type, wid), fetch=True)
         return rs
 
     def exists_by_feed(self, feed):
@@ -95,7 +163,7 @@ class RBLDao(SQLite3DAO):
         rs = self._query(sql, (feed,), fetch=True)
         return len(rs) == 1
 
-    def find_by_ip(self, ip_str: str) -> Optional[Dict[str, Any]]:
+    def find_by_ip(self, ip_str: str, wid: int = 0) -> Optional[Dict[str, Any]]:
         """
         Finds RBL information for a given IP address.
 
@@ -109,10 +177,11 @@ class RBLDao(SQLite3DAO):
             ip_obj = ipaddress.ip_address(ip_str)
             ip_packed = ip_obj.packed
             ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
-            query = (f"select network, broadcast, prefix,version, feed, risk_score, feed_type"
-                     f" from {self.table_name}"
-                     f" where idx_s <= ? and idx_e >= ? and version=?")
-            return self._query(query, params=(ip_packed, ip_packed, ver), fetch=True)
+            query = (f"select a.network, a.broadcast, a.prefix,a.version, a.feed, a.risk_score, a.feed_type"
+                     f" from {self.table_name} a"
+                     f" left join rbl_module b on a.feed = b.feed"
+                     f" where a.idx_s <= ? and a.idx_e >= ? and a.version=? and b.wid=?")
+            return self._query(query, params=(ip_packed, ip_packed, ver, wid), fetch=True)
         except Exception as e:
             logger.error(f"Error finding RBL data for IP {ip_str}: {str(e)}")
             raise

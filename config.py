@@ -35,3 +35,4 @@ JWT_EXPIRE = 3600
 JWT_AUD = "ipxa"
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@local")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
+API_KEY = os.environ.get("API_KEY", "dev_api_key")

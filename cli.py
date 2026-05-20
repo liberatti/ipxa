@@ -1,11 +1,12 @@
 import sys
+from urllib.request import urlopen
 
 from api.tasks import install_task, update_task
 
 
 def health_check():
     try:
-        with urllib.request.urlopen('http://localhost:5000') as response:
+        with urlopen('http://localhost:5000',timeout=5) as response:
             if response.getcode() != 200:
                 print("Health check failed")
             else:
