@@ -1,4 +1,3 @@
-from flask import request
 import os
 
 from nxcore.controllers.base_controller import response_data
@@ -11,7 +10,6 @@ from api.repository.rbl_model import RBLDao
 from api.tools.common import enrich_country, cached
 from api.tools.network_tool import NetworkTool
 from config import cache
-from nxcore.middleware.logging import logger
 
 routes = Blueprint("ip", __name__)
 

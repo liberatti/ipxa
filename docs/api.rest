@@ -158,23 +158,3 @@ response:
 }
 ```
 ###
-
-# @name Create RBL usage for module
-POST {{baseUrl}}/api/rbl_module
-x-api-key: {{api_key}}
-Content-Type: application/json
-
-{
-  "feeds": [
-    "firehol_level1"
-  ],
-  "wid": 1
-}
-
-###
-
-# @name Delete RBL usage for module
-DELETE {{baseUrl}}/api/rbl_module/1
-x-api-key: {{api_key}}
-
-###
