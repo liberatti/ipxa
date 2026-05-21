@@ -101,13 +101,12 @@ def _fill_geo(info: dict) -> dict:
         info.update({"location": geoip})
 
 
-def _build_ip_info(ip: str, wid: int) -> dict:
+def _build_ip_info(ip: str) -> dict:
     """
     Builds the IP information dictionary.
 
     Args:
         ip (str): The IP address to query.
-        wid (int): The module ID to query.
 
     Returns:
         dict: The IP information dictionary.
@@ -122,7 +121,7 @@ def _build_ip_info(ip: str, wid: int) -> dict:
 
     try:
         with RBLDao() as dao:
-            rep_data = dao.get_by_ip(ip, wid)
+            rep_data = dao.get_by_ip(ip)
             if rep_data:
                 for r in rep_data:
                     feed = r.get("feed", "")
@@ -155,16 +154,13 @@ def ip_info(ip: str) -> Response:
 
     Args:
         ip (str): The IP address to query.
-        wid (int): The module ID to query.
-
     Returns:
         Response: A Flask Response object containing the IP information.
     """
-    wid = request.args.get("wid", 0)
-    info = _build_ip_info(ip, wid)
+    info = _build_ip_info(ip)
     _fill_geo(info)
     _fill_org(info)
-    cache[f"i:{wid}:{ip}"] = info
+    cache[f"i:{ip}"] = info
     headers = {
         "x-risk-score": info["security"]["risk_score"],
         "x-cache": "miss",
@@ -182,13 +178,11 @@ def ip_check(ip: str) -> Response:
 
     Args:
         ip (str): The IP address to query.
-        wid (int): The module ID to query.
 
     Returns:
         Response: A Flask Response object containing the IP information.
     """
-    wid = request.args.get("wid", 0)
-    info = _build_ip_info(ip, wid)
+    info = _build_ip_info(ip)
     security = info.get("security", {})
     risk_score = security.get("risk_score", 0)
     reasons = security.get("reasons", [])
@@ -198,7 +192,7 @@ def ip_check(ip: str) -> Response:
         "risk_score": risk_score,
         "reasons": reasons
     }
-    cache[f"c:{wid}:{ip}"] = result
+    cache[f"c:{ip}"] = result
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
@@ -215,18 +209,16 @@ def ip_quick(ip: str) -> Response:
 
     Args:
         ip (str): The IP address to query.
-        wid (int): The module ID to query.
 
     Returns:
         Response: A Flask Response object containing the IP information.
     """
-    wid = request.args.get("wid", 0)
-    info = _build_ip_info(ip, wid)
+    info = _build_ip_info(ip)
     security = info.get("security", {})
     result = {
         "risk_score": security.get("risk_score", 0)
     }
-    cache[f"q:{wid}:{ip}"] = result
+    cache[f"q:{ip}"] = result
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",

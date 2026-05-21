@@ -18,8 +18,7 @@ def cached(prefix):
     def decorator(f):
         @wraps(f)
         def wrapper(ip, *args, **kwargs):
-            wid = request.args.get("wid", 0)
-            cache_key = f"{prefix}:{wid}:{ip}"
+            cache_key = f"{prefix}:{ip}"
             print(f"cache_key: {cache_key}")
             hit = cache.get(cache_key)
             print(f"hit: {hit}")

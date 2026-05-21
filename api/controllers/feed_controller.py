@@ -7,7 +7,7 @@ from nxcore.controllers.base_controller import (
 )
 from nxcore.controllers.base_controller import has_any_authority
 from api.repository.feed_model import FeedDao
-from api.repository.rbl_model import RBLDao,RBLModuleDao
+from api.repository.rbl_model import RBLDao
 from api.tools.feed_tool import update_feed
 
 routes = Blueprint("feed", __name__)
@@ -47,11 +47,6 @@ def save() -> Response:
     feed = request.json
     with FeedDao(auto_commit=False) as dao:
         if dao.create(feed):
-            with RBLModuleDao() as rdao:
-                rdao.persist({
-                    "feed": feed["name"],
-                    "wid": 0
-                })
             update_feed(feed)
             dao.commit()
             return response_ok("Record created")
