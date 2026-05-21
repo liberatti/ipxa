@@ -6,7 +6,7 @@ from api.tasks import install_task, update_task
 
 def health_check():
     try:
-        with urlopen('http://localhost:5000',timeout=5) as response:
+        with urlopen('http://localhost:5000', timeout=5) as response:
             if response.getcode() != 200:
                 print("Health check failed")
             else:

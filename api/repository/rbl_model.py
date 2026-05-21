@@ -7,6 +7,7 @@ from nxcore.repository.sqlite3_base_dao import SQLite3DAO
 import config
 from api.tools.network_tool import NetworkTool
 
+
 class RBLDao(SQLite3DAO):
 
     def __init__(self, auto_commit=True):
@@ -47,7 +48,7 @@ class RBLDao(SQLite3DAO):
         ip_packed = ip_obj.packed
         ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
         query = (f"""
-            SELECT 
+            SELECT
             a.network,
             a.broadcast,
             a.prefix,
@@ -87,7 +88,7 @@ class RBLDao(SQLite3DAO):
             list: A list of network
         """
         query = f"""
-            SELECT 
+            SELECT
             a.network,
             a.broadcast,
             a.prefix,

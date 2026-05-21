@@ -1,8 +1,15 @@
 import traceback
 
+from flask import Flask, Blueprint
+from flask_cors import CORS
+from flask_restful import Api
+
 import config
 import nxcore.config as nxcore_config
+from nxcore.controllers.base_controller import response_error_404, response_error_500
 from nxcore.middleware.logging import logger
+
+from api.routes import register as register_api_routes
 
 nxcore_config.init(
     {
@@ -14,12 +21,6 @@ nxcore_config.init(
     }
 )
 
-from nxcore.controllers.base_controller import response_error_404, response_error_500
-from flask import Flask, Blueprint
-from flask_cors import CORS
-from flask_restful import Api
-
-from api.routes import register as register_api_routes
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False

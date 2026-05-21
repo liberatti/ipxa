@@ -94,4 +94,3 @@ scheduler_started = False
 accesslog = "-" if _config.LOGLEVEL in ["DEBUG", "INFO"] else None
 errorlog = "-"
 loglevel = _config.LOGLEVEL
-
