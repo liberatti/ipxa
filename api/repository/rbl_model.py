@@ -22,6 +22,8 @@ class RBLModuleDao(SQLite3DAO):
                 wid integer
             );
         """)
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_module_wid ON {self.table_name} (wid);")
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_module_feed ON {self.table_name} (feed);")
 
     def get_by_wid(self, wid: int) -> Optional[Dict[str, Any]]:
         """
@@ -77,6 +79,9 @@ class RBLDao(SQLite3DAO):
                 risk_score INTEGER
             );
         """)
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_feed ON {self.table_name} (feed);")
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_version_idx ON {self.table_name} (version, idx_s, idx_e);")
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_feed_type ON {self.table_name} (feed_type);")
 
     def get_by_ip(self, ip_str: str, wid: int = 0):
         """

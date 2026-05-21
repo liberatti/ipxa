@@ -31,6 +31,9 @@ class FeedDao(SQLite3DAO):
                 data_json TEXT
             );
         """)
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_feed_type ON {self.table_name} (type);")
+        self.ddl(f"CREATE UNIQUE INDEX IF NOT EXISTS idx_feed_slug ON {self.table_name} (slug);")
+
 
     def from_dict(self, vo):
         """

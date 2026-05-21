@@ -1,3 +1,4 @@
+from flask import request
 import os
 
 from nxcore.controllers.base_controller import response_data
@@ -16,6 +17,15 @@ routes = Blueprint("ip", __name__)
 
 
 def _fill_org(info: dict) -> dict:
+    """
+    Fills the organization information.
+
+    Args:
+        info (dict): The IP information dictionary.
+
+    Returns:
+        dict: The IP information dictionary with organization information filled.
+    """
     org = {}
     geoip = info["location"]
     if geoip:
@@ -31,6 +41,15 @@ def _fill_org(info: dict) -> dict:
 
 
 def _fill_geo(info: dict) -> dict:
+    """
+    Fills the GeoIP information.
+
+    Args:
+        info (dict): The IP information dictionary.
+
+    Returns:
+        dict: The IP information dictionary with GeoIP information filled.
+    """
     geoip = {}
     ip = info["ip"]["address"]
     try:
@@ -82,7 +101,17 @@ def _fill_geo(info: dict) -> dict:
         info.update({"location": geoip})
 
 
-def _build_ip_info(ip: str) -> dict:
+def _build_ip_info(ip: str, wid: int) -> dict:
+    """
+    Builds the IP information dictionary.
+
+    Args:
+        ip (str): The IP address to query.
+        wid (int): The module ID to query.
+
+    Returns:
+        dict: The IP information dictionary.
+    """
     ipd = {"address": ip}
 
     rep = {
@@ -93,7 +122,7 @@ def _build_ip_info(ip: str) -> dict:
 
     try:
         with RBLDao() as dao:
-            rep_data = dao.get_by_ip(ip)
+            rep_data = dao.get_by_ip(ip, wid)
             if rep_data:
                 for r in rep_data:
                     feed = r.get("feed", "")
@@ -119,12 +148,23 @@ def _build_ip_info(ip: str) -> dict:
 
 
 @routes.route("/info/<ip>", methods=["GET"])
-@cached("info")
+@cached("i")
 def ip_info(ip: str) -> Response:
-    info = _build_ip_info(ip)
+    """
+    Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
+
+    Args:
+        ip (str): The IP address to query.
+        wid (int): The module ID to query.
+
+    Returns:
+        Response: A Flask Response object containing the IP information.
+    """
+    wid = request.args.get("wid", 0)
+    info = _build_ip_info(ip, wid)
     _fill_geo(info)
     _fill_org(info)
-    cache[f"info:{ip}"] = info
+    cache[f"i:{wid}:{ip}"] = info
     headers = {
         "x-risk-score": info["security"]["risk_score"],
         "x-cache": "miss",
@@ -135,11 +175,20 @@ def ip_info(ip: str) -> Response:
 
 
 @routes.route("/check/<ip>", methods=["GET"])
-@cached("check")
+@cached("c")
 def ip_check(ip: str) -> Response:
-    """Returns a summary risk assessment for the IP."""
+    """
+    Returns a summary risk assessment for the IP.
 
-    info = _build_ip_info(ip)
+    Args:
+        ip (str): The IP address to query.
+        wid (int): The module ID to query.
+
+    Returns:
+        Response: A Flask Response object containing the IP information.
+    """
+    wid = request.args.get("wid", 0)
+    info = _build_ip_info(ip, wid)
     security = info.get("security", {})
     risk_score = security.get("risk_score", 0)
     reasons = security.get("reasons", [])
@@ -149,7 +198,7 @@ def ip_check(ip: str) -> Response:
         "risk_score": risk_score,
         "reasons": reasons
     }
-    cache[f"check:{ip}"] = result
+    cache[f"c:{wid}:{ip}"] = result
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
@@ -159,15 +208,25 @@ def ip_check(ip: str) -> Response:
 
 
 @routes.route("/quick/<ip>", methods=["GET"])
-@cached("quick")
+@cached("q")
 def ip_quick(ip: str) -> Response:
-    """Returns only the risk_score and TTL for quick decisions (e.g., firewall)."""
-    info = _build_ip_info(ip)
+    """
+    Returns only the risk_score for quick decisions (e.g., firewall).
+
+    Args:
+        ip (str): The IP address to query.
+        wid (int): The module ID to query.
+
+    Returns:
+        Response: A Flask Response object containing the IP information.
+    """
+    wid = request.args.get("wid", 0)
+    info = _build_ip_info(ip, wid)
     security = info.get("security", {})
     result = {
         "risk_score": security.get("risk_score", 0)
     }
-    cache[f"quick:{ip}"] = result
+    cache[f"q:{wid}:{ip}"] = result
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
