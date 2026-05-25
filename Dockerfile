@@ -3,7 +3,7 @@ FROM --platform=$BUILDPLATFORM node:lts AS build_frontend
 WORKDIR /app/web
 
 COPY web/package*.json .
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY web /app/web
 COPY *.json /app/web/
@@ -46,6 +46,9 @@ RUN mkdir -p /data \
 USER nxguard
 
 EXPOSE 5000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD python3 cli.py health_check
 
 VOLUME [ "/data" ]
 

@@ -30,8 +30,11 @@ class RBLDao(SQLite3DAO):
                 risk_score INTEGER
             );
         """)
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_feed ON {self.table_name} (feed);")
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_version_idx ON {self.table_name} (version, idx_s, idx_e);")
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_feed_type ON {self.table_name} (feed_type);")
 
-    def get_by_ip(self, ip_str):
+    def get_by_ip(self, ip_str: str):
         """
         Retrieves all RBL records that contain the given IP address.
 
@@ -45,8 +48,15 @@ class RBLDao(SQLite3DAO):
         ip_packed = ip_obj.packed
         ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
         query = (f"""
-            SELECT network, broadcast, prefix, version, feed, risk_score, feed_type
-            FROM {self.table_name}
+            SELECT
+            a.network,
+            a.broadcast,
+            a.prefix,
+            a.version,
+            a.feed,
+            a.feed_type,
+            a.risk_score
+            FROM {self.table_name} a
             WHERE idx_s <= ? AND idx_e >= ? AND version = ?
             ORDER BY idx_s
         """)
@@ -77,8 +87,20 @@ class RBLDao(SQLite3DAO):
         Returns:
             list: A list of network
         """
-        sql = f"SELECT network, prefix, version FROM {self.table_name} WHERE feed_type = ?"
-        rs = self._query(sql, (feed_type,), fetch=True)
+        query = f"""
+            SELECT
+            a.network,
+            a.broadcast,
+            a.prefix,
+            a.version,
+            a.feed,
+            a.feed_type,
+            a.risk_score
+            FROM {self.table_name} a
+            WHERE feed_type = ?
+            ORDER BY idx_s
+        """
+        rs = self._query(query, (feed_type,), fetch=True)
         return rs
 
     def exists_by_feed(self, feed):
@@ -109,9 +131,9 @@ class RBLDao(SQLite3DAO):
             ip_obj = ipaddress.ip_address(ip_str)
             ip_packed = ip_obj.packed
             ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
-            query = (f"select network, broadcast, prefix,version, feed, risk_score, feed_type"
-                     f" from {self.table_name}"
-                     f" where idx_s <= ? and idx_e >= ? and version=?")
+            query = (f"select a.network, a.broadcast, a.prefix,a.version, a.feed, a.risk_score, a.feed_type"
+                     f" from {self.table_name} a"
+                     f" where a.idx_s <= ? and a.idx_e >= ? and a.version=?")
             return self._query(query, params=(ip_packed, ip_packed, ver), fetch=True)
         except Exception as e:
             logger.error(f"Error finding RBL data for IP {ip_str}: {str(e)}")

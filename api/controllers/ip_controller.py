@@ -10,12 +10,20 @@ from api.repository.rbl_model import RBLDao
 from api.tools.common import enrich_country, cached
 from api.tools.network_tool import NetworkTool
 from config import cache
-from nxcore.middleware.logging import logger
 
 routes = Blueprint("ip", __name__)
 
 
 def _fill_org(info: dict) -> dict:
+    """
+    Fills the organization information.
+
+    Args:
+        info (dict): The IP information dictionary.
+
+    Returns:
+        dict: The IP information dictionary with organization information filled.
+    """
     org = {}
     geoip = info["location"]
     if geoip:
@@ -31,6 +39,15 @@ def _fill_org(info: dict) -> dict:
 
 
 def _fill_geo(info: dict) -> dict:
+    """
+    Fills the GeoIP information.
+
+    Args:
+        info (dict): The IP information dictionary.
+
+    Returns:
+        dict: The IP information dictionary with GeoIP information filled.
+    """
     geoip = {}
     ip = info["ip"]["address"]
     try:
@@ -83,6 +100,15 @@ def _fill_geo(info: dict) -> dict:
 
 
 def _build_ip_info(ip: str) -> dict:
+    """
+    Builds the IP information dictionary.
+
+    Args:
+        ip (str): The IP address to query.
+
+    Returns:
+        dict: The IP information dictionary.
+    """
     ipd = {"address": ip}
 
     rep = {
@@ -98,7 +124,6 @@ def _build_ip_info(ip: str) -> dict:
                 for r in rep_data:
                     feed = r.get("feed", "")
                     feed_type = r.get("feed_type", None)
-                    logger.info(f"DEBUG: Feed: {feed}, Feed Type: {feed_type}")
                     if "bypass" in feed_type:
                         rep["trusted"] = True
                         rep["reasons"].append(f"trust:{feed}")
@@ -120,12 +145,20 @@ def _build_ip_info(ip: str) -> dict:
 
 
 @routes.route("/info/<ip>", methods=["GET"])
-@cached("info")
+@cached("i")
 def ip_info(ip: str) -> Response:
+    """
+    Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
+
+    Args:
+        ip (str): The IP address to query.
+    Returns:
+        Response: A Flask Response object containing the IP information.
+    """
     info = _build_ip_info(ip)
     _fill_geo(info)
     _fill_org(info)
-    cache[f"info:{ip}"] = info
+    cache[f"i:{ip}"] = info
     headers = {
         "x-risk-score": info["security"]["risk_score"],
         "x-cache": "miss",
@@ -136,10 +169,17 @@ def ip_info(ip: str) -> Response:
 
 
 @routes.route("/check/<ip>", methods=["GET"])
-@cached("check")
+@cached("c")
 def ip_check(ip: str) -> Response:
-    """Returns a summary risk assessment for the IP."""
+    """
+    Returns a summary risk assessment for the IP.
 
+    Args:
+        ip (str): The IP address to query.
+
+    Returns:
+        Response: A Flask Response object containing the IP information.
+    """
     info = _build_ip_info(ip)
     security = info.get("security", {})
     risk_score = security.get("risk_score", 0)
@@ -150,7 +190,7 @@ def ip_check(ip: str) -> Response:
         "risk_score": risk_score,
         "reasons": reasons
     }
-    cache[f"check:{ip}"] = result
+    cache[f"c:{ip}"] = result
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",
@@ -160,15 +200,23 @@ def ip_check(ip: str) -> Response:
 
 
 @routes.route("/quick/<ip>", methods=["GET"])
-@cached("quick")
+@cached("q")
 def ip_quick(ip: str) -> Response:
-    """Returns only the risk_score and TTL for quick decisions (e.g., firewall)."""
+    """
+    Returns only the risk_score for quick decisions (e.g., firewall).
+
+    Args:
+        ip (str): The IP address to query.
+
+    Returns:
+        Response: A Flask Response object containing the IP information.
+    """
     info = _build_ip_info(ip)
     security = info.get("security", {})
     result = {
         "risk_score": security.get("risk_score", 0)
     }
-    cache[f"quick:{ip}"] = result
+    cache[f"q:{ip}"] = result
     headers = {
         "x-risk-score": security.get("risk_score", 0),
         "x-cache": "miss",

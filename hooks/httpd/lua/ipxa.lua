@@ -11,8 +11,6 @@ local tcp = socket.tcp()
 tcp:settimeout(2)
 
 function ip_info_check(r)
-    local request_id = r.subprocess_env["UNIQUE_ID"] or "unavailable"
-
     local ip = utils.get_client_ip(r)
     local cached = cache.get(ip)
 

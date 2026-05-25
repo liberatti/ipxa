@@ -47,7 +47,6 @@ def install_task():
     os.makedirs(config.DB_PATH, exist_ok=True)
     with UserDao() as dao:
         dao.create_schema()
-
     with FeedDao() as dao:
         dao.create_schema()
         for c in os.listdir(config.APP_BASE + "/config"):

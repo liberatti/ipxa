@@ -28,8 +28,8 @@ class UserSchema(Schema):
 
 
 class UserDao(SQLite3DAO):
+
     def create_schema(self):
-        # self.ddl(f"DROP TABLE {self.table_name};")
         self.ddl(
             f"""
                     CREATE TABLE IF NOT EXISTS {self.table_name} (
@@ -41,6 +41,8 @@ class UserDao(SQLite3DAO):
                     );
                 """
         )
+        self.ddl(f"CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON {self.table_name} (email);")
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_users_role ON {self.table_name} (role);")
 
     def __init__(self):
         super().__init__(

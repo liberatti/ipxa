@@ -31,6 +31,8 @@ class GeoIpDao(SQLite3DAO):
                 prefix INTEGER
             );
         """)
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_geoip_source ON {self.table_name} (source);")
+        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_geoip_version_idx ON {self.table_name} (version, idx_s, idx_e);")
 
     def delete_by_source(self, source: str) -> None:
         """

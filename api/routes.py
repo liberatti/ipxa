@@ -7,7 +7,7 @@ from api.controllers.feed_controller import routes as feed_routes
 routes = [
     (ip_routes, "/api/ip"),
     (oauth_routes, "/api/oauth"),
-    (feed_routes, "/api/feed"),
+    (feed_routes, "/api/feed")
 ]
 
 

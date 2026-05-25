@@ -18,7 +18,9 @@ def cached(prefix):
         @wraps(f)
         def wrapper(ip, *args, **kwargs):
             cache_key = f"{prefix}:{ip}"
+            print(f"cache_key: {cache_key}")
             hit = cache.get(cache_key)
+            print(f"hit: {hit}")
             if hit:
                 headers = {
                     "x-risk-score": hit['security']['risk_score'],
