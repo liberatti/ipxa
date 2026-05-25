@@ -1,46 +1,19 @@
-name: CI / develop
+name: Release Tag
 
 on:
   push:
-    branches: [ "v*-rc" ]
-  pull_request:
-    branches: [ "v*-rc" ]
+    branches:
+      - "qas"
 
 permissions:
   contents: write
 
 jobs:
-  code-check:
+  publish-tag:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12
-          cache: pip
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install flake8 pytest
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-      - name: Lint
-        run: |
-          flake8 . --exclude=web --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --exclude=web --count --exit-zero --max-complexity=20 --max-line-length=256 --statistics
-
-  release:
-    runs-on: ubuntu-latest
-    needs: code-check
-    steps:
-      - uses: actions/checkout@v4
-
       - name: Log in to Docker Hub
-        if: github.event_name == 'push'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -53,7 +26,6 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Extract image metadata
-        if: github.event_name == 'push'
         id: meta
         uses: docker/metadata-action@v5
         with:
