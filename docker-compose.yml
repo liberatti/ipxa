@@ -1,11 +1,12 @@
 services:
   ipxa:
     image: liberatti/ipxa:latest
-#    environment:
+    environment:
 #      - IBLOCKLIST_USERNAME=
 #      - IBLOCKLIST_PASSWORD=
 #      - MAXMIND_ACCOUNT_ID=
 #      - MAXMIND_LICENSE_KEY=
+      - PORTAL_ENABLED=true
     volumes:
       - data:/data
     ports:

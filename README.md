@@ -6,10 +6,10 @@
 [![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
 
-![Dashboard](docs/screenshot-01.png)
+![Dashboard](_docs/screenshot-01.png)
 *Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
 
-![IpInfo](docs/screenshot-02.png)
+![IpInfo](_docs/screenshot-02.png)
 *Multi-workspace environment for isolated security configurations.*
 
 ---
@@ -32,7 +32,7 @@ You can configure the access credentials using the following environment variabl
 - **ADMIN_EMAIL**: Administrator email (Default: `admin@local`)
 - **ADMIN_PASSWORD**: Administrator password (Default: `admin`)
 
-![Admin Dashboard](docs/screenshot-03.png)
+![Admin Dashboard](_docs/screenshot-03.png)
 *Manage your feeds, workspaces, and monitoring data through a premium, dark-mode administrative interface with secure session management.*
 
 ---

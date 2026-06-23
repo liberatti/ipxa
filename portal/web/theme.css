@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;600;700;800&display=swap');
+
+:root {
+    /* Enhanced Premium Dark Palette */
+    --background-dark: #0d1117;
+    --background-darker: #050810;
+    --background-card: rgba(22, 27, 34, 0.7);
+    --background-glass: rgba(13, 17, 23, 0.6);
+    --background-panel: rgba(13, 17, 23, 0.8);
+    --background-panel-alt: rgba(13, 17, 23, 0.5);
+    --background-panel-deep: rgba(13, 17, 23, 0.9);
+    --background-pill: #21262d;
+    --background-overlay: rgba(0, 0, 0, 0.7);
+
+    --primary-color: #238636;
+    --primary-glow: rgba(35, 134, 54, 0.3);
+    --primary-hover: #2ea043;
+
+    --accent-color: #58a6ff;
+    --accent-glow: rgba(88, 166, 255, 0.2);
+    --accent-blue: #60a5fa;
+    --accent-blue-glow: rgba(96, 165, 250, 0.3);
+    --accent-blue-dim: rgba(96, 165, 250, 0.1);
+    --accent-blue-ghost: rgba(96, 165, 250, 0.05);
+    
+    --accent-cyan: #22d3ee;
+    --accent-cyan-dim: rgba(34, 211, 238, 0.12);
+    
+    --accent-purple: #a78bfa;
+    --accent-purple-dim: rgba(167, 139, 250, 0.12);
+    --accent-purple-ghost: rgba(167, 139, 250, 0.08);
+    
+    --accent-violet: #7c3aed;
+    --accent-violet-glow: rgba(124, 58, 237, 0.4);
+    --accent-violet-dim: rgba(124, 58, 237, 0.2);
+
+    --text-primary: #f0f6fc;
+    --text-secondary: #8b949e;
+    --text-muted: #484f58;
+    --text-code: #e6edf3;
+
+    --border-color: rgba(48, 54, 61, 0.8);
+    --border-dim: rgba(48, 54, 61, 0.4);
+    --border-med: rgba(48, 54, 61, 0.6);
+    --border-hover: rgba(88, 166, 255, 0.3);
+
+    /* Semantic Colors */
+    --success-color: #3fb950;
+    --success-glow: rgba(63, 185, 80, 0.3);
+    --success-bg: rgba(63, 185, 80, 0.1);
+    --success-dim: rgba(63, 185, 80, 0.2);
+    
+    --warning-color: #d29922;
+    --warning-glow: rgba(210, 153, 34, 0.4);
+    --warning-bg: rgba(212, 167, 44, 0.15);
+
+    --danger-color: #f85149;
+    --danger-glow: rgba(248, 81, 73, 0.4);
+    --danger-bg: rgba(248, 81, 73, 0.1);
+    --danger-dim: rgba(248, 81, 73, 0.2);
+
+    --background-nav: rgba(5, 8, 16, 0.85);
+    --background-nav-mobile: rgba(5, 8, 16, 0.98);
+
+    --white-ghost: rgba(255, 255, 255, 0.05);
+    --white-dim: rgba(255, 255, 255, 0.1);
+    --white-med: rgba(255, 255, 255, 0.2);
+
+    --black-ghost: rgba(0, 0, 0, 0.1);
+    --black-dim: rgba(0, 0, 0, 0.3);
+    --black-med: rgba(0, 0, 0, 0.5);
+    --black-strong: rgba(0, 0, 0, 0.7);
+
+    --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    --glass-blur: blur(12px);
+
+    /* Transitions */
+    --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Glass Card Refinement */
+.glass-card {
+    background: var(--background-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow-premium);
+    transition: var(--transition-standard);
+}
+
+.glass-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Premium Buttons */
+button.mat-mdc-raised-button {
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px;
+    transition: var(--transition-standard) !important;
+}
+
+button.mat-mdc-raised-button.mat-primary {
+    background-color: var(--primary-color) !important;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+button.mat-mdc-raised-button.mat-primary:hover {
+    background-color: var(--primary-hover) !important;
+    box-shadow: 0 0 25px var(--primary-glow);
+    transform: translateY(-1px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 5px;
+    border: 2px solid var(--background-dark);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #484f58;
+}
