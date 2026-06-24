@@ -28,7 +28,7 @@
   transform: translateX(-50%);
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(88, 166, 255, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -55,7 +55,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(88, 166, 255, 0.1);
+  background: var(--accent-blue-ghost);
   border: 1px solid var(--border-hover);
   color: var(--accent-color);
 }
@@ -218,14 +218,14 @@
   align-items: center;
   gap: 4px;
   padding: 2px 8px;
-  background: rgba(56, 139, 253, 0.15);
-  color: #58a6ff;
+  background: var(--accent-blue-dim);
+  color: var(--accent-blue);
   border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border: 1px solid rgba(56, 139, 253, 0.3);
+  border: 1px solid var(--border-hover);
 }
 
 .trusted-badge mat-icon {
@@ -257,7 +257,7 @@
 
 .meter-track {
   height: 10px;
-  background: #21262d;
+  background: var(--background-pill);
   border-radius: 100px;
   position: relative;
   overflow: hidden;
@@ -280,9 +280,9 @@
   border-radius: 100px;
 }
 
-.bg-low { background: var(--primary-color); }
-.bg-medium { background: #9e6a03; }
-.bg-high { background: #da3633; }
+.bg-low { background: var(--success-color); }
+.bg-medium { background: var(--warning-color); }
+.bg-high { background: var(--danger-color); }
 
 .threat-tags {
   display: flex;
@@ -346,13 +346,13 @@
 }
 
 .value-pill {
-  background: #21262d;
+  background: var(--background-pill);
   color: var(--accent-color);
   padding: 4px 14px;
   border-radius: 100px;
   font-weight: 700;
   font-size: 14px;
-  border: 1px solid rgba(88, 166, 255, 0.1);
+  border: 1px solid var(--border-dim);
 }
 
 /* Actions Section */

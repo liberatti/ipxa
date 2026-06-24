@@ -4,14 +4,12 @@ from api.controllers.ip_controller import routes as ip_routes
 from api.controllers.oauth_controller import routes as oauth_routes
 from api.controllers.feed_controller import routes as feed_routes
 from api.controllers.config_controller import routes as config_routes
-from api.controllers.user_controller import routes as user_routes
 
 routes = [
     (ip_routes, "/api/ip"),
     (oauth_routes, "/api/oauth"),
     (feed_routes, "/api/feed"),
     (config_routes, "/api/config"),
-    (user_routes, "/api/user"),
 ]
 
 

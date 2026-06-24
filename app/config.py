@@ -6,15 +6,15 @@ import json
 
 APP_BASE = os.environ.get("APP_BASE", ".")
 
-APP_VERSION = json.load(open(os.path.join(APP_BASE, "package.json")))['version']
+APP_VERSION = json.load(open(os.path.join(APP_BASE, "package.json")))["version"]
 
 DATETIME_FMT = "%Y-%m-%dT%H:%M:%S.%fZ"
 TZ = pytz.timezone("UTC")
 
 MAINTENANCE_WINDOW = "01:00"
 
-LOGLEVEL = os.environ.get('LOGLEVEL', 'WARNING').upper()
-DB_PATH = os.environ.get("DB_PATH", 'data')
+LOGLEVEL = os.environ.get("LOGLEVEL", "WARNING").upper()
+DB_PATH = os.environ.get("DB_PATH", "data")
 
 IBLOCKLIST_USERNAME = os.environ.get("IBLOCKLIST_USERNAME", None)
 IBLOCKLIST_PASSWORD = os.environ.get("IBLOCKLIST_PASSWORD", None)
@@ -36,3 +36,4 @@ JWT_AUD = "ipxa"
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@local")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
 API_KEY = os.environ.get("API_KEY", "dev_api_key")
+PORTAL_ENABLED = os.environ.get("PORTAL_ENABLED", "false").lower() == "true"

@@ -47,30 +47,25 @@
   border-radius: 4px;
 }
 .spacer { flex: 1 1 auto; }
-.admin-sidenav-container {
-  flex: 1;
-  background: transparent !important;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden !important;
-}
-.admin-sidenav {
-  width: 260px;
-  background: var(--background-dark) !important;
-  border-right: 1px solid var(--border-color);
-  overflow: hidden !important;
+.nav-links {
   display: flex;
-  flex-direction: column;
+  gap: 8px;
+  margin-left: 24px;
 }
-
-/* Hide horizontal scrollbar specifically from the sidenav inner container */
-:host ::ng-deep .mat-drawer-inner-container {
-  overflow-x: hidden !important;
+.nav-links a {
+  border-radius: 8px;
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  transition: var(--transition-standard);
+}
+.nav-links a:hover {
+  background: var(--white-ghost) !important;
+  color: var(--text-primary) !important;
 }
 .admin-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
   padding: 0 !important;
   background: var(--background-darker) !important;
   overflow-y: auto;
@@ -132,19 +127,7 @@
   font-weight: 700;
   letter-spacing: 0.5px;
 }
-mat-nav-list a {
-  margin: 4px 12px;
-  border-radius: 8px;
-  color: var(--text-secondary) !important;
-  transition: var(--transition-standard);
-}
-mat-nav-list a:hover {
-  background: var(--white-ghost) !important;
-  color: var(--text-primary) !important;
-}
-mat-nav-list a span, .mat-icon {
-  color: var(--text-primary) !important;
-}
+
 .active {
   background: var(--accent-blue-dim) !important;
   color: var(--accent-blue) !important;

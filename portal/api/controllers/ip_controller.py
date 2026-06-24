@@ -1,4 +1,7 @@
-from nxcore.controllers.base_controller import response_data
+import requests
+
+import config
+from nxcore.controllers.base_controller import response_data, response_error
 from flask import Blueprint, Response
 
 routes = Blueprint("ip", __name__)
@@ -14,4 +17,19 @@ def ip_info(ip: str) -> Response:
     Returns:
         Response: A Flask Response object containing the IP information.
     """
-    return response_data({}, headers={})
+    url = f"{config.IPXA_API_URL}/api/ip/info/{ip}"
+    headers = {"x-api-key": config.IPXA_API_KEY}
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            return response_data(data)
+        else:
+            try:
+                err_data = response.json()
+                msg = err_data.get("message", "Error calling IP API")
+            except Exception:
+                msg = f"Error calling IP API: {response.status_code}"
+            return response_error(msg)
+    except Exception as e:
+        return response_error(f"Failed to query IP info: {str(e)}")

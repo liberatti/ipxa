@@ -1,13 +1,6 @@
-import traceback
-from typing import Dict
-
-import bcrypt
+from flask import Blueprint, Response
 from nxcore.controllers.base_controller import response_data
-
-from flask import Blueprint, request, Response
-from marshmallow import ValidationError
-
-from config import JWT_EXPIRE
+import config
 
 routes = Blueprint("config", __name__)
 

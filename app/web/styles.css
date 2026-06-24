@@ -12,7 +12,9 @@ html, body {
 
 /* Typography Refinement */
 h1, h2, h3, h4, b, strong {
-    font-weight: 600;
+    font-family: 'Poppins', 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: var(--text-primary);
 }
 
@@ -230,11 +232,11 @@ h1, h2, h3, h4, b, strong {
 
 /* --- Dialog Styles --- */
 .custom-dialog-container .mat-mdc-dialog-container .mdc-dialog__surface {
-    background: #1c2128 !important; /* Lighter, solid background for dialog */
+    background: var(--background-dark) !important;
     border: 1px solid var(--border-color);
     border-radius: 16px !important;
-    box-shadow: 0 24px 48px rgba(0,0,0,0.8) !important;
-    backdrop-filter: none !important; /* Remove blur to keep it simple and high contrast */
+    box-shadow: var(--shadow-premium) !important;
+    backdrop-filter: none !important;
 }
 
 .mat-mdc-dialog-title {
@@ -256,51 +258,51 @@ h1, h2, h3, h4, b, strong {
 .mat-mdc-form-field {
     --mdc-outlined-text-field-container-shape: 12px;
     --mdc-outlined-text-field-outline-color: var(--border-color);
-    --mdc-outlined-text-field-focus-outline-color: var(--accent-blue);
+    --mdc-outlined-text-field-focus-outline-color: var(--primary-color);
     --mdc-outlined-text-field-label-text-color: var(--text-secondary) !important;
-    --mdc-outlined-text-field-focus-label-text-color: var(--accent-blue) !important;
+    --mdc-outlined-text-field-focus-label-text-color: var(--primary-color) !important;
     --mdc-outlined-text-field-input-text-color: var(--text-primary) !important;
     width: 100%;
     margin-bottom: 8px;
 }
 
-/* Brighten labels when they are floating */
+/* Floating label color */
 .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
-    color: var(--accent-blue) !important;
+    color: var(--primary-color) !important;
 }
 
 .mat-mdc-form-field .mat-mdc-floating-label {
-    color: rgba(255, 255, 255, 0.7) !important;
+    color: var(--text-secondary) !important;
 }
 
-/* Make the input background significantly lighter for better contrast */
+/* Input background */
 .mat-mdc-text-field-wrapper {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+    background-color: var(--white-ghost) !important;
     transition: var(--transition-standard) !important;
     border-radius: 8px !important;
 }
 
 .mat-mdc-text-field-wrapper:hover {
-    background-color: rgba(255, 255, 255, 0.12) !important;
+    background-color: var(--white-dim) !important;
 }
 
 .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 0 0 2px var(--accent-blue-ghost);
+    background-color: var(--white-med) !important;
+    box-shadow: 0 0 0 2px var(--primary-glow);
 }
 
-/* Ensure input text is pure white and clearly visible */
+/* Input text and placeholder */
 .mat-mdc-form-field .mdc-text-field__input {
-    color: #ffffff !important;
+    color: var(--text-primary) !important;
     font-weight: 500 !important;
 }
 
 .mat-mdc-form-field .mdc-text-field__input::placeholder {
-    color: rgba(255, 255, 255, 0.5) !important;
+    color: var(--text-muted) !important;
 }
 
 .mat-mdc-select-value-text {
-    color: #ffffff !important;
+    color: var(--text-primary) !important;
     font-weight: 500 !important;
 }
 
@@ -309,30 +311,31 @@ h1, h2, h3, h4, b, strong {
 }
 
 .mat-mdc-option {
-    background: #1c2128 !important;
-    color: #f0f6fc !important;
+    background: var(--background-dark) !important;
+    color: var(--text-primary) !important;
 }
 
 .mat-mdc-option:hover, .mat-mdc-option.mdc-list-item--selected {
-    background: #30363d !important;
+    background: var(--white-ghost) !important;
 }
 
 /* Button contrast in dialogs */
 .mat-mdc-dialog-actions button[mat-button] {
-    color: #8b949e !important;
+    color: var(--text-secondary) !important;
 }
 
 .mat-mdc-dialog-actions button[mat-button]:hover {
-    color: #f0f6fc !important;
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary) !important;
+    background: var(--white-ghost);
 }
+
 /* --- Slide Toggle Overrides --- */
 .mat-mdc-slide-toggle {
-    --mdc-switch-selected-focus-state-layer-color: var(--accent-blue);
+    --mdc-switch-selected-focus-state-layer-color: var(--primary-color);
     --mdc-switch-selected-handle-color: #ffffff;
-    --mdc-switch-selected-hover-state-layer-color: var(--accent-blue);
-    --mdc-switch-selected-pressed-state-layer-color: var(--accent-blue);
-    --mdc-switch-selected-track-color: var(--accent-blue);
+    --mdc-switch-selected-hover-state-layer-color: var(--primary-color);
+    --mdc-switch-selected-pressed-state-layer-color: var(--primary-color);
+    --mdc-switch-selected-track-color: var(--primary-color);
     --mdc-switch-unselected-focus-state-layer-color: var(--text-muted);
     --mdc-switch-unselected-handle-color: var(--text-secondary);
     --mdc-switch-unselected-hover-state-layer-color: var(--text-muted);
@@ -346,13 +349,13 @@ h1, h2, h3, h4, b, strong {
     margin-left: 8px;
 }
 
-/* Brighten form field icons */
+/* Form field icons */
 .mat-mdc-form-field [matPrefix], 
 .mat-mdc-form-field [matSuffix] {
-    color: rgba(255, 255, 255, 0.6) !important;
+    color: var(--text-secondary) !important;
 }
 
 .mat-mdc-form-field.mat-focused [matPrefix], 
 .mat-mdc-form-field.mat-focused [matSuffix] {
-    color: var(--accent-blue) !important;
+    color: var(--primary-color) !important;
 }

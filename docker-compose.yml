@@ -1,3 +1,6 @@
+volumes:
+  data:
+
 services:
   ipxa:
     image: liberatti/ipxa:latest
@@ -10,10 +13,19 @@ services:
     volumes:
       - data:/data
     ports:
+      - "5001:5000"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  portal:
+    image: liberatti/ipxa-portal:latest
+    environment:
+      - IPXA_API_KEY=dev
+      - IPXA_API_URL=http://ipxa:5000
+    ports:
       - "5000:5000"
     deploy:
       resources:
         limits:
           memory: 256M
-volumes:
-  data:

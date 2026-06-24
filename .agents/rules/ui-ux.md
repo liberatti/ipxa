@@ -29,9 +29,9 @@ trigger: always_on
 
 ## Visual Style
 
-- Modern, dark, futuristic look
+- Modern, light, minimalist, and clean look
 - Use theme configuration instead of hardcoded colors
-- Subtle use of gradients and glow only when needed
+- Subtle use of gradients and shadows only when needed
 
 ## Avoid
 

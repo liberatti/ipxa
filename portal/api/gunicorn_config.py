@@ -1,8 +1,4 @@
-import fcntl
-import os.path
 import threading
-import time
-import traceback
 
 from nxcore.middleware.logging import logger
 

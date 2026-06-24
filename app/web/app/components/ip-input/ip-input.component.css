@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 0;
-  background: rgba(13, 17, 23, 0.8);
+  background: var(--background-glass);
   border: 1.5px solid var(--border-color);
   border-radius: 14px;
   padding: 6px 6px 6px 16px;
@@ -29,12 +29,12 @@
 }
 
 .ip-input-wrapper.focused {
-  border-color: rgba(88, 166, 255, 0.6);
+  border-color: var(--accent-color);
   box-shadow: 0 0 0 3px var(--accent-glow), 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .ip-input-wrapper.hovered:not(.focused) {
-  border-color: rgba(88, 166, 255, 0.35);
+  border-color: var(--border-hover);
 }
 
 .ip-input-wrapper.valid {
@@ -42,7 +42,7 @@
 }
 
 .ip-input-wrapper.valid.focused {
-  border-color: rgba(63, 185, 80, 0.7);
+  border-color: var(--success-color);
   box-shadow: 0 0 0 3px var(--success-bg);
 }
 
@@ -51,7 +51,7 @@
 }
 
 .ip-input-wrapper.invalid.focused {
-  border-color: rgba(248, 81, 73, 0.7);
+  border-color: var(--danger-color);
   box-shadow: 0 0 0 3px var(--danger-bg);
 }
 
@@ -135,7 +135,7 @@
 .ip-version-badge.v6 {
   background: var(--accent-purple-dim);
   color: var(--accent-purple);
-  border-color: rgba(139, 92, 246, 0.3);
+  border-color: var(--border-dim);
 }
 
 .ip-status {
@@ -173,7 +173,7 @@
 
 .ip-clear-btn:hover {
   color: var(--text-secondary);
-  background: rgba(139, 148, 158, 0.12);
+  background: var(--white-ghost);
 }
 
 .ip-search-btn {
@@ -196,7 +196,7 @@
 }
 
 .ip-search-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--accent-violet) 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 16px var(--accent-violet-glow);
 }

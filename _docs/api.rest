@@ -3,7 +3,16 @@
 @ip = 14.152.94.1
 @mail = admin@local
 @password = admin
-@api_key = dev_api_key
+@api_key = dev
+
+###
+
+# @name Info (com x-api-key)
+# Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
+GET {{baseUrl}}/api/ip/info/{{ip}}
+content-type: application/json
+x-api-key: {{api_key}}
+
 
 ###
 # @name oauth_login
@@ -34,7 +43,7 @@ Refresh-Token: {{refresh_token}}
 
 # @name Info
 # Retrieves comprehensive GeoIP, ASN, and reputation data for a specific IP address.
-GET {{baseUrl}}/api/ip/info/{{ip}}?wid=2
+GET {{baseUrl}}/api/ip/info/{{ip}}
 content-type: application/json
 
 response_headers:
@@ -60,7 +69,7 @@ response:
     "city": null,
     "continent": "Asia",
     "country": "China",
-    "country_code": "CN",
+    "country_code": "CN", 
     "country_name": "China",
     "latitude": 34.7732,
     "longitude": 113.722,

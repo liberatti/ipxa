@@ -33,25 +33,21 @@
           <mat-label>Password</mat-label>
           <input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password">
           <mat-icon matPrefix>lock_outline</mat-icon>
-          <button mat-icon-button matSuffix (click)="togglePassword()" type="button" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="showPassword()">
+          <button mat-icon-button matSuffix (click)="togglePassword()" type="button" [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="showPassword()">
             <mat-icon>{{showPassword() ? 'visibility' : 'visibility_off'}}</mat-icon>
           </button>
         </mat-form-field>
         <div class="form-actions">
-          <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isLoading()" class="btn-login btn-glow">
+          <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isLoading()"
+            class="btn-login btn-glow">
             <span *ngIf="!isLoading()">Login to Dashboard</span>
             <span *ngIf="isLoading()">Authenticating...</span>
           </button>
         </div>
       </form>
-
-      <div class="login-footer">
-        <a routerLink="/" class="back-link">
-          <mat-icon>arrow_back</mat-icon> Back to Home
-        </a>
-      </div>
     </mat-card>
-    
+
     <div class="copyright">
       &copy; {{ currentYear }} ipxa - Advanced IP Intelligence
     </div>

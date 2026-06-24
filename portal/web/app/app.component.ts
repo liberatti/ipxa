@@ -1,6 +1,7 @@
 import { Component, signal, computed } from '@angular/core';
 import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { IpInputComponent } from 'app/components/ip-input/ip-input.component';
 import { environment } from 'environments/environment';
 
@@ -19,7 +20,7 @@ interface MockResult {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, IpInputComponent, MatIconModule],
+  imports: [CommonModule, IpInputComponent, MatIconModule, MatButtonModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   providers: [

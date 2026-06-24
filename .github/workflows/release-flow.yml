@@ -82,11 +82,19 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Build and push Docker image
+      - name: Extract portal image metadata
+        id: meta-portal
+        uses: docker/metadata-action@v5
+        with:
+          images: liberatti/ipxa-portal
+          tags: |
+            type=raw,value=${{ steps.get_version.outputs.version }}
+
+      - name: Build and push portal Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta-portal.outputs.tags }}
+          labels: ${{ steps.meta-portal.outputs.labels }}

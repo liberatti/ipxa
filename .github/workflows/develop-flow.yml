@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  code-check:
+  ipxa-code-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,9 +33,9 @@ jobs:
           flake8 . --exclude=web --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --exclude=web --count --exit-zero --max-complexity=20 --max-line-length=256 --statistics
 
-  release:
+  ipxa-image:
     runs-on: ubuntu-latest
-    needs: code-check
+    needs: ipxa-code-check
     steps:
       - uses: actions/checkout@v4
 
@@ -65,8 +65,24 @@ jobs:
         if: github.event_name == 'push'
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: app
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Extract portal image metadata
+        id: meta-portal
+        uses: docker/metadata-action@v5
+        with:
+          images: liberatti/ipxa-portal
+          tags: |
+            type=raw,value=${{ steps.get_version.outputs.version }}
+
+      - name: Build and push portal Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta-portal.outputs.tags }}
+          labels: ${{ steps.meta-portal.outputs.labels }}
