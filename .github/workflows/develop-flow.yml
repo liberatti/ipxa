@@ -88,19 +88,19 @@ jobs:
           tags: ${{ steps.meta-portal.outputs.tags }}
           labels: ${{ steps.meta-portal.outputs.labels }}
 
-      - name: Extract hooks openresty metadata
-        id: meta-hooks-openresty
+      - name: Extract ipxa-resty metadata
+        id: meta-openresty
         uses: docker/metadata-action@v5
         with:
-          images: liberatti/ipxa-openresty
+          images: liberatti/ipxa-resty
           tags: |
             type=raw,value=latest
 
-      - name: Build and push hooks openresty Docker image
+      - name: Build and push ipxa-resty
         uses: docker/build-push-action@v6
         with:
           context: hooks/openresty
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta-hooks-openresty.outputs.tags }}
-          labels: ${{ steps.meta-hooks-openresty.outputs.labels }}
+          tags: ${{ steps.meta-openresty.outputs.tags }}
+          labels: ${{ steps.meta-openresty.outputs.labels }}
