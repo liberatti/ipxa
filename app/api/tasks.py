@@ -3,7 +3,7 @@ import os
 import traceback
 from datetime import timedelta, datetime
 
-from nxcore.middleware.logging import logger
+from nxcore.middleware.logging_manager import logger
 
 import bcrypt
 import config

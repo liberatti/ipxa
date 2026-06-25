@@ -1,8 +1,8 @@
 import ipaddress
 from typing import Dict, Any, Optional
 
-from nxcore.middleware.logging import logger
-from nxcore.repository.sqlite3_base_dao import SQLite3DAO
+from nxcore.middleware.logging_manager import logger
+from nxcore.repository.sqlite3_dao import SQLite3DAO
 
 import config
 from api.tools.network_tool import NetworkTool
@@ -11,13 +11,16 @@ from api.tools.network_tool import NetworkTool
 class RBLDao(SQLite3DAO):
 
     def __init__(self, auto_commit=True):
-        super().__init__(db_path=config.DB_PATH, table_name="rbl", auto_commit=auto_commit)
+        super().__init__(
+            db_path=config.DB_PATH, table_name="rbl", auto_commit=auto_commit
+        )
 
     def create_schema(self):
         """
         Creates the database table for RBL data if it doesn't already exist.
         """
-        self.ddl(f"""
+        self.ddl(
+            f"""
             CREATE TABLE IF NOT EXISTS {self.table_name} (
                 prefix INTEGER,
                 version INTEGER,
@@ -29,10 +32,17 @@ class RBLDao(SQLite3DAO):
                 feed_type TEXT,
                 risk_score INTEGER
             );
-        """)
-        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_feed ON {self.table_name} (feed);")
-        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_version_idx ON {self.table_name} (version, idx_s, idx_e);")
-        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_rbl_feed_type ON {self.table_name} (feed_type);")
+        """
+        )
+        self.ddl(
+            f"CREATE INDEX IF NOT EXISTS idx_rbl_feed ON {self.table_name} (feed);"
+        )
+        self.ddl(
+            f"CREATE INDEX IF NOT EXISTS idx_rbl_version_idx ON {self.table_name} (version, idx_s, idx_e);"
+        )
+        self.ddl(
+            f"CREATE INDEX IF NOT EXISTS idx_rbl_feed_type ON {self.table_name} (feed_type);"
+        )
 
     def get_by_ip(self, ip_str: str):
         """
@@ -47,7 +57,7 @@ class RBLDao(SQLite3DAO):
         ip_obj = ipaddress.ip_address(ip_str)
         ip_packed = ip_obj.packed
         ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
-        query = (f"""
+        query = f"""
             SELECT
             a.network,
             a.broadcast,
@@ -59,7 +69,7 @@ class RBLDao(SQLite3DAO):
             FROM {self.table_name} a
             WHERE idx_s <= ? AND idx_e >= ? AND version = ?
             ORDER BY idx_s
-        """)
+        """
 
         return self._query(query, params=(ip_packed, ip_packed, ver), fetch=True)
 
@@ -131,9 +141,11 @@ class RBLDao(SQLite3DAO):
             ip_obj = ipaddress.ip_address(ip_str)
             ip_packed = ip_obj.packed
             ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
-            query = (f"select a.network, a.broadcast, a.prefix,a.version, a.feed, a.risk_score, a.feed_type"
-                     f" from {self.table_name} a"
-                     f" where a.idx_s <= ? and a.idx_e >= ? and a.version=?")
+            query = (
+                f"select a.network, a.broadcast, a.prefix,a.version, a.feed, a.risk_score, a.feed_type"
+                f" from {self.table_name} a"
+                f" where a.idx_s <= ? and a.idx_e >= ? and a.version=?"
+            )
             return self._query(query, params=(ip_packed, ip_packed, ver), fetch=True)
         except Exception as e:
             logger.error(f"Error finding RBL data for IP {ip_str}: {str(e)}")

@@ -7,7 +7,7 @@ from flask_restful import Api
 import config
 import nxcore.config as nxcore_config
 from nxcore.controllers.base_controller import response_error_404, response_error_500
-from nxcore.middleware.logging import logger
+from nxcore.middleware.logging_manager import logger, LoggingManager
 
 from api.routes import register as register_api_routes
 
@@ -19,6 +19,8 @@ nxcore_config.init(
 
 
 app = Flask(__name__)
+app.config["LOGLEVEL"] = config.LOGLEVEL
+LoggingManager(app)
 app.url_map.strict_slashes = False
 
 CORS(app, resources={r"/*": {"origins": "*"}})

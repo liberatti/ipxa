@@ -9,7 +9,7 @@ APP_VERSION = json.load(open(os.path.join(APP_BASE, "package.json")))["version"]
 DATETIME_FMT = "%Y-%m-%dT%H:%M:%S.%fZ"
 TZ = pytz.timezone("UTC")
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "WARNING").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 
 WORKERS = int(os.environ.get("WORKERS", 4))
 THREADS = int(os.environ.get("THREADS", 4))

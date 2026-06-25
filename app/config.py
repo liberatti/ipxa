@@ -13,7 +13,7 @@ TZ = pytz.timezone("UTC")
 
 MAINTENANCE_WINDOW = "01:00"
 
-LOGLEVEL = os.environ.get("LOGLEVEL", "WARNING").upper()
+LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 DB_PATH = os.environ.get("DB_PATH", "data")
 
 IBLOCKLIST_USERNAME = os.environ.get("IBLOCKLIST_USERNAME", None)

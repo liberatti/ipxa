@@ -1,8 +1,9 @@
 import threading
 
-from nxcore.middleware.logging import logger
+from nxcore.middleware.logging_manager import logger, LoggingManager
 
 import config as _config
+LoggingManager(loglevel=_config.LOGLEVEL)
 
 stop_event = threading.Event()
 

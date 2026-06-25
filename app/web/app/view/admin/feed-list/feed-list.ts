@@ -18,7 +18,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
   styleUrls: ['./feed-list.css']
 })
 export class FeedListComponent implements OnInit {
-  feedDC: string[] = ['name', 'provider', 'type', 'format', 'risk_score', 'actions'];
+  feedDC: string[] = ['name', 'provider', 'type', 'format', 'risk_score', 'updated_on', 'actions'];
   feedDS: MatTableDataSource<Feed>;
   feedPA: PageMeta;
 

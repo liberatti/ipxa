@@ -1,8 +1,8 @@
 import ipaddress
 from typing import Dict, Any, Optional
 
-from nxcore.middleware.logging import logger
-from nxcore.repository.sqlite3_base_dao import SQLite3DAO
+from nxcore.middleware.logging_manager import logger
+from nxcore.repository.sqlite3_dao import SQLite3DAO
 
 import config
 from api.tools.network_tool import NetworkTool

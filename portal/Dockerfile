@@ -21,6 +21,7 @@ RUN apk add --no-cache \
 ENV PYTHONUSERBASE=/opt/ipxa/site-packages
 ENV PATH=/opt/ipxa/venv/bin:$PATH
 ENV APP_BASE=/opt/ipxa
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /opt/ipxa
 

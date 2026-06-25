@@ -8,12 +8,7 @@ from nxcore.controllers.base_controller import (
     response_error_500,
     response_error_401
 )
-from nxcore.middleware.jwt import (
-    jwt_decode,
-    jwt_create_access_token,
-    jwt_create_refresh_token,
-    jwt_get_refresh
-)
+from nxcore.middleware.jwt_manager import JWTManager
 from flask import Blueprint, request, Response
 from marshmallow import ValidationError
 
@@ -42,9 +37,9 @@ def refresh_token() -> Response:
     Returns:
         Response: A Flask Response object containing the new access token or an error message.
     """
-    r_token = jwt_get_refresh()
+    r_token = JWTManager.get_current_instance().get_refresh_token_from_request()
     try:
-        payload = jwt_decode(r_token)
+        payload = JWTManager.get_current_instance().decode(r_token)
         with UserDao() as dao:
             user = dao.get_by_id(payload["sub"])
         if not user:
@@ -52,7 +47,7 @@ def refresh_token() -> Response:
 
         return response_data(
             {
-                "access_token": jwt_create_access_token(user["_id"], authorities=[user["role"]], profile=user),
+                "access_token": JWTManager.get_current_instance().create_access_token(user["_id"], authorities=[user["role"]], profile=user),
                 "expires_in": JWT_EXPIRE,
                 "token_type": 'bearer'
             }
@@ -97,8 +92,8 @@ def _create_oidc_token(user: Dict) -> Dict:
     if "password" in user:
         user.pop("password")
     return {
-        "access_token": jwt_create_access_token(str(user["_id"]), authorities=[user['role']], profile=user),
-        "refresh_token": jwt_create_refresh_token(str(user['_id']) if '_id' in user else user['email']),
+        "access_token": JWTManager.get_current_instance().create_access_token(str(user["_id"]), authorities=[user['role']], profile=user),
+        "refresh_token": JWTManager.get_current_instance().create_refresh_token(str(user['_id']) if '_id' in user else user['email']),
         "expires_in": JWT_EXPIRE,
         "token_type": 'bearer'
     }

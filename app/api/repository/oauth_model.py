@@ -1,7 +1,7 @@
 from typing import Dict, Any, Optional
 
-from nxcore.middleware.logging import logger
-from nxcore.repository.sqlite3_base_dao import SQLite3DAO
+from nxcore.middleware.logging_manager import logger
+from nxcore.repository.sqlite3_dao import SQLite3DAO
 from marshmallow import EXCLUDE, Schema, fields
 
 import config as config
@@ -43,19 +43,19 @@ class UserDao(SQLite3DAO):
                     );
                 """
         )
-        self.ddl(f"CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON {self.table_name} (email);")
-        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_users_role ON {self.table_name} (role);")
+        self.ddl(
+            f"CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email ON {self.table_name} (email);"
+        )
+        self.ddl(
+            f"CREATE INDEX IF NOT EXISTS idx_users_role ON {self.table_name} (role);"
+        )
         try:
             self.ddl(f"ALTER TABLE {self.table_name} ADD COLUMN service_token TEXT;")
         except Exception:
             pass
 
     def __init__(self):
-        super().__init__(
-            db_path=config.DB_PATH,
-            table_name="users",
-            schema=UserSchema
-        )
+        super().__init__(db_path=config.DB_PATH, table_name="users", schema=UserSchema)
 
     def get_by_email(self, email: str) -> Optional[Dict[str, Any]]:
         try:

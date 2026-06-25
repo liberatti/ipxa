@@ -1,5 +1,5 @@
 import requests
-from nxcore.middleware.logging import logger
+from nxcore.middleware.logging_manager import logger
 
 
 def get_source_ip():

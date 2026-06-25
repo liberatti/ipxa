@@ -22,6 +22,7 @@ ENV PYTHONUSERBASE=/opt/ipxa/site-packages
 ENV PATH=/opt/ipxa/venv/bin:$PATH
 ENV APP_BASE=/opt/ipxa
 ENV DB_PATH=/data
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /opt/ipxa
 
