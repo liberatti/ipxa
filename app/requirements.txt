@@ -1,16 +1,11 @@
-Flask>=3.1.3,<4
 Flask-RESTful>=0.3.10
 Flask-CORS>=5.0.1
 gunicorn[gevent]>=25.0.1
 schedule>=1.2.2
-requests>=2.33.1,<3
 geoip2>=5.0.1
-pytz>=2025.1
 cachetools>=7.0.0
-marshmallow>=4.3.0,<5
-PyJWT>=2.12.1,<3
 pycountry
 pycountry-convert
 bson
-nxcore[web,sqlite] @ git+https://github.com/liberatti/nxcore@v1.0.5-rc
+nxcore[web,sqlite] @ git+https://github.com/liberatti/nxcore@v1.0.5
 bcrypt
