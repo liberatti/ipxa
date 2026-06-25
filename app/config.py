@@ -28,7 +28,7 @@ WORKERS = int(os.environ.get("WORKERS", 4))
 THREADS = int(os.environ.get("THREADS", 4))
 
 # Security config
-SECURITY_ENABLED = True
+SECURITY_ENABLED = os.environ.get("SECURITY_ENABLED", "true") == "true"
 KEY_SIZE = 2048
 JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", secrets.token_urlsafe(32))
 JWT_EXPIRE = 3600
@@ -36,4 +36,3 @@ JWT_AUD = "ipxa"
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@local")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin")
 API_KEY = os.environ.get("API_KEY", "dev_api_key")
-PORTAL_ENABLED = os.environ.get("PORTAL_ENABLED", "false").lower() == "true"

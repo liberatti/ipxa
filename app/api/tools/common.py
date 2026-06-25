@@ -14,19 +14,18 @@ def cached(prefix):
     Args:
         prefix (str): The prefix to use for the cache key.
     """
+
     def decorator(f):
         @wraps(f)
         def wrapper(ip, *args, **kwargs):
             cache_key = f"{prefix}:{ip}"
-            print(f"cache_key: {cache_key}")
             hit = cache.get(cache_key)
-            print(f"hit: {hit}")
             if hit:
                 headers = {
-                    "x-risk-score": hit['security']['risk_score'],
+                    "x-risk-score": hit["security"]["risk_score"],
                     "x-cache": "hit",
                     "x-country-code": hit["location"]["country_code"],
-                    "x-trusted": hit["security"]["trusted"]
+                    "x-trusted": hit["security"]["trusted"],
                 }
                 return response_data(hit, headers=headers)
             result = f(ip, *args, **kwargs)

@@ -13,4 +13,4 @@ def get_config() -> Response:
     Returns:
         Response: A Flask Response object containing the configuration.
     """
-    return response_data({"portal_enabled": config.PORTAL_ENABLED})
+    return response_data({"security_enabled": config.SECURITY_ENABLED})

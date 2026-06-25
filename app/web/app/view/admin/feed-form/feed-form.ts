@@ -13,12 +13,12 @@ import { Feed } from 'app/models/feed';
   selector: 'app-feed-form',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    MatDialogModule, 
-    MatFormFieldModule, 
-    MatInputModule, 
-    MatSelectModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatSlideToggleModule
   ],
@@ -40,10 +40,9 @@ export class FeedFormComponent implements OnInit {
       name: ['', Validators.required],
       slug: ['', Validators.required],
       provider: ['ipxa', Validators.required],
-      restricted: [false],
       type: ['reputation', Validators.required],
       source: [''],
-      data_raw: [''], // Will be converted to array
+      data_raw: [''],
       description: [''],
       format: ['cdir_text', Validators.required],
       update_interval: ['hourly'],
@@ -74,7 +73,7 @@ export class FeedFormComponent implements OnInit {
       }
       this.form.patchValue(formData);
     }
-    
+
     // Trigger initial validation check
     this.form.get('format')?.updateValueAndValidity();
   }

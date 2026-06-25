@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { OAuthService } from 'app/services/oauth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -35,15 +36,27 @@ export class LoginComponent {
   errorMessage = signal<string | null>(null);
   showPassword = signal(false);
   currentYear = new Date().getFullYear();
+  security_enabled = signal(false);
 
   constructor(
     private fb: FormBuilder,
     private authService: OAuthService,
-    private router: Router
+    private router: Router,
+    private httpClient: HttpClient
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
+    });
+  }
+
+  ngOnInit() {
+    this.httpClient.get<any>("/api/config", { responseType: "json" }).subscribe({
+      next: (data: any) => {
+        if (!data.security_enabled) {
+          this.router.navigate(['/admin/feeds']);
+        }
+      }
     });
   }
 

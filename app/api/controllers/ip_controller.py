@@ -181,6 +181,7 @@ def ip_info(ip: str) -> Response:
 
 
 @routes.route("/check/<ip>", methods=["GET"])
+@has_any_authority(authorities=["superuser"], _internal=True)
 @cached("c")
 def ip_check(ip: str) -> Response:
     """
@@ -208,6 +209,7 @@ def ip_check(ip: str) -> Response:
 
 
 @routes.route("/quick/<ip>", methods=["GET"])
+@has_any_authority(authorities=["superuser"], _internal=True)
 @cached("q")
 def ip_quick(ip: str) -> Response:
     """
