@@ -82,11 +82,10 @@
   margin: 0 auto 16px;
 }
 
-.logo-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-  color: var(--accent-blue);
+.logo-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .brand-section h1 {

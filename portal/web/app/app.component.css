@@ -92,9 +92,11 @@
   justify-content: center;
   background: var(--background-glass);
   border: 1px solid var(--border-color);
-  padding: 6px 12px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
   transition: var(--transition-standard);
+  box-sizing: border-box;
 }
 
 .brand-logo:hover {
@@ -103,8 +105,8 @@
 }
 
 .brand-logo-img {
-  height: 40px;
-  width: auto;
+  height: 24px;
+  width: 24px;
   display: block;
   object-fit: contain;
   transition: var(--transition-standard);

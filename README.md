@@ -24,8 +24,16 @@
 ---
 
 
+## 🌐 User Portal
+The **User Portal** (accessible by default on port `5000`) is the main search interface where users can query IP addresses locally to verify geolocation, ASN, and reputation details.
+
+![User Portal](_docs/screenshot-01.png)
+*Instantly query and visualize the geographical origin and threat score of any IP address.*
+
+---
+
 ## 🎨 Admin Interface
-The administrative interface is accessible at the `/admin` context. It features a secure login system and a **one-click logout** to ensure session security in shared environments.
+The **Admin Interface** (accessible on port `5001` at the `/admin` context) features a secure dashboard for managing workspaces, RBL threat lists, and monitoring parameters. It includes a secure session management login system and a one-click logout.
 
 You can configure the access credentials using the following environment variables:
 
@@ -33,7 +41,7 @@ You can configure the access credentials using the following environment variabl
 - **ADMIN_PASSWORD**: Administrator password (Default: `admin`)
 
 ![Admin Dashboard](_docs/screenshot-03.png)
-*Manage your feeds, workspaces, and monitoring data through a premium, dark-mode administrative interface with secure session management.*
+*Manage your workspaces, feeds, and configurations dynamically through a premium, dark-mode administrative dashboard.*
 
 ---
 
@@ -55,27 +63,37 @@ IPXA is distributed as a lightweight Docker image.
 ### Docker Compose
 
 ```yaml
+volumes:
+  data:
+
 services:
   ipxa:
     image: liberatti/ipxa:latest
-    container_name: ipxa
-#    environment:
+    environment:
+      - API_KEY=dev
 #      - IBLOCKLIST_USERNAME=
 #      - IBLOCKLIST_PASSWORD=
 #      - MAXMIND_ACCOUNT_ID=
 #      - MAXMIND_LICENSE_KEY=
     volumes:
-      - ipxa_data:/data
+      - data:/data
     ports:
-      - "5000:5000"
-    restart: always
+      - "5001:5000"
     deploy:
       resources:
         limits:
           memory: 256M
-
-volumes:
-  ipxa_data:
+  portal:
+    image: liberatti/ipxa-portal:latest
+    environment:
+      - IPXA_API_KEY=dev
+      - IPXA_API_URL=http://ipxa:5000
+    ports:
+      - "5000:5000"
+    deploy:
+      resources:
+        limits:
+          memory: 64M
 ```
 ---
 

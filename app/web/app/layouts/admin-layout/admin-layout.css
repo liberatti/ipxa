@@ -180,3 +180,10 @@
 .logout-btn:hover mat-icon {
   color: #f44336 !important;
 }
+
+.brand-logo {
+  height: 24px;
+  width: auto;
+  vertical-align: middle;
+  margin-right: 8px;
+}
