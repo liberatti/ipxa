@@ -1,5 +1,4 @@
 from flask import render_template, current_app
-from flask_restful import Api
 
 from api.controllers.ip_controller import routes as ip_routes
 from api.controllers.oauth_controller import routes as oauth_routes

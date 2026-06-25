@@ -2,7 +2,6 @@
   "name": "dan_tor_all",
   "slug": "dan_tor_all",
   "provider": "dan.me.uk",
-  "restricted": false,
   "type": "reputation",
   "source": "https://www.dan.me.uk/torlist/",
   "description": "Lista completa de nós da rede Tor (Entry, Middle e Exit) mantida por dan.me.uk. Útil para identificar tráfego vindo de anonimizadores.",

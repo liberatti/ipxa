@@ -2,10 +2,10 @@
   "name": "ip2asn-combined",
   "slug": "iptoasn",
   "provider": "iptoasn",
-  "restricted": false,
   "type": "geo",
   "source": "https://iptoasn.com/data/ip2asn-combined.tsv.gz",
   "description": "GeoInfo",
   "format": "custom",
-  "update_interval": "daily"
+  "update_interval": "daily",
+  "geo_score": 70
 }

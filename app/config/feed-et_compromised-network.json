@@ -2,7 +2,6 @@
   "name": "et_compromised",
   "slug": "et_compromised",
   "provider": "proofpoint",
-  "restricted": false,
   "type": "reputation",
   "source": "https://rules.emergingthreats.net/blockrules/compromised-ips.txt",
   "description": "IPs conhecidos por estarem comprometidos ou envolvidos em atividades de botnet (ET Open).",

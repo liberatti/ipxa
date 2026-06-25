@@ -11,13 +11,16 @@ from api.tools.network_tool import NetworkTool
 class GeoIpDao(SQLite3DAO):
 
     def __init__(self, auto_commit: bool = False):
-        super().__init__(db_path=config.DB_PATH, table_name="geoip", auto_commit=auto_commit)
+        super().__init__(
+            db_path=config.DB_PATH, table_name="geoip", auto_commit=auto_commit
+        )
 
     def create_schema(self):
         """
         Creates the database table for GeoIP data if it doesn't already exist.
         """
-        self.ddl(f"""
+        self.ddl(
+            f"""
             CREATE TABLE IF NOT EXISTS {self.table_name} (
                 ans_number INTEGER,
                 ans_description TEXT,
@@ -28,11 +31,17 @@ class GeoIpDao(SQLite3DAO):
                 idx_s BLOB,
                 idx_e BLOB,
                 version INTEGER,
-                prefix INTEGER
+                prefix INTEGER,
+                geo_score INTEGER
             );
-        """)
-        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_geoip_source ON {self.table_name} (source);")
-        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_geoip_version_idx ON {self.table_name} (version, idx_s, idx_e);")
+        """
+        )
+        self.ddl(
+            f"CREATE INDEX IF NOT EXISTS idx_geoip_source ON {self.table_name} (source);"
+        )
+        self.ddl(
+            f"CREATE INDEX IF NOT EXISTS idx_geoip_version_idx ON {self.table_name} (version, idx_s, idx_e);"
+        )
 
     def delete_by_source(self, source: str) -> None:
         """
@@ -62,12 +71,14 @@ class GeoIpDao(SQLite3DAO):
             ip_obj = ipaddress.ip_address(ip_str)
             ip_packed = ip_obj.packed
             ver = 4 if NetworkTool.is_ipv4(ip_str) else 6
-            query = (f"select "
-                     f" ans_number,country_code,ans_description,source,network,broadcast,version,prefix"
-                     f" from {self.table_name}"
-                     f" where idx_s <= ? and idx_e >= ? and version=? "
-                     f" order by prefix desc"
-                     f" limit 1")
+            query = (
+                f"select "
+                f" ans_number,country_code,ans_description,source,network,broadcast,version,prefix,geo_score"
+                f" from {self.table_name}"
+                f" where idx_s <= ? and idx_e >= ? and version=? "
+                f" order by geo_score desc, prefix desc"
+                f" limit 1"
+            )
             r = self._query(query, params=(ip_packed, ip_packed, ver), fetch=True)
             return r[0] if r else None
         except Exception as e:

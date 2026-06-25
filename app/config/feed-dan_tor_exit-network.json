@@ -2,7 +2,6 @@
   "name": "dan_tor_exit",
   "slug": "dan_tor_exit",
   "provider": "dan.me.uk",
-  "restricted": false,
   "type": "reputation",
   "source": "https://www.dan.me.uk/torlist/?exit",
   "description": "Lista específica de nós de SAÍDA (Exit Nodes) da rede Tor. São os IPs que efetivamente acessam serviços públicos na internet.",

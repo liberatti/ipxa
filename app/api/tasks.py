@@ -52,6 +52,7 @@ def install_task():
         for c in os.listdir(config.APP_BASE + "/config"):
             with open(config.APP_BASE + "/config/" + c) as f:
                 feed = json.load(f)
+                logger.info(f"Install feed {feed['provider']} : {feed['name']}")
                 dao.persist(feed)
 
     with RBLDao() as dao:
@@ -71,42 +72,57 @@ def update_task(override_existing=False):
     """
     logger.info(f"Update task started with override = {override_existing}")
     with UserDao() as dao:
-        secure_password = bcrypt.hashpw(config.ADMIN_PASSWORD.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+        secure_password = bcrypt.hashpw(
+            config.ADMIN_PASSWORD.encode("utf-8"), bcrypt.gensalt()
+        ).decode("utf-8")
         user = dao.get_by_email(config.ADMIN_EMAIL)
         if not user:
-            dao.persist({
-                "name": "Administrator",
-                "email": config.ADMIN_EMAIL,
-                "password": secure_password,
-                "role": "superuser"
-            })
+            dao.persist(
+                {
+                    "name": "Administrator",
+                    "email": config.ADMIN_EMAIL,
+                    "password": secure_password,
+                    "role": "superuser",
+                }
+            )
         else:
-            if not bcrypt.checkpw(config.ADMIN_PASSWORD.encode("utf-8"), user['password'].encode("utf-8")):
-                user['password'] = secure_password
-                dao.update_by_id(user['_id'], user)
+            if not bcrypt.checkpw(
+                config.ADMIN_PASSWORD.encode("utf-8"), user["password"].encode("utf-8")
+            ):
+                user["password"] = secure_password
+                dao.update_by_id(user["_id"], user)
 
     with FeedDao() as fdao:
-        feeds = fdao.get_all()['data']
+        feeds = fdao.get_all()["data"]
         for feed in feeds:
             if override_existing or __should_update(feed):
                 try:
-                    provider = feed.get('provider')
+                    provider = feed.get("provider")
+                    logger.info(f"Processing feed {provider} : {feed['name']}")
                     match provider:
-                        case 'ipverse':
+                        case "ipverse":
                             feed_tool.update_ipverse(feed)
-                        case 'iptoasn':
+                        case "iptoasn":
                             feed_tool.update_ip2asn(feed)
-                        case 'maxmind':
+                        case "ipinfo":
+                            if config.IPINFO_TOKEN:
+                                feed_tool.update_ipinfo(config.IPINFO_TOKEN, feed)
+                            else:
+                                logger.warning("ipinfo token not provided")
+                        case "maxmind":
                             if config.MAXMIND_ACCOUNT_ID and config.MAXMIND_LICENSE_KEY:
-                                feed_tool.update_maxmind(config.MAXMIND_ACCOUNT_ID, config.MAXMIND_LICENSE_KEY)
+                                feed_tool.update_maxmind(
+                                    config.MAXMIND_ACCOUNT_ID,
+                                    config.MAXMIND_LICENSE_KEY,
+                                )
                             else:
                                 logger.warning("MaxMind credentials not provided")
                         case None:
                             logger.warning("Provider not supported")
                         case _:
                             feed_tool.update_feed(feed)
-                    feed['updated_on'] = datetime.now(config.TZ)
-                    fdao.update_by_id(feed['_id'], feed)
+                    feed["updated_on"] = datetime.now(config.TZ)
+                    fdao.update_by_id(feed["_id"], feed)
                 except Exception as e:
                     logger.error(f"Failed to load {feed['name']}: %s", e)
                     logger.error(traceback.format_exc())

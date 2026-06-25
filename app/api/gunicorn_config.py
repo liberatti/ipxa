@@ -8,8 +8,9 @@ import schedule
 from nxcore.middleware.logging_manager import logger, LoggingManager
 
 import config as _config
-LoggingManager(loglevel=_config.LOGLEVEL)
 from api.tasks import install_task, update_task
+
+LoggingManager(loglevel=_config.LOGLEVEL)
 
 stop_event = threading.Event()
 

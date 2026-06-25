@@ -168,6 +168,12 @@
               <span class="label">Protocol</span>
               <span class="value-pill">IPv{{ data.ip.version }}</span>
             </div>
+            @if (data.location.geo_score !== undefined && data.location.geo_score !== null) {
+              <div class="detail-row">
+                <span class="label">Geo Score</span>
+                <span class="value">{{ data.location.geo_score }}</span>
+              </div>
+            }
             @if (data.location.latitude) {
               <div class="detail-row">
                 <span class="label">Coordinates</span>

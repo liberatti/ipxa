@@ -6,10 +6,12 @@ services:
     image: liberatti/ipxa:latest
     environment:
       - API_KEY=dev
-#      - IBLOCKLIST_USERNAME=
-#      - IBLOCKLIST_PASSWORD=
-#      - MAXMIND_ACCOUNT_ID=
-#      - MAXMIND_LICENSE_KEY=
+      #      - SECURITY_ENABLED=false
+      #      - IPINFO_TOKEN=
+      #      - IBLOCKLIST_USERNAME=
+      #      - IBLOCKLIST_PASSWORD=
+      #      - MAXMIND_ACCOUNT_ID=
+      #      - MAXMIND_LICENSE_KEY=
     volumes:
       - data:/data
     ports:

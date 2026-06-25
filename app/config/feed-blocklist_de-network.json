@@ -2,7 +2,6 @@
   "name": "blocklist_de",
   "slug": "blocklist_de",
   "provider": "blocklist.de",
-  "restricted": false,
   "type": "reputation",
   "source": "http://www.blocklist.de/lists/all.txt",
   "description": "Agregação de IPs que realizaram ataques recentes reportados por diversos serviços.",

@@ -54,7 +54,7 @@ def enrich_country(row):
     # Country
     country = pycountry.countries.get(alpha_2=code)
     if country:
-        row["country_name"] = country.name
+        row["country"] = country.name
 
     # Continent
     try:

@@ -2,7 +2,6 @@
   "name": "dshield",
   "slug": "dshield",
   "provider": "iblocklist",
-  "restricted": false,
   "type": "reputation",
   "source": "http://list.iblocklist.com/?list=xpbqleszmajjesnzddhv&fileformat=cidr&archiveformat=gz",
   "description": "Contains known Hackers and such people in it.",

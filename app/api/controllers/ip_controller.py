@@ -52,13 +52,6 @@ def _fill_geo(info: dict) -> dict:
     """
     geoip = {}
     ip = info["ip"]["address"]
-    try:
-        with GeoIpDao() as dao:
-            row = dao.find_by_ip(ip)
-            if row:
-                geoip.update(row)
-    except Exception:
-        pass
 
     for db_name in ["ASN", "City"]:
         db_file = f"{config.DB_PATH}/GeoLite2-{db_name}.mmdb"
@@ -92,6 +85,14 @@ def _fill_geo(info: dict) -> dict:
                         )
                 except Exception:
                     pass
+    try:
+        if geoip.get("country_code", None) is None:
+            with GeoIpDao() as dao:
+                row = dao.find_by_ip(ip)
+                if row:
+                    geoip.update(row)
+    except Exception:
+        pass
 
     if geoip:
         info["ip"].update(

@@ -3,8 +3,7 @@ export interface Feed {
   name: string;
   slug: string;
   provider: string;
-  restricted: boolean;
-  type: 'reputation' | 'bypass';
+  type: 'reputation' | 'bypass' | 'geo';
   source?: string;
   data?: string[];
   description: string;
@@ -12,4 +11,5 @@ export interface Feed {
   update_interval: 'hourly' | 'daily';
   updated_on?: string;
   risk_score: number;
+  geo_score?: number;
 }

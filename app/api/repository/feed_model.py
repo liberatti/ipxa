@@ -8,19 +8,21 @@ import config
 class FeedDao(SQLite3DAO):
 
     def __init__(self, auto_commit=True):
-        super().__init__(db_path=config.DB_PATH, table_name="feed", auto_commit=auto_commit)
+        super().__init__(
+            db_path=config.DB_PATH, table_name="feed", auto_commit=auto_commit
+        )
 
     def create_schema(self):
         """
         Creates the database table for feeds if it doesn't already exist.
         """
-        self.ddl(f"""
+        self.ddl(
+            f"""
             CREATE TABLE IF NOT EXISTS {self.table_name} (
                 _id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT,
                 slug TEXT,
                 provider TEXT,
-                restricted BOOLEAN,
                 type TEXT,
                 source TEXT,
                 description TEXT,
@@ -28,11 +30,21 @@ class FeedDao(SQLite3DAO):
                 update_interval TEXT,
                 updated_on TEXT,
                 risk_score INTEGER,
+                geo_score INTEGER,
                 data_json TEXT
             );
-        """)
-        self.ddl(f"CREATE INDEX IF NOT EXISTS idx_feed_type ON {self.table_name} (type);")
-        self.ddl(f"CREATE UNIQUE INDEX IF NOT EXISTS idx_feed_slug ON {self.table_name} (slug);")
+        """
+        )
+        try:
+            self.ddl(f"ALTER TABLE {self.table_name} ADD COLUMN geo_score INTEGER;")
+        except Exception:
+            pass
+        self.ddl(
+            f"CREATE INDEX IF NOT EXISTS idx_feed_type ON {self.table_name} (type);"
+        )
+        self.ddl(
+            f"CREATE UNIQUE INDEX IF NOT EXISTS idx_feed_slug ON {self.table_name} (slug);"
+        )
 
     def from_dict(self, vo):
         """
@@ -81,10 +93,12 @@ class FeedDao(SQLite3DAO):
         Returns:
             list[dict]: The list of feeds.
         """
-        sql = (f"SELECT "
-               f" _id, name, provider, slug, type, restricted, source, description, format, update_interval, updated_on, risk_score, data_json"
-               f" FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
-               f" ORDER BY _id ASC")
+        sql = (
+            f"SELECT "
+            f" _id, name, provider, slug, type, source, description, format, update_interval, updated_on, risk_score, geo_score, data_json"
+            f" FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
+            f" ORDER BY _id ASC"
+        )
         count_sql = f"SELECT COUNT(*) AS total FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
         rows = []
         total = self._query(count_sql, params=types, fetch=True)[0]["total"]

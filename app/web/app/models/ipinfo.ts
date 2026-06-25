@@ -14,6 +14,7 @@ export interface LocationDetails {
     region?: string;
     latitude?: number;
     longitude?: number;
+    geo_score?: number;
 }
 
 export interface OrgDetails {

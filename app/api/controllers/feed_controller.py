@@ -24,7 +24,7 @@ def get_all() -> Response:
         Response: A Flask Response object containing the list of feeds
         or an error message.
     """
-    types = ["reputation", "bypass"]
+    types = ["reputation", "bypass", "geo"]
     if "type" in request.args:
         types = [request.args.get("type")]
 

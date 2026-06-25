@@ -17,8 +17,6 @@ from api.repository.rbl_model import RBLDao
 from api.tools.network_tool import NetworkTool
 
 
-# TODO Add support to https://ipinfo.io/dashboard/lite
-
 def update_maxmind(MAXMIND_ACCOUNT_ID, MAXMIND_LICENSE_KEY):
     """
     Downloads and updates MaxMind GeoLite2-ASN and GeoLite2-City databases.
@@ -29,16 +27,16 @@ def update_maxmind(MAXMIND_ACCOUNT_ID, MAXMIND_LICENSE_KEY):
     """
     for edition_id in ["GeoLite2-ASN", "GeoLite2-City"]:
         url = f"https://download.maxmind.com/geoip/databases/{edition_id}/download?suffix=tar.gz"
-        response = requests.get(
-            url, auth=(MAXMIND_ACCOUNT_ID, MAXMIND_LICENSE_KEY)
-        )
+        response = requests.get(url, auth=(MAXMIND_ACCOUNT_ID, MAXMIND_LICENSE_KEY))
         if response.status_code == 200:
             zip_content = io.BytesIO(response.content)
             with tarfile.open(fileobj=zip_content, mode="r:gz") as tar:
                 os.makedirs(config.DB_PATH, exist_ok=True)
                 for member in tar.getmembers():
                     if member.name.endswith(".mmdb") and member.isfile():
-                        dest_path = os.path.join(config.DB_PATH, os.path.basename(member.name))
+                        dest_path = os.path.join(
+                            config.DB_PATH, os.path.basename(member.name)
+                        )
                         extracted = tar.extractfile(member)
                         if extracted is not None:
                             with open(dest_path, "wb") as out_f:
@@ -65,7 +63,10 @@ def update_ipverse(feed: Dict):
                 batch = []
                 count = 0
                 for member in tar.getmembers():
-                    if (member.name.endswith("aggregated.json") or member.name.endswith("addregated.json")) and member.isfile():
+                    if (
+                        member.name.endswith("aggregated.json")
+                        or member.name.endswith("addregated.json")
+                    ) and member.isfile():
                         f = tar.extractfile(member)
                         if f:
                             try:
@@ -82,7 +83,9 @@ def update_ipverse(feed: Dict):
                                     if line.strip() and NetworkTool.is_network(line):
                                         addr = line.split("/")
                                         if len(addr) <= 1:
-                                            prefix = 32 if NetworkTool.is_ipv4(line) else 128
+                                            prefix = (
+                                                32 if NetworkTool.is_ipv4(line) else 128
+                                            )
                                         else:
                                             prefix = addr[1]
 
@@ -91,19 +94,22 @@ def update_ipverse(feed: Dict):
                                         )
                                         net = {
                                             "source": feed["name"],
+                                            "geo_score": feed["geo_score"],
                                             "country_code": country_code,
                                             "ans_description": country,
-                                            "ans_number": 0
+                                            "ans_number": 0,
                                         }
                                         net.update(info_n)
                                         batch.append(net)
                                         count += 1
 
-                                        if len(batch) >= 500:
+                                        if len(batch) >= 1000:
                                             dao.persist_many(batch)
                                             batch = []
                             except Exception as e:
-                                logger.error(f"Failed to parse JSON member {member.name}: {e}")
+                                logger.error(
+                                    f"Failed to parse JSON member {member.name}: {e}"
+                                )
                 if batch:
                     dao.persist_many(batch)
                 logger.info(f"Loaded {count} geoip records from {feed['name']}")
@@ -134,6 +140,7 @@ def update_ip2asn(feed: Dict):
                         net = NetworkTool.extract_network_info(row[0], prefix=p)
                         r = {
                             "source": "ip2asn",
+                            "geo_score": feed["geo_score"],
                             "ans_number": int(row[2]),
                             "country_code": row[3],
                             "ans_description": row[4],
@@ -141,13 +148,75 @@ def update_ip2asn(feed: Dict):
                         r.update(net)
                         batch.append(r)
                         i += 1
-                        if i % 10000 == 0:
+                        if i % 1000 == 0:
                             dao.persist_many(batch)
                             batch = []
                     except Exception:
                         logger.error(traceback.format_exc())
                 dao.persist_many(batch)
                 logger.info(f"Loaded {i} geoip records from {feed['name']}")
+
+
+def update_ipinfo(IPINFO_TOKEN: str, feed: Dict):
+    """
+    Downloads and processes an IPInfo Lite feed.
+
+    Args:
+        feed (Dict): The feed configuration dictionary.
+    """
+    src = f"https://ipinfo.io/data/ipinfo_lite.csv.gz?&token={IPINFO_TOKEN}"
+    response = requests.get(src)
+    if response.status_code == 200:
+        zip_content = io.BytesIO(response.content)
+        with gzip.open(zip_content, "rt", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            batch = []
+            with GeoIpDao(auto_commit=True) as dao:
+                dao.delete_by_source("ipinfo")
+                i = 0
+                for row in reader:
+                    try:
+                        network_str = row.get("network")
+                        if not network_str:
+                            continue
+
+                        addr_parts = network_str.split("/")
+                        addr = addr_parts[0]
+                        if len(addr_parts) <= 1:
+                            prefix = 32 if NetworkTool.is_ipv4(addr) else 128
+                        else:
+                            prefix = int(addr_parts[1])
+
+                        net = NetworkTool.extract_network_info(addr, prefix=prefix)
+
+                        asn_str = row.get("asn")
+                        asn_num = 0
+                        if asn_str:
+                            digits = "".join(filter(str.isdigit, str(asn_str)))
+                            if digits:
+                                asn_num = int(digits)
+
+                        r = {
+                            "source": "ipinfo",
+                            "geo_score": feed["geo_score"],
+                            "ans_number": asn_num,
+                            "country_code": row.get("country_code") or "",
+                            "ans_description": row.get("as_name") or "",
+                        }
+                        r.update(net)
+                        batch.append(r)
+                        i += 1
+                        if i % 1000 == 0:
+                            logger.info(f"Processing {i} records from ipinfo")
+                            dao.persist_many(batch)
+                            batch = []
+                    except Exception:
+                        logger.error(traceback.format_exc())
+                if batch:
+                    dao.persist_many(batch)
+                logger.info(f"Loaded {i} geoip records from ipinfo")
+    else:
+        logger.warning(f"ipinfo download failed. {response.status_code}")
 
 
 def update_feed(feed):
@@ -164,12 +233,11 @@ def update_feed(feed):
         lines = feed["data"]
     elif "source" in feed and feed["source"]:
         source_url = feed["source"]
-        if feed["restricted"]:
-            if "iblocklist" in feed["provider"]:
-                if config.IBLOCKLIST_USERNAME and config.IBLOCKLIST_PASSWORD:
-                    source_url = f"{source_url}&username={config.IBLOCKLIST_USERNAME}&pin={config.IBLOCKLIST_PASSWORD}"
-                else:
-                    logger.warning(f"Feed {feed['name']} skipped, no credentials")
+        if "iblocklist" in feed["provider"]:
+            if config.IBLOCKLIST_USERNAME and config.IBLOCKLIST_PASSWORD:
+                source_url = f"{source_url}&username={config.IBLOCKLIST_USERNAME}&pin={config.IBLOCKLIST_PASSWORD}"
+            else:
+                logger.warning(f"Feed {feed['name']} skipped, no credentials")
         resp = requests.get(source_url, timeout=10)
         if resp and resp.status_code == 200:
             if "cdir_text" in feed["format"]:
@@ -200,12 +268,14 @@ def update_feed(feed):
 def build_ip_info(line: str, feed: Dict):
     if NetworkTool.is_network(line):
         addr = line.split("/")
-        net = {"feed": feed["name"], "risk_score": feed.get("risk_score", 0), "feed_type": feed.get("type", None)}
+        net = {
+            "feed": feed["name"],
+            "risk_score": feed.get("risk_score", 0),
+            "feed_type": feed.get("type", None),
+        }
         if len(addr) <= 1:
             addr.append(32)
-        info_n = NetworkTool.extract_network_info(
-            addr[0], prefix=addr[1]
-        )
+        info_n = NetworkTool.extract_network_info(addr[0], prefix=addr[1])
         net.update(info_n)
         return net
     return None

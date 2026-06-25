@@ -22,6 +22,8 @@ IBLOCKLIST_PASSWORD = os.environ.get("IBLOCKLIST_PASSWORD", None)
 MAXMIND_ACCOUNT_ID = os.environ.get("MAXMIND_ACCOUNT_ID", None)
 MAXMIND_LICENSE_KEY = os.environ.get("MAXMIND_LICENSE_KEY", None)
 
+IPINFO_TOKEN = os.environ.get("IPINFO_TOKEN", None)
+
 cache = TTLCache(maxsize=1000, ttl=int(os.environ.get("CACHE_TTL", 30)))
 
 WORKERS = int(os.environ.get("WORKERS", 4))
