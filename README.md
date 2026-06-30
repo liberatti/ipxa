@@ -5,6 +5,7 @@
 
 [![Docker Image](https://img.shields.io/badge/docker-ready-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/Sponsor-♥-ea4aaa?style=flat&logo=github)](https://github.com/sponsors/liberatti)
 
 ![Dashboard](_docs/screenshot-01.png)
 *Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
