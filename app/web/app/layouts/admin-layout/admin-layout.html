@@ -1,0 +1,26 @@
+<div class="admin-container">
+  <mat-toolbar class="admin-header">
+    <span class="brand-text"><img src="assets/shield_icon.png" alt="ipxa Logo" class="brand-logo"> ipxa <small>Admin</small></span>
+    <div class="nav-links">
+      <a mat-button routerLink="/admin/feeds" routerLinkActive="active">
+        <mat-icon>rss_feed</mat-icon>
+        <span>Feeds</span>
+      </a>
+    </div>
+    <span class="spacer"></span>
+    <button mat-button (click)="logout()" class="logout-btn">
+      <mat-icon>logout</mat-icon> Logout
+    </button>
+  </mat-toolbar>
+
+  <div class="admin-content">
+    <div class="page-container animate-in">
+      <router-outlet></router-outlet>
+    </div>
+    <footer class="admin-footer">
+      <span>&copy; 2026 ipxa · Advanced IP Intelligence Dashboard</span>
+      <div class="spacer"></div>
+      <span class="footer-tag">Open Source</span>
+    </footer>
+  </div>
+</div>

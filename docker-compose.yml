@@ -1,18 +1,33 @@
+volumes:
+  data:
+
 services:
   ipxa:
     image: liberatti/ipxa:latest
-#    environment:
-#      - IBLOCKLIST_USERNAME=
-#      - IBLOCKLIST_PASSWORD=
-#      - MAXMIND_ACCOUNT_ID=
-#      - MAXMIND_LICENSE_KEY=
+    environment:
+      - API_KEY=dev
+      #      - SECURITY_ENABLED=false
+      #      - IPINFO_TOKEN=
+      #      - IBLOCKLIST_USERNAME=
+      #      - IBLOCKLIST_PASSWORD=
+      #      - MAXMIND_ACCOUNT_ID=
+      #      - MAXMIND_LICENSE_KEY=
     volumes:
       - data:/data
+    ports:
+      - "5001:5000"
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+  portal:
+    image: liberatti/ipxa-portal:latest
+    environment:
+      - IPXA_API_KEY=dev
+      - IPXA_API_URL=http://ipxa:5000
     ports:
       - "5000:5000"
     deploy:
       resources:
         limits:
-          memory: 256M
-volumes:
-  data:
+          memory: 64M
