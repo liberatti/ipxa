@@ -76,7 +76,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: app
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -93,8 +93,25 @@ jobs:
       - name: Build and push portal Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: portal
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta-portal.outputs.tags }}
           labels: ${{ steps.meta-portal.outputs.labels }}
+
+      - name: Extract ipxa-resty metadata
+        id: meta-openresty
+        uses: docker/metadata-action@v5
+        with:
+          images: liberatti/ipxa-resty
+          tags: |
+            type=raw,value=latest
+
+      - name: Build and push ipxa-resty
+        uses: docker/build-push-action@v6
+        with:
+          context: hooks/openresty
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta-openresty.outputs.tags }}
+          labels: ${{ steps.meta-openresty.outputs.labels }}
