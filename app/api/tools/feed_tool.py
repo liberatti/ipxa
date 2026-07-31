@@ -253,12 +253,13 @@ def update_feed(feed):
         batch = []
         i = 0
         for line in lines:
-            if line.strip() and "#" not in line:
-                net = build_ip_info(line, feed)
+            t = line.strip()
+            if t and not t.startswith("#"):
+                net = build_ip_info(t, feed)
                 if net:
                     batch.append(net)
                     i += 1
-            if i % 500 == 0:
+            if i % 100 == 0:
                 dao.persist_many(batch)
                 batch = []
         dao.persist_many(batch)
