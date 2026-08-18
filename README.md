@@ -7,10 +7,10 @@
 [![Platform](https://img.shields.io/badge/Platform-Docker-blue.svg)](https://www.docker.com/)
 [![Sponsor](https://img.shields.io/badge/Sponsor-♥-ea4aaa?style=flat&logo=github)](https://github.com/sponsors/liberatti)
 
-![Dashboard](_docs/screenshot-01.png)
+![Dashboard](.docs/screenshot-01.png)
 *Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
 
-![IpInfo](_docs/screenshot-02.png)
+![IpInfo](.docs/screenshot-02.png)
 *Multi-workspace environment for isolated security configurations.*
 
 ---
@@ -28,7 +28,7 @@
 ## 🌐 User Portal
 The **User Portal** (accessible by default on port `5000`) is the main search interface where users can query IP addresses locally to verify geolocation, ASN, and reputation details.
 
-![User Portal](_docs/screenshot-01.png)
+![User Portal](.docs/screenshot-01.png)
 *Instantly query and visualize the geographical origin and threat score of any IP address.*
 
 ---
@@ -41,7 +41,7 @@ You can configure the access credentials using the following environment variabl
 - **ADMIN_EMAIL**: Administrator email (Default: `admin@local`)
 - **ADMIN_PASSWORD**: Administrator password (Default: `admin`)
 
-![Admin Dashboard](_docs/screenshot-03.png)
+![Admin Dashboard](.docs/screenshot-03.png)
 *Manage your workspaces, feeds, and configurations dynamically through a premium, dark-mode administrative dashboard.*
 
 ---
