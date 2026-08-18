@@ -1,4 +1,4 @@
-# 🛡️ IPXA
+# <img src="app/web/assets/logo.png" alt="IPXA Logo" width="60" align="center"> IPXA
 > **IP Reputation and Network Intelligence Monitoring**
 
 **IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 15+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
