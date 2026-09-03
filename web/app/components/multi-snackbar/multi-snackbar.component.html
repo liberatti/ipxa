@@ -1,0 +1,9 @@
+@if (data && data.messages) {
+  <div class="multi-snackbar">
+    @for (message of data.messages; track message) {
+      <div class="snackbar-item">
+        {{ message }}
+      </div>
+    }
+  </div>
+}

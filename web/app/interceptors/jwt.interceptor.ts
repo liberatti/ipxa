@@ -17,10 +17,12 @@ export const JwtInterceptor: HttpInterceptorFn = (req, next) => {
     const notificationService = inject(NotificationService);
 
     const accessToken = authService.getAccessToken();
-    let authReq = req.clone({
-        headers: req.headers
-            .set('Authorization', accessToken ? `Bearer ${accessToken}` : '')
-    });
+    let authReq = req;
+    if (accessToken) {
+        authReq = req.clone({
+            headers: req.headers.set('Authorization', `Bearer ${accessToken}`)
+        });
+    }
     if (!req.headers.has('Content-Type')) {
         if (req.body instanceof FormData) {
             authReq = authReq.clone({

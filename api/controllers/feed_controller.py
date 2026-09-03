@@ -1,3 +1,4 @@
+import sqlite3
 from flask import Blueprint, request, Response
 from nxcore.controllers.base_controller import (
     response_data,
@@ -14,7 +15,6 @@ routes = Blueprint("feed", __name__)
 
 
 @routes.route("", methods=["GET"])
-@routes.route("/", methods=["GET"])
 @has_any_authority(authorities=["superuser"], _internal=True)
 def get_all() -> Response:
     """
@@ -36,7 +36,6 @@ def get_all() -> Response:
 
 
 @routes.route("", methods=["POST"])
-@routes.route("/", methods=["POST"])
 @has_any_authority(authorities=["superuser"], _internal=True)
 def save() -> Response:
     """
@@ -47,12 +46,22 @@ def save() -> Response:
         or an error message.
     """
     feed = request.json
-    with FeedDao(auto_commit=False) as dao:
-        if dao.persist(feed):
-            update_feed(feed)
-            dao.commit()
-            return response_ok("Record created")
-        dao.rollback()
+    try:
+        with FeedDao(auto_commit=True) as dao:
+            if dao.persist(feed):
+                try:
+                    update_feed(feed)
+                except Exception as e:
+                    pass
+                return response_ok("Record created")
+    except sqlite3.IntegrityError as e:
+        if "UNIQUE constraint failed: feed.slug" in str(e):
+            return response_error("A feed with this slug already exists.")
+        if "UNIQUE constraint failed: feed.name" in str(e):
+            return response_error("A feed with this name already exists.")
+        return response_error(f"Database constraint error: {e}")
+    except Exception as e:
+        return response_error(f"Failed to create feed: {e}")
     return response_error("Record not created")
 
 
@@ -71,10 +80,22 @@ def update(id: int) -> Response:
         or an error message.
     """
     feed = request.json
-    update_feed(feed)
-    with FeedDao() as dao:
-        dao.update_by_id(id, feed)
-    return response_ok("Record updated")
+    try:
+        with FeedDao(auto_commit=True) as dao:
+            dao.update_by_id(id, feed)
+        try:
+            update_feed(feed)
+        except Exception as e:
+            pass
+        return response_ok("Record updated")
+    except sqlite3.IntegrityError as e:
+        if "UNIQUE constraint failed: feed.slug" in str(e):
+            return response_error("A feed with this slug already exists.")
+        if "UNIQUE constraint failed: feed.name" in str(e):
+            return response_error("A feed with this name already exists.")
+        return response_error(f"Database constraint error: {e}")
+    except Exception as e:
+        return response_error(f"Failed to update feed: {e}")
 
 
 @routes.route("/<int:id>", methods=["DELETE"])
@@ -90,11 +111,18 @@ def remove(id: int) -> Response:
         Response: A Flask Response object indicating the result of
         the deletion or an error message.
     """
-    with FeedDao(auto_commit=False) as dao:
+    feed_name = None
+    with FeedDao(auto_commit=True) as dao:
         feed = dao.get_by_id(id)
         if feed:
-            dao.remove_by_id(id)
-            with RBLDao() as rbl_dao:
-                rbl_dao.delete_by_feed_name(feed["name"])
-            dao.commit()
+            feed_name = feed.get("name")
+            dao.delete_by_id(id)
+
+    if feed_name:
+        try:
+            with RBLDao(auto_commit=True) as rbl_dao:
+                rbl_dao.delete_by_feed_name(feed_name)
+        except Exception:
+            pass
+
     return response_data(True)

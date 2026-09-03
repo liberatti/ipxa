@@ -8,22 +8,22 @@
         <mat-icon>info_outline</mat-icon>
       </div>
       <div class="title-texts">
-        <h2>IP Information Details</h2>
+        <h2 translate="IP_DETAILS.TITLE"></h2>
         <div class="subtitle-group">
           <span class="status-indicator"></span>
           <div class="subtitle-content">
-            <p class="subtitle">Detailed analysis for <code>{{ data.ip.address }}</code></p>
+            <p class="subtitle">{{ 'IP_DETAILS.SUBTITLE' | translate }} <code>{{ data.ip.address }}</code></p>
             @if (data.security.trusted) {
               <div class="header-trusted-badge">
                 <mat-icon>verified</mat-icon>
-                <span>Trusted IP</span>
+                <span translate="IP_DETAILS.TRUSTED_IP"></span>
               </div>
             }
           </div>
         </div>
       </div>
     </div>
-    <button mat-icon-button (click)="close()" class="close-btn" aria-label="Close dialog">
+    <button mat-icon-button (click)="close()" class="close-btn" [attr.aria-label]="'IP_LOOKUP.ARIA_CLOSE' | translate">
       <mat-icon>close</mat-icon>
     </button>
   </div>
@@ -34,23 +34,23 @@
       <section class="glass-section network-section">
         <div class="section-badge">
           <mat-icon>business</mat-icon>
-          <span>Infrastructure</span>
+          <span translate="IP_DETAILS.INFRASTRUCTURE"></span>
         </div>
         <div class="data-items">
           <div class="data-item">
-            <span class="label">Organization</span>
+            <span class="label" translate="IP_DETAILS.ORGANIZATION"></span>
             <span class="value">{{ data.organization.asn_name }}</span>
           </div>
           <div class="data-item">
-            <span class="label">ASN</span>
+            <span class="label" translate="IP_DETAILS.ASN"></span>
             <span class="value highlight-box">AS{{ data.organization.asn_number }}</span>
           </div>
           <div class="data-item">
-            <span class="label">Description</span>
-            <span class="value secondary-text">{{ data.organization.asn_description || 'No description available' }}</span>
+            <span class="label" translate="IP_DETAILS.DESCRIPTION"></span>
+            <span class="value secondary-text">{{ data.organization.asn_description || ('IP_DETAILS.NO_DESCRIPTION' | translate) }}</span>
           </div>
           <div class="data-item">
-            <span class="label">Network Range</span>
+            <span class="label" translate="IP_DETAILS.NETWORK_RANGE"></span>
             <span class="value font-mono accent-text">{{ data.ip.network }}/{{ data.ip.prefix }}</span>
           </div>
         </div>
@@ -60,7 +60,7 @@
       <section class="glass-section risk-section" [class.is-danger]="riskScore() >= 70" [class.is-warning]="riskScore() > 0 && riskScore() < 70" [class.is-safe]="riskScore() === 0">
         <div class="section-badge">
           <mat-icon>security</mat-icon>
-          <span>Security & Risk</span>
+          <span translate="IP_DETAILS.SECURITY_AND_RISK"></span>
         </div>
         
         <div class="risk-display">
@@ -75,21 +75,21 @@
                   @if (data.security.trusted) {
                     <span class="trusted-badge">
                       <mat-icon>verified</mat-icon>
-                      Trusted
+                      <span translate="IP_DETAILS.TRUSTED_IP"></span>
                     </span>
                   }
                 </div>
-                <span class="status-desc">Active threats detected in reputation feeds.</span>
+                <span class="status-desc" translate="IP_DETAILS.THREATS_DETECTED"></span>
               </div>
             </div>
 
             <div class="risk-meter-container">
               <div class="meter-header">
-                <span class="label">Threat Probability</span>
-                <span class="level-value" [class]="'level-' + riskLevel().toLowerCase()">{{ riskLevel() }} ({{ riskScore() }}%)</span>
+                <span class="label" translate="IP_DETAILS.THREAT_PROBABILITY"></span>
+                <span class="level-value" [class]="'level-' + riskLevelClass()">{{ riskLevelKey() | translate }} ({{ riskScore() }}%)</span>
               </div>
               <div class="meter-track">
-                <div class="meter-fill" [style.width.%]="riskScore()" [class]="'bg-' + riskLevel().toLowerCase()">
+                <div class="meter-fill" [style.--meter-percent.%]="riskScore()" [class]="'bg-' + riskLevelClass()">
                   <div class="fill-reflection"></div>
                 </div>
               </div>
@@ -97,7 +97,7 @@
 
             @if (data.security.reasons.length) {
               <div class="tags-container">
-                <span class="label small">Identified Feeds</span>
+                <span class="label small" translate="IP_DETAILS.IDENTIFIED_FEEDS"></span>
                 <div class="threat-tags">
                   @for (reason of data.security.reasons; track reason) {
                     <span class="threat-tag">
@@ -115,19 +115,19 @@
               </div>
               <div class="security-info">
                 <div class="status-header">
-                  <span class="status-text">Safe Connection</span>
+                  <span class="status-text" translate="IP_DETAILS.SAFE_CONNECTION"></span>
                   @if (data.security.trusted) {
                     <span class="trusted-badge">
                       <mat-icon>verified</mat-icon>
-                      Trusted
+                      <span translate="IP_DETAILS.TRUSTED_IP"></span>
                     </span>
                   }
                 </div>
-                <span class="status-desc">Verified clean across all global blacklists.</span>
+                <span class="status-desc" translate="IP_DETAILS.CLEAN_DESC"></span>
               </div>
             </div>
             <div class="data-item mt-auto">
-              <span class="label">Recommended Action</span>
+              <span class="label" translate="IP_DETAILS.RECOMMENDED_ACTION"></span>
               <span class="value success-tag">{{ data.security.action }}</span>
             </div>
           }
@@ -138,7 +138,7 @@
       <section class="glass-section location-section">
         <div class="section-badge">
           <mat-icon>location_on</mat-icon>
-          <span>Geographic Intel</span>
+          <span translate="IP_DETAILS.GEOGRAPHIC_INTEL"></span>
         </div>
         <div class="location-layout">
           <div class="country-hero">
@@ -154,34 +154,34 @@
           <div class="geo-details">
             @if (data.location.region) {
               <div class="detail-row">
-                <span class="label">Region</span>
+                <span class="label" translate="IP_DETAILS.REGION"></span>
                 <span class="value">{{ data.location.region }}</span>
               </div>
             }
             @if (data.location.city) {
               <div class="detail-row">
-                <span class="label">City</span>
+                <span class="label" translate="IP_DETAILS.CITY"></span>
                 <span class="value">{{ data.location.city }}</span>
               </div>
             }
             <div class="detail-row">
-              <span class="label">Protocol</span>
+              <span class="label" translate="IP_DETAILS.PROTOCOL"></span>
               <span class="value-pill">IPv{{ data.ip.version }}</span>
             </div>
             @if (data.location.geo_score !== undefined && data.location.geo_score !== null) {
               <div class="detail-row">
-                <span class="label">Geo Score</span>
+                <span class="label" translate="IP_DETAILS.GEO_SCORE"></span>
                 <span class="value">{{ data.location.geo_score }}</span>
               </div>
             }
             @if (data.location.latitude) {
               <div class="detail-row">
-                <span class="label">Coordinates</span>
+                <span class="label" translate="IP_DETAILS.COORDINATES"></span>
                 <span class="value font-mono secondary-text small-coords">{{ data.location.latitude }}, {{ data.location.longitude }}</span>
               </div>
             }
             <div class="detail-row">
-              <span class="label">Broadcast</span>
+              <span class="label" translate="IP_DETAILS.BROADCAST"></span>
               <span class="value font-mono">{{ data.ip.broadcast }}</span>
             </div>
           </div>
@@ -189,12 +189,4 @@
       </section>
     </div>
   </div>
-
-<!--
-    <div class="dialog-actions">
-    <button mat-flat-button color="primary" (click)="close()" class="action-btn">
-      <span>Close Details</span>
-    </button>
-  </div>
-  -->
 </div>

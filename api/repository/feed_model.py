@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 from nxcore.repository.sqlite3_dao import SQLite3DAO
 
@@ -57,12 +57,28 @@ class FeedDao(SQLite3DAO):
         Returns:
             dict: The converted dictionary.
         """
-        if "updated_on" in vo:
-            vo.update({"updated_on": vo["updated_on"].isoformat()})
+        vo = dict(vo)
+        if "_id" in vo:
+            vo.pop("_id", None)
+        vo["updated_on"] = datetime.now(timezone.utc).isoformat()
         if "data" in vo:
-            vo.update({"data_json": json.dumps(vo.pop("data"), ensure_ascii=False)})
+            data = vo.pop("data")
+            if data is not None:
+                vo["data_json"] = json.dumps(data, ensure_ascii=False)
+            else:
+                vo["data_json"] = None
 
-        return super().from_dict(vo)
+        valid_columns = {
+            "name", "slug", "provider", "type", "source", "description",
+            "format", "update_interval", "updated_on", "risk_score",
+            "geo_score", "data_json"
+        }
+        filtered = {k: v for k, v in vo.items() if k in valid_columns}
+        return super().from_dict(filtered)
+
+    def update_by_id(self, id: int, vo: dict):
+        vo = self.from_dict(vo)
+        return super().update_by_id(id, vo)
 
     def to_dict(self, row):
         """
@@ -76,9 +92,18 @@ class FeedDao(SQLite3DAO):
             dict: The converted dictionary.
         """
         if "updated_on" in row and row["updated_on"] is not None:
-            row.update({"updated_on": datetime.fromisoformat(row["updated_on"])})
+            if isinstance(row["updated_on"], str):
+                try:
+                    row.update(
+                        {"updated_on": datetime.fromisoformat(row["updated_on"])}
+                    )
+                except Exception:
+                    pass
         if "data_json" in row and row["data_json"] is not None:
-            row.update({"data": json.loads(row.pop("data_json"))})
+            try:
+                row.update({"data": json.loads(row.pop("data_json"))})
+            except Exception:
+                row["data"] = []
 
         return row
 
@@ -93,11 +118,13 @@ class FeedDao(SQLite3DAO):
         Returns:
             list[dict]: The list of feeds.
         """
+        if types is None:
+            types = ["reputation", "bypass", "geo"]
         sql = (
             f"SELECT "
             f" _id, name, provider, slug, type, source, description, format, update_interval, updated_on, risk_score, geo_score, data_json"
             f" FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
-            f" ORDER BY _id ASC"
+            f" ORDER BY _id DESC"
         )
         count_sql = f"SELECT COUNT(*) AS total FROM {self.table_name} WHERE type IN ({', '.join(['?'] * len(types))})"
         rows = []
@@ -114,9 +141,7 @@ class FeedDao(SQLite3DAO):
 
         rs = self._query(sql, params=types, fetch=True)
         if rs:
-            rows = [row for row in rs]
-            for r in rows:
-                self.to_dict(r)
+            rows = [self.to_dict(dict(row)) for row in rs]
         return {
             "metadata": pagination,
             "data": rows,

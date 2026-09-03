@@ -3,22 +3,29 @@ import { CommonModule } from '@angular/common';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { IpInfo } from '../../models/ipinfo';
 
 @Component({
   selector: 'app-ip-details-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatDialogModule, MatIconModule, MatButtonModule, TranslatePipe, TranslateDirective],
   templateUrl: './ip-details-dialog.component.html',
   styleUrls: ['./ip-details-dialog.component.css'],
 })
 export class IpDetailsDialogComponent {
   dataSignal = signal<IpInfo>(this.data);
 
-  riskLevel = computed(() => {
+  riskLevelClass = computed(() => {
     const score = this.dataSignal().security?.risk_score || 0;
-    if (score === 0) return 'Low';
-    return score < 50 ? 'Medium' : 'High';
+    if (score === 0) return 'low';
+    return score < 50 ? 'medium' : 'high';
+  });
+
+  riskLevelKey = computed(() => {
+    const score = this.dataSignal().security?.risk_score || 0;
+    if (score === 0) return 'IP_DETAILS.RISK_LOW';
+    return score < 50 ? 'IP_DETAILS.RISK_MEDIUM' : 'IP_DETAILS.RISK_HIGH';
   });
 
   riskScore = computed(() => {

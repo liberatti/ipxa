@@ -1,82 +1,119 @@
-<h2 mat-dialog-title class="gradient-text">{{ data ? 'Edit Feed' : 'New Feed' }}</h2>
+<h2 mat-dialog-title class="gradient-text">
+  {{ (data ? 'FEEDS.FORM.TITLE_EDIT' : 'FEEDS.FORM.TITLE_NEW') | translate }}
+</h2>
 <mat-dialog-content>
   <form [formGroup]="form" class="form-grid">
     <div class="form-row">
       <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" placeholder="Ex: Spamhaus SBL">
-        <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+        <mat-label translate="FEEDS.FORM.NAME_LABEL"></mat-label>
+        <input matInput formControlName="name" [placeholder]="'FEEDS.FORM.NAME_PLACEHOLDER' | translate">
+        @if (form.get('name')?.hasError('required')) {
+          <mat-error translate="FEEDS.FORM.NAME_REQUIRED"></mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Slug</mat-label>
-        <input matInput formControlName="slug" placeholder="spamhaus_sbl">
-        <mat-error *ngIf="form.get('slug')?.hasError('required')">Slug is required</mat-error>
+        <mat-label translate="FEEDS.FORM.SLUG_LABEL"></mat-label>
+        <input matInput formControlName="slug" [placeholder]="'FEEDS.FORM.SLUG_PLACEHOLDER' | translate">
+        @if (form.get('slug')?.hasError('required')) {
+          <mat-error translate="FEEDS.FORM.SLUG_REQUIRED"></mat-error>
+        }
       </mat-form-field>
     </div>
 
     <div class="form-row">
       <mat-form-field appearance="outline">
-        <mat-label>Provider</mat-label>
-        <input matInput formControlName="provider" placeholder="Ex: Spamhaus">
-        <mat-error *ngIf="form.get('provider')?.hasError('required')">Provider is required</mat-error>
+        <mat-label translate="FEEDS.FORM.PROVIDER_LABEL"></mat-label>
+        <input matInput formControlName="provider" [placeholder]="'FEEDS.FORM.PROVIDER_PLACEHOLDER' | translate">
+        @if (form.get('provider')?.hasError('required')) {
+          <mat-error translate="FEEDS.FORM.PROVIDER_REQUIRED"></mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Risk Score (0-10)</mat-label>
+        <mat-label translate="FEEDS.FORM.RISK_SCORE_LABEL"></mat-label>
         <input matInput type="number" formControlName="risk_score">
-        <mat-error *ngIf="form.get('risk_score')?.hasError('min')">Risk Score must be at least 0</mat-error>
-        <mat-error *ngIf="form.get('risk_score')?.hasError('max')">Risk Score cannot exceed 100</mat-error>
+        @if (form.get('risk_score')?.hasError('min')) {
+          <mat-error translate="FEEDS.FORM.RISK_SCORE_MIN"></mat-error>
+        }
+        @if (form.get('risk_score')?.hasError('max')) {
+          <mat-error translate="FEEDS.FORM.RISK_SCORE_MAX"></mat-error>
+        }
       </mat-form-field>
     </div>
 
     <div class="form-row">
       <mat-form-field appearance="outline">
-        <mat-label>Type</mat-label>
+        <mat-label translate="FEEDS.FORM.TYPE_LABEL"></mat-label>
         <mat-select formControlName="type">
-          <mat-option *ngFor="let t of types" [value]="t">{{t | titlecase}}</mat-option>
+          @for (t of types; track t) {
+            <mat-option [value]="t">{{ t | titlecase }}</mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get('type')?.hasError('required')">Type is required</mat-error>
+        @if (form.get('type')?.hasError('required')) {
+          <mat-error translate="FEEDS.FORM.TYPE_REQUIRED"></mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Format</mat-label>
+        <mat-label translate="FEEDS.FORM.FORMAT_LABEL"></mat-label>
         <mat-select formControlName="format">
-          <mat-option *ngFor="let f of formats" [value]="f">{{f}}</mat-option>
+          @for (f of formats; track f) {
+            <mat-option [value]="f">{{ f }}</mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="form.get('format')?.hasError('required')">Format is required</mat-error>
+        @if (form.get('format')?.hasError('required')) {
+          <mat-error translate="FEEDS.FORM.FORMAT_REQUIRED"></mat-error>
+        }
       </mat-form-field>
     </div>
 
-    <div class="form-row" *ngIf="form.get('format')?.value !== 'embedded'">
-      <mat-form-field appearance="outline">
-        <mat-label>Source URL</mat-label>
-        <input matInput formControlName="source" placeholder="https://...">
-        <mat-error *ngIf="form.get('source')?.hasError('required')">Source URL is required</mat-error>
-      </mat-form-field>
+    @if (form.get('format')?.value !== 'embedded') {
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label translate="FEEDS.FORM.SOURCE_LABEL"></mat-label>
+          <input matInput formControlName="source" [placeholder]="'FEEDS.FORM.SOURCE_PLACEHOLDER' | translate">
+          @if (form.get('source')?.hasError('required')) {
+            <mat-error translate="FEEDS.FORM.SOURCE_REQUIRED"></mat-error>
+          }
+        </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Update Interval</mat-label>
-        <mat-select formControlName="update_interval">
-          <mat-option *ngFor="let i of intervals" [value]="i">{{i | titlecase}}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get('update_interval')?.hasError('required')">Update interval is required</mat-error>
-      </mat-form-field>
-    </div>
+        <mat-form-field appearance="outline">
+          <mat-label translate="FEEDS.FORM.INTERVAL_LABEL"></mat-label>
+          <mat-select formControlName="update_interval">
+            @for (i of intervals; track i) {
+              <mat-option [value]="i">{{ i | titlecase }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('update_interval')?.hasError('required')) {
+            <mat-error translate="FEEDS.FORM.INTERVAL_REQUIRED"></mat-error>
+          }
+        </mat-form-field>
+      </div>
+    }
 
-    <mat-form-field appearance="outline" *ngIf="form.get('format')?.value === 'embedded'">
-      <mat-label>IP List (one per line)</mat-label>
-      <textarea matInput formControlName="data_raw" rows="5" placeholder="192.168.0.0/16"></textarea>
-      <mat-error *ngIf="form.get('data_raw')?.hasError('required')">IP List is required for embedded format</mat-error>
-    </mat-form-field>
+    @if (form.get('format')?.value === 'embedded') {
+      <mat-form-field appearance="outline">
+        <mat-label translate="FEEDS.FORM.DATA_RAW_LABEL"></mat-label>
+        <textarea matInput formControlName="data_raw" rows="5" [placeholder]="'FEEDS.FORM.DATA_RAW_PLACEHOLDER' | translate"></textarea>
+        @if (form.get('data_raw')?.hasError('required')) {
+          <mat-error translate="FEEDS.FORM.DATA_RAW_REQUIRED"></mat-error>
+        }
+      </mat-form-field>
+    }
 
     <mat-form-field appearance="outline">
-      <mat-label>Description</mat-label>
+      <mat-label translate="FEEDS.FORM.DESCRIPTION_LABEL"></mat-label>
       <textarea matInput formControlName="description" rows="2"></textarea>
     </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="onSave()">Save Feed</button>
+  <button mat-button type="button" [disabled]="isLoading()" (click)="onCancel()" translate="FEEDS.FORM.BTN_CANCEL"></button>
+  <button mat-flat-button color="primary" type="button" [disabled]="isLoading()" (click)="onSave()">
+    @if (isLoading()) {
+      <mat-spinner diameter="18" class="button-spinner"></mat-spinner>
+    }
+    <span translate="FEEDS.FORM.BTN_SAVE"></span>
+  </button>
 </mat-dialog-actions>

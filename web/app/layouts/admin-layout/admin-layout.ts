@@ -5,6 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { OAuthService } from '../../services/oauth.service';
 import { LocalStorageService } from '../../services/localstorage.service';
 import { Router } from '@angular/router';
@@ -20,6 +21,8 @@ import { IpInputComponent } from '../../components/ip-input/ip-input.component';
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    TranslatePipe,
+    TranslateDirective,
     IpInputComponent
   ],
   templateUrl: './admin-layout.html',

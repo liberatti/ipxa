@@ -22,3 +22,8 @@
 textarea {
   resize: none;
 }
+
+.button-spinner {
+  display: inline-block;
+  margin-right: 8px;
+}

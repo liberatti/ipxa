@@ -44,9 +44,14 @@
               "theme.css",
               "styles.css"
             ],
-            "allowedCommonJsDependencies": [
-              "moment"
-            ]
+            "optimization": {
+              "scripts": true,
+              "styles": {
+                "minify": true,
+                "inlineCritical": false
+              },
+              "fonts": false
+            }
           },
           "configurations": {
             "production": {

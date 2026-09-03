@@ -226,44 +226,64 @@ def update_feed(feed):
     Args:
         feed (dict): The feed configuration dictionary.
     """
+    if not feed:
+        return
+
+    feed_name = feed.get("name")
+    if not feed_name:
+        return
+
     with RBLDao() as dao:
-        dao.delete_by_feed_name(feed["name"])
+        dao.delete_by_feed_name(feed_name)
+
     lines = []
-    if "embedded" in feed["format"]:
-        lines = feed["data"]
-    elif "source" in feed and feed["source"]:
+    feed_format = feed.get("format", "")
+    if "embedded" in feed_format:
+        raw_data = feed.get("data") or []
+        if isinstance(raw_data, list):
+            lines = raw_data
+        elif isinstance(raw_data, str):
+            lines = raw_data.splitlines()
+    elif feed.get("source"):
         source_url = feed["source"]
-        if "iblocklist" in feed["provider"]:
+        if "iblocklist" in feed.get("provider", ""):
             if config.IBLOCKLIST_USERNAME and config.IBLOCKLIST_PASSWORD:
                 source_url = f"{source_url}&username={config.IBLOCKLIST_USERNAME}&pin={config.IBLOCKLIST_PASSWORD}"
             else:
-                logger.warning(f"Feed {feed['name']} skipped, no credentials")
-        resp = requests.get(source_url, timeout=10)
-        if resp and resp.status_code == 200:
-            if "cdir_text" in feed["format"]:
-                lines = resp.text.splitlines()
-            if "cdir_gz" in feed["format"]:
-                with gzip.GzipFile(fileobj=io.BytesIO(resp.content)) as gz:
-                    for gzl in gz:
-                        lines.append(gzl.decode("utf-8").strip())
+                logger.warning(f"Feed {feed_name} skipped, no credentials")
+                return
+        try:
+            resp = requests.get(source_url, timeout=10)
+            if resp and resp.status_code == 200:
+                if "cdir_text" in feed_format:
+                    lines = resp.text.splitlines()
+                elif "cdir_gz" in feed_format:
+                    with gzip.GzipFile(fileobj=io.BytesIO(resp.content)) as gz:
+                        for gzl in gz:
+                            lines.append(gzl.decode("utf-8").strip())
+        except Exception as e:
+            logger.error(f"Failed to fetch feed {feed_name} from {source_url}: {e}")
+            return
     else:
-        logger.warning(f"Feed {feed['name']} skipped, no source or embedded data")
+        logger.warning(f"Feed {feed_name} skipped, no source or embedded data")
         return
+
     with RBLDao() as dao:
         batch = []
         i = 0
         for line in lines:
-            t = line.strip()
+            t = str(line).strip()
             if t and not t.startswith("#"):
                 net = build_ip_info(t, feed)
                 if net:
                     batch.append(net)
                     i += 1
-            if i % 100 == 0:
+            if len(batch) >= 500:
                 dao.persist_many(batch)
                 batch = []
-        dao.persist_many(batch)
-        logger.info(f"Loaded {i} records from {feed['name']}")
+        if batch:
+            dao.persist_many(batch)
+        logger.info(f"Loaded {i} records from {feed_name}")
 
 
 def build_ip_info(line: str, feed: Dict):

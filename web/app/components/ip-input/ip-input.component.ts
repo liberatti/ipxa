@@ -18,6 +18,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { TranslatePipe, TranslateDirective } from '@ngx-translate/core';
 import { IpInfoService } from '../../services/ip.service';
 import { IpDetailsDialogComponent } from '../ip-details-dialog/ip-details-dialog.component';
 
@@ -33,7 +34,7 @@ export function ipValidator(control: AbstractControl): ValidationErrors | null {
 @Component({
   selector: 'app-ip-input',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatDialogModule],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, TranslatePipe, TranslateDirective],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -45,7 +46,7 @@ export function ipValidator(control: AbstractControl): ValidationErrors | null {
   styleUrls: ['./ip-input.component.css'],
 })
 export class IpInputComponent implements ControlValueAccessor {
-  @Input() placeholder = 'e.g., 8.8.8.8 or 2001:db8::1';
+  @Input() placeholder?: string;
   @Input() size: 'default' | 'large' = 'default';
   @Output() search = new EventEmitter<string>();
 

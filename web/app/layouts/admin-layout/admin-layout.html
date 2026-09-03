@@ -1,19 +1,23 @@
 <div class="admin-container">
   <mat-toolbar class="admin-header">
-    <span class="brand-text"><img src="assets/logo.png" alt="ipxa Logo" class="brand-logo"> ipxa <small>Admin</small></span>
+    <span class="brand-text">
+      <img src="assets/logo.png" [alt]="'NAVBAR.BRAND' | translate" class="brand-logo">
+      {{ 'NAVBAR.BRAND' | translate }} <small translate="NAVBAR.BRAND_SUBTITLE"></small>
+    </span>
     <div class="nav-links">
       <a mat-button routerLink="/admin/feeds" routerLinkActive="active">
         <mat-icon>rss_feed</mat-icon>
-        <span>Feeds</span>
+        <span translate="NAVBAR.FEEDS"></span>
       </a>
       <button mat-button (click)="openIpLookupDialog()" class="nav-btn ip-lookup-nav-btn">
         <mat-icon>search</mat-icon>
-        <span>IP Lookup</span>
+        <span translate="NAVBAR.IP_LOOKUP"></span>
       </button>
     </div>
     <span class="spacer"></span>
     <button mat-button (click)="logout()" class="logout-btn">
-      <mat-icon>logout</mat-icon> Logout
+      <mat-icon>logout</mat-icon>
+      <span translate="NAVBAR.LOGOUT"></span>
     </button>
   </mat-toolbar>
 
@@ -22,9 +26,9 @@
       <router-outlet></router-outlet>
     </div>
     <footer class="admin-footer">
-      <span>&copy; 2026 ipxa · Advanced IP Intelligence Dashboard</span>
+      <span translate="NAVBAR.FOOTER_COPYRIGHT"></span>
       <div class="spacer"></div>
-      <span class="footer-tag">Open Source</span>
+      <span class="footer-tag" translate="NAVBAR.FOOTER_TAG"></span>
     </footer>
   </div>
 </div>
@@ -35,11 +39,11 @@
       <div class="modal-title-group">
         <mat-icon class="modal-header-icon">travel_explore</mat-icon>
         <div>
-          <h3 class="modal-title">IP Intelligence Lookup</h3>
-          <p class="modal-subtitle">Analyze reputation, geolocation, ASN, and risk score</p>
+          <h3 class="modal-title" translate="IP_LOOKUP.MODAL_TITLE"></h3>
+          <p class="modal-subtitle" translate="IP_LOOKUP.MODAL_SUBTITLE"></p>
         </div>
       </div>
-      <button mat-icon-button mat-dialog-close class="modal-close-btn" aria-label="Close dialog">
+      <button mat-icon-button mat-dialog-close class="modal-close-btn" [attr.aria-label]="'IP_LOOKUP.ARIA_CLOSE' | translate">
         <mat-icon>close</mat-icon>
       </button>
     </div>

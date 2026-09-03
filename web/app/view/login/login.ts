@@ -9,6 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe, TranslateDirective, TranslateService } from '@ngx-translate/core';
 import { OAuthService } from 'app/services/oauth.service';
 import { HttpClient } from '@angular/common/http';
 import { REST_API_URL } from 'app/app.config';
@@ -22,11 +26,16 @@ import { REST_API_URL } from 'app/app.config';
     RouterModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
     MatProgressBarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatMenuModule,
+    MatTooltipModule,
+    TranslatePipe,
+    TranslateDirective
   ],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
@@ -38,18 +47,31 @@ export class LoginComponent {
   showPassword = signal(false);
   currentYear = new Date().getFullYear();
   security_enabled = signal(false);
+  currentLang = signal<string>('en_US');
+
+  languages = [
+    { code: 'en_US', labelKey: 'AUTH.LOGIN.LANG_EN' },
+    { code: 'pt_BR', labelKey: 'AUTH.LOGIN.LANG_PT' }
+  ];
 
   constructor(
     private fb: FormBuilder,
     private authService: OAuthService,
     private router: Router,
     private httpClient: HttpClient,
+    private translate: TranslateService,
     @Inject(REST_API_URL) private apiUrl: string
   ) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+    this.currentLang.set(this.translate.getCurrentLang() || this.translate.getFallbackLang() || 'en_US');
+  }
+
+  setLanguage(lang: string) {
+    this.translate.use(lang);
+    this.currentLang.set(lang);
   }
 
   ngOnInit() {

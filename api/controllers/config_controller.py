@@ -6,7 +6,6 @@ routes = Blueprint("config", __name__)
 
 
 @routes.route("", methods=["GET"])
-@routes.route("/", methods=["GET"])
 def get_config() -> Response:
     """
     Returns the configuration.
