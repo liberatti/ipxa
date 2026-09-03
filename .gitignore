@@ -212,3 +212,4 @@ hooks/httpd/**/config.lua
 hooks/openresty/**/config.lua
 hooks/httpd/**/httpd.conf
 devc.yml
+.idea

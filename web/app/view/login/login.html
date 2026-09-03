@@ -1,0 +1,89 @@
+<div class="login-page">
+  <div class="login-background">
+    <div class="grid-overlay"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="login-container animate-in">
+    <mat-card class="glass-card login-card">
+      <div class="brand-section">
+        <div class="logo-box">
+          <img src="assets/logo.png" [alt]="'AUTH.LOGIN.TITLE' | translate" class="logo-img">
+          <div class="logo-pulse"></div>
+        </div>
+        <h1 class="gradient-text" translate="AUTH.LOGIN.TITLE"></h1>
+        <div class="badge-tag" translate="AUTH.LOGIN.SECURITY_BADGE"></div>
+      </div>
+
+      @if (isLoading()) {
+      <mat-progress-bar mode="indeterminate" class="login-progress"></mat-progress-bar>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+        @if (errorMessage()) {
+        <div class="error-box animate-in">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage() }}</span>
+        </div>
+        }
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label translate="AUTH.LOGIN.SELECT_LANG"></mat-label>
+          <mat-icon matPrefix class="lang-icon">language</mat-icon>
+          <mat-select [value]="currentLang()" (selectionChange)="setLanguage($event.value)"
+            [attr.aria-label]="'AUTH.LOGIN.SELECT_LANG' | translate">
+            @for (lang of languages; track lang.code) {
+            <mat-option [value]="lang.code">
+              <span [translate]="lang.labelKey"></span>
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label translate="AUTH.LOGIN.EMAIL_LABEL"></mat-label>
+          <input matInput type="email" formControlName="email"
+            [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate" autocomplete="username">
+          <mat-icon matPrefix>alternate_email</mat-icon>
+          @if (form.get('email')?.hasError('email')) {
+          <mat-error translate="AUTH.LOGIN.ERROR_INVALID_EMAIL"></mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label translate="AUTH.LOGIN.PASSWORD_LABEL"></mat-label>
+          <input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+            [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" autocomplete="current-password">
+          <mat-icon matPrefix>lock_outline</mat-icon>
+          <button mat-icon-button matSuffix (click)="togglePassword()" type="button"
+            [attr.aria-label]="(showPassword() ? 'AUTH.LOGIN.PASSWORD_HIDE' : 'AUTH.LOGIN.PASSWORD_SHOW') | translate"
+            [attr.aria-pressed]="showPassword()">
+            <mat-icon>{{ showPassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          @if (form.get('password')?.hasError('required')) {
+          <mat-error translate="AUTH.LOGIN.ERROR_REQUIRED_PASSWORD"></mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isLoading()"
+            class="btn-login btn-glow">
+            @if (!isLoading()) {
+            <mat-icon class="btn-icon" matButtonIcon>lock_open</mat-icon>
+            }
+            <span>
+              {{ (isLoading() ? 'AUTH.LOGIN.BTN_AUTHENTICATING' : 'AUTH.LOGIN.BTN_LOGIN') | translate }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <div class="copyright">
+      <span>{{ 'AUTH.LOGIN.FOOTER' | translate:{ year: currentYear } }}</span>
+      <span class="version-tag">{{ version }}</span>
+    </div>
+  </div>
+</div>

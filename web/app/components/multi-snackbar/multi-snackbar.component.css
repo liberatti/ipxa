@@ -1,0 +1,12 @@
+.multi-snackbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+
+.snackbar-item {
+  padding: 6px;
+  color: var(--text-primary);
+  font-size: 14px;
+}

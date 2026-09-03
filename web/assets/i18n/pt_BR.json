@@ -1,0 +1,161 @@
+{
+  "NAVBAR": {
+    "BRAND": "ipxa",
+    "BRAND_SUBTITLE": "Admin",
+    "FEEDS": "Feeds",
+    "IP_LOOKUP": "Consultar IP",
+    "LOGOUT": "Sair",
+    "THEME_LIGHT": "Alternar para Tema Claro",
+    "THEME_DARK": "Alternar para Tema Escuro",
+    "TOGGLE_THEME": "Alternar Tema",
+    "FOOTER_COPYRIGHT": "© 2026 ipxa · Painel Avançado de Inteligência de IP",
+    "FOOTER_TAG": "Código Aberto"
+  },
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "ipxa",
+      "SUBTITLE": "Acesso Restrito ao Painel",
+      "SECURITY_BADGE": "Plataforma de Inteligência Corporativa",
+      "SYSTEM_STATUS": "Sistema Operacional · Criptografia TLS",
+      "SELECT_LANG": "Alternar Idioma",
+      "LANG_EN": "English",
+      "LANG_PT": "Português",
+      "EMAIL_LABEL": "E-mail",
+      "EMAIL_PLACEHOLDER": "seu@email.com",
+      "PASSWORD_LABEL": "Senha",
+      "PASSWORD_PLACEHOLDER": "Digite sua senha",
+      "PASSWORD_SHOW": "Mostrar senha",
+      "PASSWORD_HIDE": "Ocultar senha",
+      "BTN_LOGIN": "Entrar no Painel",
+      "BTN_AUTHENTICATING": "Autenticando...",
+      "ERROR_INVALID_EMAIL": "Formato de e-mail inválido",
+      "ERROR_REQUIRED_PASSWORD": "A senha é obrigatória",
+      "FOOTER": "© {{ year }} ipxa - Inteligência Avançada de IP"
+    }
+  },
+  "FEEDS": {
+    "LIST": {
+      "TITLE": "Gerenciamento de Feeds",
+      "SEARCH_PLACEHOLDER": "Buscar por nome, provedor ou origem...",
+      "SEARCH_ARIA": "Buscar feeds por nome, provedor ou origem",
+      "NO_MATCHING_DATA": "Nenhum feed correspondente aos critérios de busca",
+      "BTN_CREATE": "Novo Feed",
+      "COL_NAME": "Nome",
+      "COL_PROVIDER": "Provedor",
+      "COL_TYPE": "Tipo",
+      "COL_FORMAT": "Formato",
+      "COL_SCORE": "Pontuação",
+      "COL_UPDATED_ON": "Última Atualização",
+      "COL_ACTIONS": "Ações",
+      "NEVER_UPDATED": "Nunca",
+      "BTN_EDIT": "Editar feed",
+      "BTN_DELETE": "Excluir feed"
+    },
+    "FORM": {
+      "TITLE_NEW": "Novo Feed",
+      "TITLE_EDIT": "Editar Feed",
+      "NAME_LABEL": "Nome",
+      "NAME_PLACEHOLDER": "Ex: Spamhaus SBL",
+      "NAME_REQUIRED": "O nome é obrigatório",
+      "SLUG_LABEL": "Identificador (Slug)",
+      "SLUG_PLACEHOLDER": "spamhaus_sbl",
+      "SLUG_REQUIRED": "O identificador é obrigatório",
+      "PROVIDER_LABEL": "Provedor",
+      "PROVIDER_PLACEHOLDER": "Ex: Spamhaus",
+      "PROVIDER_REQUIRED": "O provedor é obrigatório",
+      "RISK_SCORE_LABEL": "Pontuação de Risco (0-10)",
+      "RISK_SCORE_MIN": "A pontuação de risco deve ser no mínimo 0",
+      "RISK_SCORE_MAX": "A pontuação de risco não pode exceder 100",
+      "TYPE_LABEL": "Tipo",
+      "TYPE_REQUIRED": "O tipo é obrigatório",
+      "FORMAT_LABEL": "Formato",
+      "FORMAT_REQUIRED": "O formato é obrigatório",
+      "SOURCE_LABEL": "URL de Origem",
+      "SOURCE_PLACEHOLDER": "https://...",
+      "SOURCE_REQUIRED": "A URL de origem é obrigatória",
+      "INTERVAL_LABEL": "Intervalo de Atualização",
+      "INTERVAL_REQUIRED": "O intervalo de atualização é obrigatório",
+      "DATA_RAW_LABEL": "Lista de IPs (um por linha)",
+      "DATA_RAW_PLACEHOLDER": "192.168.0.0/16",
+      "DATA_RAW_REQUIRED": "A lista de IPs é obrigatória para o formato embutido",
+      "DESCRIPTION_LABEL": "Descrição",
+      "BTN_CANCEL": "Cancelar",
+      "BTN_SAVE": "Salvar Feed"
+    }
+  },
+  "IP_LOOKUP": {
+    "MODAL_TITLE": "Consulta de Inteligência de IP",
+    "MODAL_SUBTITLE": "Analise reputação, geolocalização, ASN e pontuação de risco",
+    "INPUT_PLACEHOLDER": "ex: 8.8.8.8 ou 2001:db8::1",
+    "BTN_SEARCH": "Consultar",
+    "BTN_SEARCHING": "Consultando...",
+    "ARIA_INPUT": "Digite um endereço IP",
+    "ARIA_SEARCH": "Consultar IP",
+    "ARIA_CLEAR": "Limpar",
+    "ARIA_CLOSE": "Fechar janela",
+    "ERROR_INVALID_IP": "Endereço IP inválido. Digite um IPv4 ou IPv6 válido."
+  },
+  "IP_DETAILS": {
+    "TITLE": "Detalhes das Informações do IP",
+    "SUBTITLE": "Análise detalhada para",
+    "TRUSTED_IP": "IP Confiável",
+    "INFRASTRUCTURE": "Infraestrutura",
+    "ORGANIZATION": "Organização",
+    "ASN": "ASN",
+    "DESCRIPTION": "Descrição",
+    "NO_DESCRIPTION": "Nenhuma descrição disponível",
+    "NETWORK_RANGE": "Faixa de Rede",
+    "SECURITY_AND_RISK": "Segurança e Risco",
+    "THREATS_DETECTED": "Ameaças ativas detectadas em listas de reputação.",
+    "THREAT_PROBABILITY": "Probabilidade de Ameaça",
+    "IDENTIFIED_FEEDS": "Feeds Identificados",
+    "SAFE_CONNECTION": "Conexão Segura",
+    "CLEAN_DESC": "Verificado como limpo em todas as listas globais de bloqueio.",
+    "RECOMMENDED_ACTION": "Ação Recomendada",
+    "GEOGRAPHIC_INTEL": "Informações Geográficas",
+    "REGION": "Região",
+    "CITY": "Cidade",
+    "PROTOCOL": "Protocolo",
+    "GEO_SCORE": "Pontuação Geográfica",
+    "COORDINATES": "Coordenadas",
+    "BROADCAST": "Broadcast",
+    "RISK_LOW": "Baixo",
+    "RISK_MEDIUM": "Médio",
+    "RISK_HIGH": "Alto",
+    "CLOSE_DETAILS": "Fechar Detalhes"
+  },
+  "ACTIONS": {
+    "CREATE": "Criar",
+    "EDIT": "Editar",
+    "DELETE": "Excluir",
+    "SEARCH": "Buscar",
+    "SAVE": "Salvar",
+    "CANCEL": "Cancelar",
+    "CONFIRM": "Confirmar",
+    "CLOSE": "Fechar"
+  },
+  "PAGINATOR": {
+    "ITEMS_PER_PAGE": "Itens por página:",
+    "NEXT_PAGE": "Próxima página",
+    "PREVIOUS_PAGE": "Página anterior",
+    "FIRST_PAGE": "Primeira página",
+    "LAST_PAGE": "Última página"
+  },
+  "DIALOGS": {
+    "CONFIRM_DELETE": {
+      "TITLE": "Confirmar Exclusão",
+      "MESSAGE": "Tem certeza que deseja excluir este feed? Esta ação não pode ser desfeita."
+    }
+  },
+  "NOTIFICATIONS": {
+    "SUCCESS_SAVE": "Feed salvo com sucesso",
+    "SUCCESS_DELETE": "Feed removido com sucesso",
+    "ERROR_GENERIC": "Ocorreu um erro ao processar a requisição"
+  },
+  "FORMAT": {
+    "DISPLAY": {
+      "DATETIME": "DD/MM/YYYY HH:mm:ss",
+      "DATE": "DD/MM/YYYY"
+    }
+  }
+}

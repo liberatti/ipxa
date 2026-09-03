@@ -1,0 +1,63 @@
+<div class="admin-container">
+  <mat-toolbar class="admin-header">
+    <span class="brand-text">
+      <img src="assets/logo.png" [alt]="'NAVBAR.BRAND' | translate" class="brand-logo">
+      {{ 'NAVBAR.BRAND' | translate }} <small translate="NAVBAR.BRAND_SUBTITLE"></small>
+    </span>
+    <div class="nav-links">
+      <a mat-button routerLink="/admin/feeds" routerLinkActive="active">
+        <mat-icon>rss_feed</mat-icon>
+        <span translate="NAVBAR.FEEDS"></span>
+      </a>
+    </div>
+    <span class="spacer"></span>
+    <div class="header-right-actions">
+      <button mat-button (click)="openIpLookupDialog()" class="nav-btn ip-lookup-nav-btn">
+        <mat-icon>search</mat-icon>
+        <span translate="NAVBAR.IP_LOOKUP"></span>
+      </button>
+      <button mat-icon-button (click)="toggleTheme()" class="theme-toggle-btn"
+        [attr.aria-label]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate"
+        [matTooltip]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate">
+        <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <button mat-button (click)="logout()" class="logout-btn">
+        <mat-icon>logout</mat-icon>
+        <span translate="NAVBAR.LOGOUT"></span>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <div class="admin-content">
+    <div class="page-container animate-in">
+      <router-outlet></router-outlet>
+    </div>
+    <footer class="admin-footer">
+      <span translate="NAVBAR.FOOTER_COPYRIGHT"></span>
+      <div class="spacer"></div>
+      <span class="footer-tag" translate="NAVBAR.FOOTER_TAG"></span>
+    </footer>
+  </div>
+</div>
+
+<ng-template #ipLookupDialog>
+  <div class="ip-lookup-modal">
+    <div class="ip-lookup-modal-header">
+      <div class="modal-title-group">
+        <mat-icon class="modal-header-icon">travel_explore</mat-icon>
+        <div>
+          <h3 class="modal-title" translate="IP_LOOKUP.MODAL_TITLE"></h3>
+          <p class="modal-subtitle" translate="IP_LOOKUP.MODAL_SUBTITLE"></p>
+        </div>
+      </div>
+      <button mat-icon-button mat-dialog-close class="modal-close-btn"
+        [attr.aria-label]="'IP_LOOKUP.ARIA_CLOSE' | translate">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="ip-lookup-modal-body">
+      <app-ip-input (search)="onIpSearched()"></app-ip-input>
+    </div>
+  </div>
+</ng-template>

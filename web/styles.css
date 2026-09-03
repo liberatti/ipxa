@@ -1,0 +1,429 @@
+@import 'material-icons/iconfont/material-icons.css';
+@import './theme.css';
+
+/* Global Reset & Layout */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--background-darker);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+}
+
+/* Typography Refinement */
+h1, h2, h3, h4, b, strong {
+    font-family: var(--font-brand);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+.font-mono {
+    font-family: var(--font-mono);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 50%, var(--accent-cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Animations (Subtle & Flat) */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-in {
+    animation: fadeIn 0.2s ease-in-out forwards;
+}
+
+/* ==========================================================================
+   Shared Surface & Utility Classes
+   ========================================================================== */
+
+/* Flat Card */
+.glass-card {
+    background: var(--background-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow-premium);
+    transition: var(--transition-standard);
+}
+
+.glass-card:hover {
+    border-color: var(--border-hover);
+}
+
+/* Flat Section */
+.glass-section {
+    background: var(--background-panel);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 16px;
+    transition: var(--transition-standard);
+    display: flex;
+    flex-direction: column;
+}
+
+.glass-section:hover {
+    border-color: var(--border-hover);
+}
+
+/* Badges & Tags */
+.section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    background: var(--border-dim);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    width: fit-content;
+    border: 1px solid var(--border-dim);
+}
+
+.highlight-box {
+    background: var(--accent-blue-dim);
+    color: var(--accent-color);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    border: 1px solid var(--border-color);
+    width: fit-content;
+}
+
+.threat-tag {
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-dim);
+    border-radius: 6px;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--danger-color);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Data Display */
+.data-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.label {
+    color: var(--text-secondary);
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.value {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.secondary-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+/* Flag icons */
+.fi {
+    display: inline-block;
+    width: 1.2em;
+    height: 0.9em;
+    background-size: cover;
+    border-radius: 2px;
+}
+
+/* ==========================================================================
+   Button Utilities (Flat)
+   ========================================================================== */
+
+.btn-primary, .btn-outline, .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: var(--transition-standard);
+    text-decoration: none;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-outline:hover {
+    background: var(--white-dim);
+    border-color: var(--border-hover);
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--accent-blue);
+}
+
+.btn-ghost:hover {
+    color: var(--accent-cyan);
+    background: var(--accent-blue-ghost);
+}
+
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.btn-lg { padding: 12px 24px; font-size: 15px; }
+
+.btn-glow {
+    position: relative;
+}
+
+/* ==========================================================================
+   Material MDC Overrides
+   ========================================================================== */
+
+/* Dialog Container & Backdrop */
+.cdk-overlay-backdrop {
+    background: var(--background-overlay) !important;
+}
+
+.custom-dialog-container .mat-mdc-dialog-container {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.custom-dialog-container .mat-mdc-dialog-surface {
+    background: var(--background-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-premium) !important;
+    overflow: visible !important;
+}
+
+.mat-mdc-dialog-title {
+    font-family: var(--font-brand) !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    padding: 24px 24px 10px !important;
+}
+
+.mat-mdc-dialog-content {
+    padding: 16px 24px !important;
+    color: var(--text-secondary) !important;
+}
+
+.mat-mdc-dialog-actions {
+    padding: 16px 24px 24px !important;
+    gap: 8px;
+}
+
+/* Form Fields */
+.mat-mdc-form-field {
+    --mdc-outlined-text-field-container-shape: 12px;
+    --mdc-outlined-text-field-outline-color: var(--border-color);
+    --mdc-outlined-text-field-focus-outline-color: var(--accent-blue);
+    --mdc-outlined-text-field-label-text-color: var(--text-secondary);
+    --mdc-outlined-text-field-focus-label-text-color: var(--accent-blue);
+    --mdc-outlined-text-field-input-text-color: var(--text-primary);
+    --mdc-filled-text-field-label-text-color: var(--text-secondary);
+    --mdc-filled-text-field-focus-label-text-color: var(--accent-blue);
+    --mdc-filled-text-field-input-text-color: var(--text-primary);
+    width: 100%;
+}
+
+.mat-mdc-form-field .mat-mdc-floating-label,
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field mat-label {
+    color: var(--text-secondary) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-floating-label,
+.mat-mdc-form-field.mat-focused .mdc-floating-label,
+.mat-mdc-form-field.mat-focused mat-label {
+    color: var(--accent-blue) !important;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+    background-color: var(--white-ghost);
+    transition: var(--transition-standard);
+    border-radius: 12px;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper:hover {
+    background-color: var(--white-dim);
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+    background-color: var(--white-med);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.mat-mdc-form-field .mdc-text-field__input {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+.mat-mdc-form-field .mdc-text-field__input::placeholder {
+    color: var(--text-muted) !important;
+}
+
+.mat-mdc-form-field [matPrefix],
+.mat-mdc-form-field [matSuffix] {
+    color: var(--text-secondary) !important;
+}
+
+.mat-mdc-form-field.mat-focused [matPrefix],
+.mat-mdc-form-field.mat-focused [matSuffix] {
+    color: var(--accent-blue) !important;
+}
+
+/* Select Dropdowns, Panels & Options */
+.mat-mdc-select-panel {
+    background: var(--background-dark) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-premium) !important;
+    padding: 6px !important;
+}
+
+.mat-mdc-select-value-text {
+    color: var(--text-primary) !important;
+    font-weight: 500 !important;
+}
+
+.mat-mdc-select-arrow {
+    color: var(--text-secondary) !important;
+}
+
+.mat-mdc-option {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+    border-radius: 8px !important;
+    margin: 2px 0 !important;
+    min-height: 40px !important;
+    transition: var(--transition-standard) !important;
+}
+
+.mat-mdc-option .mdc-list-item__primary-text {
+    color: var(--text-primary) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+    background: var(--white-dim) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+    background: var(--accent-blue-dim) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+    color: var(--accent-blue) !important;
+    font-weight: 600 !important;
+}
+
+.mat-mdc-option .mat-pseudo-checkbox-checked,
+.mat-mdc-option .mat-mdc-option-pseudo-checkbox {
+    color: var(--accent-blue) !important;
+}
+
+/* Cards & Tables */
+.mat-mdc-card {
+    background: var(--background-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.mat-mdc-table {
+    background: transparent !important;
+}
+
+.mat-mdc-header-cell {
+    color: var(--text-primary) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-size: 11px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.mat-mdc-cell {
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-dim) !important;
+}
+
+.mat-mdc-row:hover {
+    background: var(--white-ghost) !important;
+}
+
+.mat-mdc-no-data-row {
+    color: var(--text-secondary) !important;
+}
+
+/* Buttons */
+.mat-mdc-icon-button {
+    color: var(--text-secondary) !important;
+}
+
+.mat-mdc-raised-button,
+.mat-mdc-flat-button {
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    transition: var(--transition-standard) !important;
+}
+
+/* Slide Toggles */
+.mat-mdc-slide-toggle {
+    --mdc-switch-selected-focus-state-layer-color: var(--primary-color);
+    --mdc-switch-selected-handle-color: #ffffff;
+    --mdc-switch-selected-hover-state-layer-color: var(--primary-color);
+    --mdc-switch-selected-pressed-state-layer-color: var(--primary-color);
+    --mdc-switch-selected-track-color: var(--primary-color);
+    --mdc-switch-unselected-focus-state-layer-color: var(--text-muted);
+    --mdc-switch-unselected-handle-color: var(--text-secondary);
+    --mdc-switch-unselected-hover-state-layer-color: var(--text-muted);
+    --mdc-switch-unselected-pressed-state-layer-color: var(--text-muted);
+    --mdc-switch-unselected-track-color: var(--border-color);
+}
+
+.mat-mdc-slide-toggle .mdc-label {
+    color: var(--text-primary) !important;
+    font-size: 14px;
+    margin-left: 8px;
+}

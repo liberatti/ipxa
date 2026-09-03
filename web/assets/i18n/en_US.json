@@ -1,0 +1,161 @@
+{
+  "NAVBAR": {
+    "BRAND": "ipxa",
+    "BRAND_SUBTITLE": "Admin",
+    "FEEDS": "Feeds",
+    "IP_LOOKUP": "IP Lookup",
+    "LOGOUT": "Logout",
+    "THEME_LIGHT": "Switch to Light Theme",
+    "THEME_DARK": "Switch to Dark Theme",
+    "TOGGLE_THEME": "Toggle Theme",
+    "FOOTER_COPYRIGHT": "© 2026 ipxa · Advanced IP Intelligence Dashboard",
+    "FOOTER_TAG": "Open Source"
+  },
+  "AUTH": {
+    "LOGIN": {
+      "TITLE": "ipxa",
+      "SUBTITLE": "Restricted Dashboard Access",
+      "SECURITY_BADGE": "Enterprise Intelligence Platform",
+      "SYSTEM_STATUS": "System Operational · TLS Encrypted",
+      "SELECT_LANG": "Switch Language",
+      "LANG_EN": "English",
+      "LANG_PT": "Português",
+      "EMAIL_LABEL": "Email",
+      "EMAIL_PLACEHOLDER": "your@email.com",
+      "PASSWORD_LABEL": "Password",
+      "PASSWORD_PLACEHOLDER": "Enter your password",
+      "PASSWORD_SHOW": "Show password",
+      "PASSWORD_HIDE": "Hide password",
+      "BTN_LOGIN": "Login to Dashboard",
+      "BTN_AUTHENTICATING": "Authenticating...",
+      "ERROR_INVALID_EMAIL": "Invalid email format",
+      "ERROR_REQUIRED_PASSWORD": "Password is required",
+      "FOOTER": "© {{ year }} ipxa - Advanced IP Intelligence"
+    }
+  },
+  "FEEDS": {
+    "LIST": {
+      "TITLE": "Feeds Management",
+      "SEARCH_PLACEHOLDER": "Search by name, provider or source...",
+      "SEARCH_ARIA": "Search feeds by name, provider or source",
+      "NO_MATCHING_DATA": "No feeds match the search criteria",
+      "BTN_CREATE": "Create Feed",
+      "COL_NAME": "Name",
+      "COL_PROVIDER": "Provider",
+      "COL_TYPE": "Type",
+      "COL_FORMAT": "Format",
+      "COL_SCORE": "Score",
+      "COL_UPDATED_ON": "Last Updated",
+      "COL_ACTIONS": "Actions",
+      "NEVER_UPDATED": "Never",
+      "BTN_EDIT": "Edit feed",
+      "BTN_DELETE": "Delete feed"
+    },
+    "FORM": {
+      "TITLE_NEW": "New Feed",
+      "TITLE_EDIT": "Edit Feed",
+      "NAME_LABEL": "Name",
+      "NAME_PLACEHOLDER": "Ex: Spamhaus SBL",
+      "NAME_REQUIRED": "Name is required",
+      "SLUG_LABEL": "Slug",
+      "SLUG_PLACEHOLDER": "spamhaus_sbl",
+      "SLUG_REQUIRED": "Slug is required",
+      "PROVIDER_LABEL": "Provider",
+      "PROVIDER_PLACEHOLDER": "Ex: Spamhaus",
+      "PROVIDER_REQUIRED": "Provider is required",
+      "RISK_SCORE_LABEL": "Risk Score (0-10)",
+      "RISK_SCORE_MIN": "Risk Score must be at least 0",
+      "RISK_SCORE_MAX": "Risk Score cannot exceed 100",
+      "TYPE_LABEL": "Type",
+      "TYPE_REQUIRED": "Type is required",
+      "FORMAT_LABEL": "Format",
+      "FORMAT_REQUIRED": "Format is required",
+      "SOURCE_LABEL": "Source URL",
+      "SOURCE_PLACEHOLDER": "https://...",
+      "SOURCE_REQUIRED": "Source URL is required",
+      "INTERVAL_LABEL": "Update Interval",
+      "INTERVAL_REQUIRED": "Update interval is required",
+      "DATA_RAW_LABEL": "IP List (one per line)",
+      "DATA_RAW_PLACEHOLDER": "192.168.0.0/16",
+      "DATA_RAW_REQUIRED": "IP List is required for embedded format",
+      "DESCRIPTION_LABEL": "Description",
+      "BTN_CANCEL": "Cancel",
+      "BTN_SAVE": "Save Feed"
+    }
+  },
+  "IP_LOOKUP": {
+    "MODAL_TITLE": "IP Intelligence Lookup",
+    "MODAL_SUBTITLE": "Analyze reputation, geolocation, ASN, and risk score",
+    "INPUT_PLACEHOLDER": "e.g., 8.8.8.8 or 2001:db8::1",
+    "BTN_SEARCH": "Search",
+    "BTN_SEARCHING": "Searching...",
+    "ARIA_INPUT": "Enter an IP address",
+    "ARIA_SEARCH": "Search IP",
+    "ARIA_CLEAR": "Clear",
+    "ARIA_CLOSE": "Close dialog",
+    "ERROR_INVALID_IP": "Invalid IP address. Please enter a valid IPv4 or IPv6."
+  },
+  "IP_DETAILS": {
+    "TITLE": "IP Information Details",
+    "SUBTITLE": "Detailed analysis for",
+    "TRUSTED_IP": "Trusted IP",
+    "INFRASTRUCTURE": "Infrastructure",
+    "ORGANIZATION": "Organization",
+    "ASN": "ASN",
+    "DESCRIPTION": "Description",
+    "NO_DESCRIPTION": "No description available",
+    "NETWORK_RANGE": "Network Range",
+    "SECURITY_AND_RISK": "Security & Risk",
+    "THREATS_DETECTED": "Active threats detected in reputation feeds.",
+    "THREAT_PROBABILITY": "Threat Probability",
+    "IDENTIFIED_FEEDS": "Identified Feeds",
+    "SAFE_CONNECTION": "Safe Connection",
+    "CLEAN_DESC": "Verified clean across all global blacklists.",
+    "RECOMMENDED_ACTION": "Recommended Action",
+    "GEOGRAPHIC_INTEL": "Geographic Intel",
+    "REGION": "Region",
+    "CITY": "City",
+    "PROTOCOL": "Protocol",
+    "GEO_SCORE": "Geo Score",
+    "COORDINATES": "Coordinates",
+    "BROADCAST": "Broadcast",
+    "RISK_LOW": "Low",
+    "RISK_MEDIUM": "Medium",
+    "RISK_HIGH": "High",
+    "CLOSE_DETAILS": "Close Details"
+  },
+  "ACTIONS": {
+    "CREATE": "Create",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "SEARCH": "Search",
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "CONFIRM": "Confirm",
+    "CLOSE": "Close"
+  },
+  "PAGINATOR": {
+    "ITEMS_PER_PAGE": "Items per page:",
+    "NEXT_PAGE": "Next page",
+    "PREVIOUS_PAGE": "Previous page",
+    "FIRST_PAGE": "First page",
+    "LAST_PAGE": "Last page"
+  },
+  "DIALOGS": {
+    "CONFIRM_DELETE": {
+      "TITLE": "Confirm Deletion",
+      "MESSAGE": "Are you sure you want to delete this feed? This action cannot be undone."
+    }
+  },
+  "NOTIFICATIONS": {
+    "SUCCESS_SAVE": "Feed saved successfully",
+    "SUCCESS_DELETE": "Feed removed successfully",
+    "ERROR_GENERIC": "An error occurred while processing the request"
+  },
+  "FORMAT": {
+    "DISPLAY": {
+      "DATETIME": "YYYY-MM-DD HH:mm:ss",
+      "DATE": "YYYY-MM-DD"
+    }
+  }
+}

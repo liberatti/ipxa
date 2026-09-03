@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  ipxa-code-check:
+  code-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,12 +30,12 @@ jobs:
 
       - name: Lint
         run: |
-          flake8 . --exclude=web --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --exclude=web --count --exit-zero --max-complexity=20 --max-line-length=256 --statistics
+          flake8 . --exclude=web,.venv,venv --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --exclude=web,.venv,venv --count --exit-zero --max-complexity=20 --max-line-length=256 --statistics
 
-  ipxa-image:
+  build-app-image:
     runs-on: ubuntu-latest
-    needs: ipxa-code-check
+    needs: code-check
     steps:
       - uses: actions/checkout@v4
 
@@ -65,28 +65,32 @@ jobs:
         if: github.event_name == 'push'
         uses: docker/build-push-action@v6
         with:
-          context: app
+          context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=v-branches
+          cache-to: type=gha,scope=v-branches
 
-      - name: Extract portal image metadata
-        id: meta-portal
-        uses: docker/metadata-action@v5
-        with:
-          images: liberatti/ipxa-portal
-          tags: |
-            type=raw,value=latest
+  build-hooks-image:
+    runs-on: ubuntu-latest
+    needs: code-check
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: Build and push portal Docker image
-        uses: docker/build-push-action@v6
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
         with:
-          context: portal
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta-portal.outputs.tags }}
-          labels: ${{ steps.meta-portal.outputs.labels }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Extract ipxa-resty metadata
         id: meta-openresty
@@ -104,3 +108,5 @@ jobs:
           push: true
           tags: ${{ steps.meta-openresty.outputs.tags }}
           labels: ${{ steps.meta-openresty.outputs.labels }}
+          cache-from: type=gha,scope=v-branches
+          cache-to: type=gha,scope=v-branches
