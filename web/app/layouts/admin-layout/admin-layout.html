@@ -9,16 +9,24 @@
         <mat-icon>rss_feed</mat-icon>
         <span translate="NAVBAR.FEEDS"></span>
       </a>
+    </div>
+    <span class="spacer"></span>
+    <div class="header-right-actions">
       <button mat-button (click)="openIpLookupDialog()" class="nav-btn ip-lookup-nav-btn">
         <mat-icon>search</mat-icon>
         <span translate="NAVBAR.IP_LOOKUP"></span>
       </button>
+      <button mat-icon-button (click)="toggleTheme()" class="theme-toggle-btn"
+        [attr.aria-label]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate"
+        [matTooltip]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate">
+        <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <button mat-button (click)="logout()" class="logout-btn">
+        <mat-icon>logout</mat-icon>
+        <span translate="NAVBAR.LOGOUT"></span>
+      </button>
     </div>
-    <span class="spacer"></span>
-    <button mat-button (click)="logout()" class="logout-btn">
-      <mat-icon>logout</mat-icon>
-      <span translate="NAVBAR.LOGOUT"></span>
-    </button>
   </mat-toolbar>
 
   <div class="admin-content">
@@ -43,7 +51,8 @@
           <p class="modal-subtitle" translate="IP_LOOKUP.MODAL_SUBTITLE"></p>
         </div>
       </div>
-      <button mat-icon-button mat-dialog-close class="modal-close-btn" [attr.aria-label]="'IP_LOOKUP.ARIA_CLOSE' | translate">
+      <button mat-icon-button mat-dialog-close class="modal-close-btn"
+        [attr.aria-label]="'IP_LOOKUP.ARIA_CLOSE' | translate">
         <mat-icon>close</mat-icon>
       </button>
     </div>

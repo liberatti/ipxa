@@ -52,6 +52,11 @@
   gap: 8px;
   margin-left: 24px;
 }
+.header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .nav-links a {
   border-radius: 8px;
   color: var(--text-secondary) !important;
@@ -186,6 +191,23 @@
   width: auto;
   vertical-align: middle;
   margin-right: 8px;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  border-radius: 8px !important;
+  color: var(--text-secondary) !important;
+  transition: var(--transition-standard) !important;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--white-ghost) !important;
+  color: var(--text-primary) !important;
+}
+
+.theme-toggle-btn mat-icon {
+  color: var(--warning-color) !important;
+  margin: 0 !important;
 }
 
 /* IP Lookup Nav Button */

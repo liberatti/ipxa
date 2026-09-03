@@ -1,0 +1,45 @@
+<div class="confirm-dialog-container">
+  <div class="confirm-dialog-header">
+    <div class="header-icon-box" [ngClass]="data.confirmColor || 'warn'">
+      <mat-icon>{{ data.icon || 'delete_outline' }}</mat-icon>
+    </div>
+    <h2 mat-dialog-title class="confirm-title">
+      @if (data.titleKey) {
+        <span [translate]="data.titleKey"></span>
+      } @else if (data.title) {
+        <span>{{ data.title }}</span>
+      } @else {
+        <span translate="DIALOGS.CONFIRM_DELETE.TITLE"></span>
+      }
+    </h2>
+  </div>
+
+  <mat-dialog-content class="confirm-content">
+    <p class="confirm-message">
+      @if (data.messageKey) {
+        <span>{{ data.messageKey | translate:data.messageParams }}</span>
+      } @else if (data.message) {
+        <span>{{ data.message }}</span>
+      } @else {
+        <span translate="DIALOGS.CONFIRM_DELETE.MESSAGE"></span>
+      }
+    </p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="confirm-actions">
+    <button mat-button (click)="onCancel()" class="btn-cancel">
+      @if (data.cancelTextKey) {
+        <span [translate]="data.cancelTextKey"></span>
+      } @else {
+        <span translate="ACTIONS.CANCEL"></span>
+      }
+    </button>
+    <button mat-flat-button [color]="data.confirmColor || 'warn'" (click)="onConfirm()" class="btn-confirm">
+      @if (data.confirmTextKey) {
+        <span [translate]="data.confirmTextKey"></span>
+      } @else {
+        <span translate="ACTIONS.DELETE"></span>
+      }
+    </button>
+  </mat-dialog-actions>
+</div>

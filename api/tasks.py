@@ -29,14 +29,34 @@ def __should_update(feed):
     Returns:
         bool: True if the feed should be updated, False otherwise.
     """
-    if "embedded" in feed["format"]:
+    if "embedded" in feed.get("format", ""):
         return False
     update_type = feed.get("update_interval", "hourly")
     updated_on = feed.get("updated_on")
     if not updated_on:
         return True
+
+    if isinstance(updated_on, str):
+        try:
+            updated_on = datetime.fromisoformat(updated_on)
+        except Exception:
+            try:
+                from email.utils import parsedate_to_datetime
+                updated_on = parsedate_to_datetime(updated_on)
+            except Exception:
+                return True
+
+    if not isinstance(updated_on, datetime):
+        return True
+
+    now = datetime.now(config.TZ)
+    if updated_on.tzinfo is None and now.tzinfo is not None:
+        now = datetime.now()
+    elif updated_on.tzinfo is not None and now.tzinfo is None:
+        updated_on = updated_on.replace(tzinfo=None)
+
     interval = INTERVALS.get(update_type, timedelta(hours=1))
-    return datetime.now(config.TZ) - updated_on >= interval
+    return now - updated_on >= interval
 
 
 def install_task():

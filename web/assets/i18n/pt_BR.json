@@ -5,6 +5,9 @@
     "FEEDS": "Feeds",
     "IP_LOOKUP": "Consultar IP",
     "LOGOUT": "Sair",
+    "THEME_LIGHT": "Alternar para Tema Claro",
+    "THEME_DARK": "Alternar para Tema Escuro",
+    "TOGGLE_THEME": "Alternar Tema",
     "FOOTER_COPYRIGHT": "© 2026 ipxa · Painel Avançado de Inteligência de IP",
     "FOOTER_TAG": "Código Aberto"
   },
@@ -137,6 +140,12 @@
     "PREVIOUS_PAGE": "Página anterior",
     "FIRST_PAGE": "Primeira página",
     "LAST_PAGE": "Última página"
+  },
+  "DIALOGS": {
+    "CONFIRM_DELETE": {
+      "TITLE": "Confirmar Exclusão",
+      "MESSAGE": "Tem certeza que deseja excluir este feed? Esta ação não pode ser desfeita."
+    }
   },
   "NOTIFICATIONS": {
     "SUCCESS_SAVE": "Feed salvo com sucesso",

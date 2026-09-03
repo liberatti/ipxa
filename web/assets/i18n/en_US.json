@@ -5,6 +5,9 @@
     "FEEDS": "Feeds",
     "IP_LOOKUP": "IP Lookup",
     "LOGOUT": "Logout",
+    "THEME_LIGHT": "Switch to Light Theme",
+    "THEME_DARK": "Switch to Dark Theme",
+    "TOGGLE_THEME": "Toggle Theme",
     "FOOTER_COPYRIGHT": "© 2026 ipxa · Advanced IP Intelligence Dashboard",
     "FOOTER_TAG": "Open Source"
   },
@@ -137,6 +140,12 @@
     "PREVIOUS_PAGE": "Previous page",
     "FIRST_PAGE": "First page",
     "LAST_PAGE": "Last page"
+  },
+  "DIALOGS": {
+    "CONFIRM_DELETE": {
+      "TITLE": "Confirm Deletion",
+      "MESSAGE": "Are you sure you want to delete this feed? This action cannot be undone."
+    }
   },
   "NOTIFICATIONS": {
     "SUCCESS_SAVE": "Feed saved successfully",

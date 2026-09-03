@@ -14,6 +14,7 @@ import { FeedFormComponent } from '../feed-form/feed-form';
 import { DefaultPageMeta, PageMeta } from 'app/models/shared';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { NotificationService } from 'app/services/notification.service';
+import { ConfirmDialogComponent } from 'app/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-feed-list',
@@ -104,18 +105,31 @@ export class FeedListComponent implements OnInit {
   }
 
   onRemove(id: number) {
-    const confirmMsg = this.translate.instant('FEEDS.LIST.BTN_DELETE') + '?';
-    if (confirm(confirmMsg)) {
-      this.feedService.removeById(id).subscribe({
-        next: () => {
-          this.notificationService.openSnackBar(this.translate.instant('NOTIFICATIONS.SUCCESS_DELETE'));
-          this.updateGridTable();
-        },
-        error: (err) => {
-          this.notificationService.openSnackBar(err.error?.message || this.translate.instant('NOTIFICATIONS.ERROR_GENERIC'));
-        }
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        titleKey: 'DIALOGS.CONFIRM_DELETE.TITLE',
+        messageKey: 'DIALOGS.CONFIRM_DELETE.MESSAGE',
+        confirmTextKey: 'ACTIONS.DELETE',
+        cancelTextKey: 'ACTIONS.CANCEL',
+        confirmColor: 'warn',
+        icon: 'delete_outline'
+      },
+      panelClass: 'custom-dialog-container'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.feedService.removeById(id).subscribe({
+          next: () => {
+            this.notificationService.openSnackBar(this.translate.instant('NOTIFICATIONS.SUCCESS_DELETE'));
+            this.updateGridTable();
+          },
+          error: (err) => {
+            this.notificationService.openSnackBar(err.error?.message || this.translate.instant('NOTIFICATIONS.ERROR_GENERIC'));
+          }
+        });
+      }
+    });
   }
   nextPage(event: PageEvent) {
     this.feedPA.page = event.pageIndex + 1;
