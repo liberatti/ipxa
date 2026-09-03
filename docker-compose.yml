@@ -2,7 +2,15 @@ volumes:
   data:
 
 services:
-  ipxa:
+  web:
+    image: node:lts
+    working_dir: /app
+    command: sh -c "npm install --legacy-peer-deps && npm run container"
+    ports:
+      - "4200:4200"
+    volumes:
+      - "./web:/app" 
+  api:
     image: liberatti/ipxa:latest
     environment:
       - API_KEY=dev
