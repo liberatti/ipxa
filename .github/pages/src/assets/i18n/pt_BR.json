@@ -1,0 +1,172 @@
+{
+  "NAVBAR": {
+    "FEATURES": "Recursos",
+    "SCREENSHOTS": "Telas",
+    "INTEGRATIONS": "Hooks & Edge",
+    "API": "API",
+    "QUICKSTART": "Início Rápido",
+    "SPONSOR": "Apoiar",
+    "GITHUB": "GitHub",
+    "SELECT_LANG": "Idioma",
+    "LANG_EN": "English",
+    "LANG_PT": "Português"
+  },
+  "HERO": {
+    "BADGE": "Plataforma de Reputação de IP e Inteligência de Rede",
+    "TITLE_PREFIX": "Inteligência de Ameaças de Alta Performance com",
+    "TITLE_GRADIENT": "Orquestração de GeoIP & RBL",
+    "SUBTITLE": "O <strong>IPXA</strong> é uma plataforma focada em privacidade para agregação de inteligência contra ameaças. Consultas instantâneas de reputação de IP, GeoIP e integração com mais de 15 listas RBL (Real-time Blackhole Lists), rodando 100% na sua própria infraestrutura.",
+    "CHIP_LICENSE": "Apache 2.0",
+    "CHIP_DOCKER": "Pronto para Docker",
+    "CHIP_LATENCY": "Latência < 5ms",
+    "CHIP_FEEDS": "+15 Feeds RBL",
+    "CHIP_PRIVATE": "100% Privado",
+    "BTN_QUICKSTART": "Início Rápido",
+    "BTN_PREVIEW": "Ver Telas da UI",
+    "BTN_GITHUB": "Favoritar no GitHub"
+  },
+  "METRICS": {
+    "LATENCY": {
+      "LABEL": "Latência Ultra-baixa",
+      "VALUE": "< 5ms",
+      "CAPTION": "Consultas locais de reputação em menos de 5ms"
+    },
+    "FEEDS": {
+      "LABEL": "Feeds de Ameaças",
+      "VALUE": "15+ RBLs",
+      "CAPTION": "Listas de reputação e bypass selecionadas"
+    },
+    "PRIVATE": {
+      "LABEL": "Privado & Seguro",
+      "VALUE": "100% Privado",
+      "CAPTION": "Inteligência de ameaças on-premise"
+    },
+    "HOOKS": {
+      "LABEL": "Hooks de Servidor",
+      "VALUE": "Apache & Nginx",
+      "CAPTION": "Bloqueio na borda com Lua nativo"
+    }
+  },
+  "SCREENSHOTS": {
+    "BADGE": "UI & Observabilidade",
+    "TITLE": "Interfaces Intuitivas de Gestão e Consulta",
+    "SUBTITLE": "Dashboard administrativo em dark mode, isolamento multi-workspace e orquestração de feeds de ameaças.",
+    "LIVE_TAG": "Interface Web ao Vivo",
+    "OPEN_ORIGINAL": "Ver imagem completa",
+    "ADMIN_DASHBOARD": {
+      "TITLE": "Dashboard de Gerenciamento Administrativo",
+      "SUBTITLE": "Gerenciamento dinâmico de feeds de ameaças e configuração de workspaces",
+      "DESCRIPTION": "Dashboard administrativo de alto contraste em dark mode para gerenciar listas de ameaças RBL, chaves de API, listas CIDR e parâmetros de monitoramento do sistema.",
+      "URL": "http://localhost:5001/admin/feeds",
+      "TAG_1": "+15 Monitores RBL Ativos",
+      "TAG_2": "Sincronização em Tempo Real",
+      "TAG_3": "Tema Dark de Alto Contraste"
+    },
+    "IP_INFO": {
+      "TITLE": "Multi-Workspace & Inteligência de IP",
+      "SUBTITLE": "GeoIP abrangente e detalhamento de ameaças por workspace",
+      "DESCRIPTION": "Inspeção detalhada de dados cobrindo continente, país, coordenadas, organização, nível de risco e motivos de correspondência nas RBLs.",
+      "URL": "http://localhost:5001/intelligence/lookup",
+      "TAG_1": "GeoIP & ASN < 5ms",
+      "TAG_2": "Isolamento Multi-Tenant",
+      "TAG_3": "Score de Risco Ponderado"
+    }
+  },
+  "FEATURES": {
+    "BADGE": "Capacidades",
+    "TITLE": "Recursos do Motor Principal",
+    "SUBTITLE": "Projetado para inspeção de tráfego de alto rendimento, privacidade absoluta e zero latência de dependências externas.",
+    "GEOIP": {
+      "TITLE": "GeoIP Inteligente",
+      "BADGE": "MaxMind & ip2asn",
+      "DESCRIPTION": "Integração local com bases MaxMind e ip2asn para consultas ultrarrápidas de localização geográfica, código de país e ASN sem limites externos de requisição."
+    },
+    "RBL": {
+      "TITLE": "Orquestração de Ameaças RBL",
+      "BADGE": "+15 Fontes de Feed",
+      "DESCRIPTION": "Gerenciamento dinâmico de feeds de inteligência de ameaças (FireHOL 1-4, Cisco Talos, DShield, Abuse.ch Feodo, Spamhaus DROP, Emerging Threats e Blocklist.de)."
+    },
+    "API_FLAVORS": {
+      "TITLE": "Múltiplos Formatos de API",
+      "BADGE": "Resposta < 5ms",
+      "DESCRIPTION": "Endpoints especializados: metadados completos (/api/ip/info), checagens de segurança (/api/ip/check) e pontuação headless para proxies (/api/ip/quick) com cabeçalhos x-risk-score."
+    },
+    "WORKSPACE": {
+      "TITLE": "Isolamento Multi-Workspace",
+      "BADGE": "Multi-Tenant",
+      "DESCRIPTION": "Isole configurações, feeds de ameaças personalizados e chaves de API entre diferentes ambientes, organizações ou perímetros de segurança."
+    },
+    "HOOKS": {
+      "TITLE": "Integrações de Servidor na Borda",
+      "BADGE": "Apache & OpenResty",
+      "DESCRIPTION": "Hooks Lua nativos para Apache (mod_lua) e OpenResty / Nginx para aplicação de regras de alta velocidade na borda com respostas de erro padronizadas em JSON."
+    },
+    "DASHBOARD": {
+      "TITLE": "Dashboard de Gestão Administrativa",
+      "BADGE": "Web UI",
+      "DESCRIPTION": "Dashboard administrativo em dark mode na porta 5001 para curadoria de feeds em tempo real, configuração de workspaces e métricas."
+    }
+  },
+  "HOOKS": {
+    "BADGE": "Aplicação na Borda",
+    "TITLE": "Integrações de Servidor & Middleware Hooks",
+    "SUBTITLE": "Hooks de middleware nativos e de alta performance para Apache e OpenResty / Nginx para bloquear tráfego malicioso na borda.",
+    "CARD_TITLE": "Hooks Lua para Apache / Nginx",
+    "CARD_SUBTITLE": "Controle de acesso em sub-milissegundos",
+    "TAB_APACHE": "Apache (mod_lua)",
+    "APACHE_DESC": "Avalie IPs de clientes no Apache usando <code>mod_lua</code> e manipuladores de erro padrão:",
+    "BTN_COPY_APACHE": "Copiar Config Apache",
+    "TAB_NGINX": "OpenResty / Nginx",
+    "NGINX_DESC": "Inspeção de IP com latência ultrabaixa e cache de dicionário compartilhado em memória:",
+    "BTN_COPY_NGINX": "Copiar Config Nginx",
+    "COPIED": "Copiado",
+    "STEP1": {
+      "TITLE": "Interceptação de Requisição na Borda",
+      "DESCRIPTION": "Cada conexão de entrada é comparada contra o cache em memória local e endpoints do IPXA antes de atingir os workers da aplicação."
+    },
+    "STEP2": {
+      "TITLE": "Pontuação Dinâmica de RBL & Bypass",
+      "DESCRIPTION": "IPs avaliados contra allowlists customizadas, bots verificados e mais de 15 feeds de ameaças (FireHOL, Cisco Talos, Abuse.ch, Spamhaus) para calcular a pontuação de risco ponderada."
+    },
+    "STEP3": {
+      "TITLE": "Manipuladores de Erro JSON Padronizados",
+      "DESCRIPTION": "Requisições bloqueadas recebem um payload JSON limpo com um <code>request_id</code> exclusivo para observabilidade e auditoria de segurança:"
+    }
+  },
+  "API_REF": {
+    "BADGE": "Referência de API",
+    "TITLE": "Endpoints REST Especializados",
+    "SUBTITLE": "Endpoints de alta velocidade sob medida para análise profunda, verificações de segurança ou pontuação em headers de alto tráfego.",
+    "TAB_INFO": "1. Informação Completa do IP (/api/ip/info)",
+    "INFO_DESC": "Retorna GeoIP completo, descrição do ASN, coordenadas, pontuação de risco e motivos de ativação de RBLs correspondentes.",
+    "TAB_CHECK": "2. Verificação de Segurança (/api/ip/check)",
+    "CHECK_DESC": "Resposta simplificada focada estritamente na reputação de ameaça, pontuação de risco e lista de feeds disparados.",
+    "TAB_QUICK": "3. Decisão Rápida (/api/ip/quick)",
+    "QUICK_DESC": "Otimizado para firewalls e proxies. Retorna pontuação de risco no corpo JSON e cabeçalhos <code>x-risk-score</code> e <code>x-country-code</code>.",
+    "BTN_COPY": "Copiar Exemplo",
+    "COPIED": "Copiado"
+  },
+  "QUICKSTART": {
+    "BADGE": "Implantação",
+    "TITLE": "Início Rápido com Docker Compose",
+    "SUBTITLE": "Implante o motor IPXA completo em segundos com isolamento em contêineres.",
+    "COMPOSE_TITLE": "docker-compose.yml",
+    "COMPOSE_SUBTITLE": "Motor central do IPXA",
+    "BTN_COPY": "Copiar docker-compose.yml",
+    "COPIED": "Copiado",
+    "ACCESS_TITLE": "Pontos de Acesso Padrão",
+    "ACCESS_ADMIN": "Painel Administrativo",
+    "ACCESS_EMAIL": "E-mail de Admin",
+    "ACCESS_PASSWORD": "Senha de Admin",
+    "ACCESS_API_KEY": "Chave de API Padrão",
+    "PRIVACY_TITLE": "100% Privado & On-Premise",
+    "PRIVACY_DESC": "O IPXA processa todas as consultas de IP em bases locais e feeds RBL em cache. <strong>Nenhuma consulta, endereço IP ou metadado sai da sua infraestrutura.</strong> Pronto para ambientes air-gap e sem custos de assinatura."
+  },
+  "FOOTER": {
+    "DESCRIPTION": "Monitoramento de Reputação de IP e Inteligência de Rede. Licenciado sob Apache 2.0.",
+    "DEVELOPED_BY": "Desenvolvido com <span class=\"heart-icon\">❤️</span> por <strong>Gustavo Liberatti</strong>",
+    "GITHUB": "GitHub",
+    "NXGUARD": "NXGuard",
+    "SPONSOR": "Apoiar"
+  }
+}
