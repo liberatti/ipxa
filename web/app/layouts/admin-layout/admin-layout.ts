@@ -1,0 +1,58 @@
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { OAuthService } from '../../services/oauth.service';
+import { LocalStorageService } from '../../services/localstorage.service';
+import { Router } from '@angular/router';
+import { IpInputComponent } from '../../components/ip-input/ip-input.component';
+
+@Component({
+  selector: 'app-admin-layout',
+  standalone: true,
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    MatToolbarModule, 
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    IpInputComponent
+  ],
+  templateUrl: './admin-layout.html',
+  styleUrls: ['./admin-layout.css']
+})
+export class AdminLayoutComponent {
+  @ViewChild('ipLookupDialog') ipLookupDialog!: TemplateRef<any>;
+  private dialogRef?: MatDialogRef<any>;
+
+  constructor(
+    private oauthService: OAuthService,
+    private localStorageService: LocalStorageService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
+
+  openIpLookupDialog() {
+    this.dialogRef = this.dialog.open(this.ipLookupDialog, {
+      width: '600px',
+      maxWidth: '92vw',
+      panelClass: 'custom-dialog-container',
+      autoFocus: false
+    });
+  }
+
+  onIpSearched() {
+    this.dialogRef?.close();
+  }
+
+  logout() {
+    this.oauthService.resetTokens();
+    this.localStorageService.clear();
+    this.router.navigate(['/login']);
+  }
+}
+

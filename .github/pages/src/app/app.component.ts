@@ -97,20 +97,13 @@ export class AppComponent {
     },
     {
       icon: 'dashboard',
-      title: 'Admin Dashboard & User Portal',
+      title: 'Admin Management Dashboard',
       badge: 'Web UI',
-      description: 'User Portal for instant public queries on port 5000 and dark-mode Administrative Dashboard on port 5001 for real-time feed curation and metrics.'
+      description: 'Dark-mode Administrative Dashboard on port 5001 for real-time feed curation, workspace configuration, and metrics.'
     }
   ];
 
   readonly screenshots: ScreenshotItem[] = [
-    {
-      id: 'user-portal',
-      title: 'User Search Portal',
-      subtitle: 'Instant IP query, GeoIP lookup, and threat score visualization',
-      image: 'assets/screenshot-01.png',
-      description: 'Clean user interface to query any IP address locally to verify geographical coordinates, ASN details, threat indicators, and risk score.'
-    },
     {
       id: 'ip-info',
       title: 'Multi-Workspace & IP Intelligence',
@@ -166,20 +159,6 @@ services:
       resources:
         limits:
           memory: 256M
-    restart: unless-stopped
-
-  portal:
-    image: liberatti/ipxa-portal:latest
-    container_name: ipxa-portal
-    environment:
-      - IPXA_API_KEY=dev
-      - IPXA_API_URL=http://ipxa:5000
-    ports:
-      - "5000:5000"
-    deploy:
-      resources:
-        limits:
-          memory: 64M
     restart: unless-stopped`;
 
   readonly apacheHookCode = `<VirtualHost *:80>
