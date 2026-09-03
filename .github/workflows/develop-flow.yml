@@ -70,7 +70,27 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=v-branches
+          cache-to: type=gha,scope=v-branches
 
+  ipxa-hooks:
+    runs-on: ubuntu-latest
+    needs: ipxa-code-check
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Extract ipxa-resty metadata
         id: meta-openresty
@@ -88,3 +108,5 @@ jobs:
           push: true
           tags: ${{ steps.meta-openresty.outputs.tags }}
           labels: ${{ steps.meta-openresty.outputs.labels }}
+          cache-from: type=gha,scope=v-branches
+          cache-to: type=gha,scope=v-branches
