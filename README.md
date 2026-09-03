@@ -1,4 +1,4 @@
-# <img src="app/web/assets/logo.png" alt="IPXA Logo" width="60" align="center"> IPXA
+# <img src="web/assets/logo.png" alt="IPXA Logo" width="60" align="center"> IPXA
 > **IP Reputation and Network Intelligence Monitoring**
 
 **IPXA** is a high-performance, private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP data, and integration with 15+ Real-time Blackhole Lists (RBLs), all running entirely on your own infrastructure.
@@ -11,7 +11,7 @@
 *Instantly visualize the origin and risk score of any IP address with our premium web dashboard.*
 
 ![IpInfo](.docs/screenshot-02.png)
-*Multi-workspace environment for isolated security configurations.*
+*Modern administrative dashboard with dark/light themes, i18n localization, and RBL orchestration.*
 
 ---
 
@@ -21,6 +21,8 @@
 - 🔒 **100% Private**: Runs entirely on your infrastructure.
 - 💰 **Zero Cost**: No per-request fees or subscription limits.
 - 🔌 **Air-gap Ready**: Optimized for restricted and high-security environments.
+- 🌓 **Adaptive UI**: High-contrast Dark and Light modes with one-click toggle.
+- 🌐 **Multi-Language (i18n)**: Native English (`en-US`) and Portuguese (`pt-BR`) translations.
 
 ---
 
@@ -34,7 +36,7 @@ The **User Portal** (accessible by default on port `5000`) is the main search in
 ---
 
 ## 🎨 Admin Interface
-The **Admin Interface** (accessible on port `5001` at the `/admin` context) features a secure dashboard for managing workspaces, RBL threat lists, and monitoring parameters. It includes a secure session management login system and a one-click logout.
+The **Admin Interface** (accessible at `/ipxa/admin` on port `5000` or `5001`) features a secure dashboard for managing RBL threat lists, monitoring parameters, and manual feed overrides. It includes a secure JWT login system, instant IP lookup dialog, and full light/dark theme switching.
 
 You can configure the access credentials using the following environment variables:
 
@@ -42,7 +44,7 @@ You can configure the access credentials using the following environment variabl
 - **ADMIN_PASSWORD**: Administrator password (Default: `admin`)
 
 ![Admin Dashboard](.docs/screenshot-03.png)
-*Manage your workspaces, feeds, and configurations dynamically through a premium, dark-mode administrative dashboard.*
+*Manage feeds, bypass lists, and configurations dynamically through a modern administrative dashboard.*
 
 ---
 
@@ -50,10 +52,11 @@ You can configure the access credentials using the following environment variabl
 ## 🚀 Key Features
 
 *   🌍 **Intelligent GeoIP**: Local integration with MaxMind and ip2asn for lightning-fast lookups.
-*   🚫 **RBL Orchestration**: Dynamic management of 15+ threat feed sources (Reputation & Bypass).
+*   🚫 **RBL Orchestration**: Dynamic management of 15+ threat feed sources (Reputation, Bypass, and Embedded CIDRs).
 *   ⚡ **Multiple API Flavors**: Specialized endpoints for exhaustive data, security checks, or high-speed header-based responses.
-*   🏢 **Multi-Workspace**: Isolate configurations and API keys across different environments or clients.
-*   🎨 **Admin Dashboard**: High-contrast, dark-mode interface for real-time monitoring and data management.
+*   🌓 **Theme Switching**: Dark and Light themes with fluid CSS variables and Angular Material tokens.
+*   🌐 **Internationalization**: Full i18n support with runtime language selection.
+*   🎨 **Admin Dashboard**: Real-time management of feeds, safe confirmation dialogs, and instant IP inspection.
 
 ---
 
@@ -254,16 +257,18 @@ IPXA includes an `api.rest` file for rapid API testing.
 
 ## 🔌 RBL Feed Management
 
-While advanced users can still add JSON files in `config/`, IPXA now features a complete **Admin Panel** to manage feeds dynamically through the UI.
+While advanced users can still add JSON files in `config/`, IPXA features a complete **Admin Panel** to manage feeds dynamically through the UI.
 
 | Field | Description |
 | :--- | :--- |
 | `name` | Human-friendly identifier for the feed |
 | `slug` | Unique internal identifier |
-| `type` | `reputation` (for blocking) or `bypass` (for allowlisting) |
-| `source` | Public URL for download (CIDR or IP list) |
-| `format` | `cdir_text` (plain text) or `cdir_gz` (compressed) |
+| `type` | `reputation` (for threat scoring) or `bypass` (for allowlisting) |
+| `format` | `cdir_text` (plain text URL), `cdir_gz` (compressed URL), or `embedded` (direct manual CIDR list) |
+| `source` | Public URL for download (required when format is remote) |
+| `data` | List of CIDRs / IPs (when format is `embedded`) |
 | `risk_score` | Weight of this feed in the final decision (0-10) |
+| `update_interval` | Automatic refresh interval (`hourly`, `daily`) |
 
 ---
 

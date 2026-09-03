@@ -16,6 +16,7 @@ import { TranslatePipe, TranslateDirective, TranslateService } from '@ngx-transl
 import { OAuthService } from 'app/services/oauth.service';
 import { HttpClient } from '@angular/common/http';
 import { REST_API_URL } from 'app/app.config';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -46,6 +47,7 @@ export class LoginComponent {
   errorMessage = signal<string | null>(null);
   showPassword = signal(false);
   currentYear = new Date().getFullYear();
+  version = environment.version;
   security_enabled = signal(false);
   currentLang = signal<string>('en_US');
 
