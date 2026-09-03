@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,26 +9,34 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatMenuModule } from '@angular/material/menu';
+import { TranslateDirective, TranslatePipe, TranslateService } from '@ngx-translate/core';
+import packageJson from '../../package.json';
 
 interface FeatureItem {
   icon: string;
-  title: string;
-  badge: string;
-  description: string;
+  titleKey: string;
+  badgeKey: string;
+  descriptionKey: string;
 }
 
 interface ScreenshotItem {
   id: string;
-  title: string;
-  subtitle: string;
+  icon: string;
+  titleKey: string;
+  subtitleKey: string;
+  urlKey: string;
   image: string;
-  description: string;
+  descriptionKey: string;
+  tagKeys: string[];
 }
 
 interface MetricItem {
-  label: string;
+  labelKey: string;
   value: string;
-  caption: string;
+  captionKey: string;
 }
 
 interface FeedItem {
@@ -41,6 +50,7 @@ interface FeedItem {
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
@@ -48,82 +58,126 @@ interface FeedItem {
     MatChipsModule,
     MatTabsModule,
     MatDividerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatMenuModule,
+    TranslateDirective,
+    TranslatePipe
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  private translate = inject(TranslateService);
+
   readonly title = 'IPXA';
-  readonly version = 'v1.0.10';
+  readonly version = packageJson.version;
+
+  readonly currentLang = signal<string>('en_US');
+
+  readonly languages = [
+    { code: 'en_US', labelKey: 'NAVBAR.LANG_EN' },
+    { code: 'pt_BR', labelKey: 'NAVBAR.LANG_PT' }
+  ];
+
+  constructor() {
+    this.translate.addLangs(['en_US', 'pt_BR']);
+    this.translate.setFallbackLang('en_US');
+    const savedLang = typeof localStorage !== 'undefined' ? localStorage.getItem('ipxa_pages_lang') : null;
+    let initialLang = 'en_US';
+    if (savedLang && (savedLang === 'en_US' || savedLang === 'pt_BR')) {
+      initialLang = savedLang;
+    } else if (typeof navigator !== 'undefined') {
+      const browserLang = navigator.language.replace('-', '_');
+      initialLang = browserLang.startsWith('pt') ? 'pt_BR' : 'en_US';
+    }
+    this.currentLang.set(initialLang);
+    this.translate.use(initialLang);
+  }
+
+  setLanguage(lang: string): void {
+    this.currentLang.set(lang);
+    this.translate.use(lang);
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('ipxa_pages_lang', lang);
+    }
+  }
 
   readonly metrics: MetricItem[] = [
-    { label: 'Ultra-low Latency', value: '< 5ms', caption: 'Sub-5ms local reputation lookups' },
-    { label: 'Threat Feeds', value: '15+ RBLs', caption: 'Curated reputation & bypass lists' },
-    { label: 'Private & Secure', value: '100% Private', caption: 'On-premise threat intelligence' },
-    { label: 'Server Hooks', value: 'Apache & Nginx', caption: 'Edge blocking with native Lua' }
+    { labelKey: 'METRICS.LATENCY.LABEL', value: '< 5ms', captionKey: 'METRICS.LATENCY.CAPTION' },
+    { labelKey: 'METRICS.FEEDS.LABEL', value: '15+ RBLs', captionKey: 'METRICS.FEEDS.CAPTION' },
+    { labelKey: 'METRICS.PRIVATE.LABEL', value: '100% Private', captionKey: 'METRICS.PRIVATE.CAPTION' },
+    { labelKey: 'METRICS.HOOKS.LABEL', value: 'Apache & Nginx', captionKey: 'METRICS.HOOKS.CAPTION' }
   ];
 
   readonly features: FeatureItem[] = [
     {
       icon: 'public',
-      title: 'Intelligent GeoIP',
-      badge: 'MaxMind & ip2asn',
-      description: 'Local integration with MaxMind and ip2asn datasets for lightning-fast geographical, country code, and ASN lookups without external rate limits.'
+      titleKey: 'FEATURES.GEOIP.TITLE',
+      badgeKey: 'FEATURES.GEOIP.BADGE',
+      descriptionKey: 'FEATURES.GEOIP.DESCRIPTION'
     },
     {
       icon: 'security',
-      title: 'RBL Threat Orchestration',
-      badge: '15+ Feed Sources',
-      description: 'Dynamic management of threat intelligence feeds (FireHOL 1-4, Cisco Talos, DShield, Abuse.ch Feodo, Spamhaus DROP, Emerging Threats, and Blocklist.de).'
+      titleKey: 'FEATURES.RBL.TITLE',
+      badgeKey: 'FEATURES.RBL.BADGE',
+      descriptionKey: 'FEATURES.RBL.DESCRIPTION'
     },
     {
       icon: 'bolt',
-      title: 'Multiple API Flavors',
-      badge: 'Sub-5ms Response',
-      description: 'Specialized endpoints: full metadata (/api/ip/info), security checks (/api/ip/check), and headless proxy scoring (/api/ip/quick) with x-risk-score headers.'
+      titleKey: 'FEATURES.API_FLAVORS.TITLE',
+      badgeKey: 'FEATURES.API_FLAVORS.BADGE',
+      descriptionKey: 'FEATURES.API_FLAVORS.DESCRIPTION'
     },
     {
       icon: 'domain',
-      title: 'Multi-Workspace Isolation',
-      badge: 'Multi-Tenant',
-      description: 'Isolate configuration, custom threat feeds, and API keys across different environments, organizations, or security perimeters.'
+      titleKey: 'FEATURES.WORKSPACE.TITLE',
+      badgeKey: 'FEATURES.WORKSPACE.BADGE',
+      descriptionKey: 'FEATURES.WORKSPACE.DESCRIPTION'
     },
     {
       icon: 'integration_instructions',
-      title: 'Edge Server Integrations',
-      badge: 'Apache & OpenResty',
-      description: 'Native Lua hooks for Apache (mod_lua) and OpenResty / Nginx for high-speed edge enforcement and standardized JSON error responses.'
+      titleKey: 'FEATURES.HOOKS.TITLE',
+      badgeKey: 'FEATURES.HOOKS.BADGE',
+      descriptionKey: 'FEATURES.HOOKS.DESCRIPTION'
     },
     {
       icon: 'dashboard',
-      title: 'Admin Management Dashboard',
-      badge: 'Web UI',
-      description: 'Dark-mode Administrative Dashboard on port 5001 for real-time feed curation, workspace configuration, and metrics.'
+      titleKey: 'FEATURES.DASHBOARD.TITLE',
+      badgeKey: 'FEATURES.DASHBOARD.BADGE',
+      descriptionKey: 'FEATURES.DASHBOARD.DESCRIPTION'
     }
   ];
 
   readonly screenshots: ScreenshotItem[] = [
     {
-      id: 'ip-info',
-      title: 'Multi-Workspace & IP Intelligence',
-      subtitle: 'Comprehensive GeoIP and threat breakdown per workspace',
-      image: 'assets/screenshot-02.png',
-      description: 'Exhaustive data inspection covering continent, country, coordinates, organization, risk level, and matched RBL reasons.'
-    },
-    {
       id: 'admin-dashboard',
-      title: 'Admin Management Dashboard',
-      subtitle: 'Dynamic threat feed management and workspace configuration',
-      image: 'assets/screenshot-03.png',
-      description: 'High-contrast dark-mode administrative dashboard to manage RBL threat lists, API keys, CIDR lists, and system monitoring parameters.'
+      icon: 'dashboard',
+      titleKey: 'SCREENSHOTS.ADMIN_DASHBOARD.TITLE',
+      subtitleKey: 'SCREENSHOTS.ADMIN_DASHBOARD.SUBTITLE',
+      urlKey: 'SCREENSHOTS.ADMIN_DASHBOARD.URL',
+      image: 'assets/screenshot-01.png',
+      descriptionKey: 'SCREENSHOTS.ADMIN_DASHBOARD.DESCRIPTION',
+      tagKeys: [
+        'SCREENSHOTS.ADMIN_DASHBOARD.TAG_1',
+        'SCREENSHOTS.ADMIN_DASHBOARD.TAG_2',
+        'SCREENSHOTS.ADMIN_DASHBOARD.TAG_3'
+      ]
     },
     {
-      id: 'develop-flow',
-      title: 'Development & Release Flow',
-      subtitle: 'Automated Git flow & release pipeline',
-      image: 'assets/develop-flow.png',
-      description: 'Continuous integration lifecycle with automated release candidate branch management, lint verification, and version tagging.'
+      id: 'ip-info',
+      icon: 'travel_explore',
+      titleKey: 'SCREENSHOTS.IP_INFO.TITLE',
+      subtitleKey: 'SCREENSHOTS.IP_INFO.SUBTITLE',
+      urlKey: 'SCREENSHOTS.IP_INFO.URL',
+      image: 'assets/screenshot-02.png',
+      descriptionKey: 'SCREENSHOTS.IP_INFO.DESCRIPTION',
+      tagKeys: [
+        'SCREENSHOTS.IP_INFO.TAG_1',
+        'SCREENSHOTS.IP_INFO.TAG_2',
+        'SCREENSHOTS.IP_INFO.TAG_3'
+      ]
     }
   ];
 
@@ -202,7 +256,7 @@ services:
   "message": "ipxa [block/risk-score]: 172.20.0.1 risk_score=14"
 }`;
 
-  readonly apiInfoCode = `GET /api/ip/info/14.152.94.1
+  readonly apiInfoCode = `GET /ipxa/api/ip/info/14.152.94.1
 x-api-key: dev
 
 # Response (HTTP 200 OK)
@@ -231,7 +285,7 @@ x-api-key: dev
   }
 }`;
 
-  readonly apiCheckCode = `GET /api/ip/check/14.152.94.1
+  readonly apiCheckCode = `GET /ipxa/api/ip/check/14.152.94.1
 
 # Response (HTTP 200 OK)
 {
@@ -242,7 +296,7 @@ x-api-key: dev
   ]
 }`;
 
-  readonly apiQuickCode = `GET /api/ip/quick/14.152.94.1
+  readonly apiQuickCode = `GET /ipxa/api/ip/quick/14.152.94.1
 
 # Response Headers:
 # x-risk-score: 9

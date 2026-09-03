@@ -4,25 +4,54 @@
     <a href="#" class="brand-group">
       <img src="assets/logo.png" alt="IPXA Logo" class="brand-logo">
       <span class="brand-title">{{ title }}</span>
+      <span class="brand-version">{{ version }}</span>
     </a>
 
     <span class="toolbar-spacer"></span>
 
     <nav class="nav-links">
-      <a mat-button href="#features" class="nav-link-item">Features</a>
-      <a mat-button href="#screenshots" class="nav-link-item">Screenshots</a>
-      <a mat-button href="#integrations" class="nav-link-item">Hooks & Edge</a>
-      <a mat-button href="#api" class="nav-link-item">API</a>
-      <a mat-button href="#quickstart" class="nav-link-item">Quick Start</a>
+      <a mat-button href="#features" class="nav-link-item" translate="NAVBAR.FEATURES"></a>
+      <a mat-button href="#screenshots" class="nav-link-item" translate="NAVBAR.SCREENSHOTS"></a>
+      <a mat-button href="#integrations" class="nav-link-item" translate="NAVBAR.INTEGRATIONS"></a>
+      <a mat-button href="#api" class="nav-link-item" translate="NAVBAR.API"></a>
+      <a mat-button href="#quickstart" class="nav-link-item" translate="NAVBAR.QUICKSTART"></a>
 
       <div class="nav-divider"></div>
 
-      <a mat-button href="https://github.com/sponsors/liberatti" target="_blank" rel="noopener" class="sponsor-btn">
-        <mat-icon class="heart-icon-sm">favorite</mat-icon> Sponsor
-      </a>
-      <a mat-flat-button href="https://github.com/liberatti/ipxa" target="_blank" rel="noopener" class="github-btn">
-        <mat-icon>star</mat-icon> GitHub
-      </a>
+      <!-- Language Menu Selector -->
+      <button mat-button [matMenuTriggerFor]="langMenu" class="lang-menu-btn"
+        [attr.aria-label]="'NAVBAR.SELECT_LANG' | translate">
+        <mat-icon class="lang-icon">translate</mat-icon>
+        <span class="lang-code-text">{{ currentLang() === 'pt_BR' ? 'PT' : 'EN' }}</span>
+        <mat-icon class="lang-arrow-icon">arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #langMenu="matMenu" class="lang-menu-panel" xPosition="before">
+        @for (lang of languages; track lang.code) {
+        <button mat-menu-item (click)="setLanguage(lang.code)" [class.active-lang-item]="currentLang() === lang.code">
+          <span [translate]="lang.labelKey"></span>
+          @if (currentLang() === lang.code) {
+            <mat-icon class="lang-check-icon" color="primary">check</mat-icon>
+          }
+        </button>
+        }
+      </mat-menu>
+
+      <div class="nav-divider"></div>
+
+      <!-- Grouped Actions (Sponsor & GitHub) -->
+      <div class="nav-actions-group">
+        <a mat-icon-button href="https://github.com/sponsors/liberatti" target="_blank" rel="noopener"
+          class="nav-icon-btn sponsor-icon-btn" [matTooltip]="'NAVBAR.SPONSOR' | translate"
+          [attr.aria-label]="'NAVBAR.SPONSOR' | translate">
+          <mat-icon class="sponsor-heart-icon">favorite</mat-icon>
+        </a>
+        <a mat-icon-button href="https://github.com/liberatti/ipxa" target="_blank" rel="noopener"
+          class="nav-icon-btn github-icon-btn" [matTooltip]="'NAVBAR.GITHUB' | translate"
+          [attr.aria-label]="'NAVBAR.GITHUB' | translate">
+          <img src="assets/github-mark.png" alt="GitHub" class="github-mark-img">
+        </a>
+      </div>
     </nav>
   </div>
 </mat-toolbar>
@@ -35,93 +64,86 @@
     <div class="hero-tag-wrapper">
       <span class="hero-tag">
         <mat-icon inline>verified_user</mat-icon>
-        IP Reputation & Network Intelligence Platform
+        <span translate="HERO.BADGE"></span>
       </span>
     </div>
 
     <h1 class="hero-title">
-      High-Performance Threat Intelligence with <br>
-      <span class="gradient-title">GeoIP & RBL Orchestration</span>
+      <span [translate]="'HERO.TITLE_PREFIX'"></span> <br>
+      <span class="gradient-title" [translate]="'HERO.TITLE_GRADIENT'"></span>
     </h1>
 
-    <p class="hero-subtitle">
-      <strong>IPXA</strong> is a private-by-design platform for threat intelligence aggregation. Instant IP reputation queries,
-      GeoIP lookups, and integration with 15+ Real-time Blackhole Lists (RBLs), running entirely on your own infrastructure.
-    </p>
-
-    <!-- Meta Chips -->
-    <div class="hero-chips">
-      <mat-chip class="meta-chip">
-        <mat-icon>policy</mat-icon> Apache 2.0
-      </mat-chip>
-      <mat-chip class="meta-chip">
-        <mat-icon>layers</mat-icon> Docker Ready
-      </mat-chip>
-      <mat-chip class="meta-chip">
-        <mat-icon>speed</mat-icon> Sub-5ms Latency
-      </mat-chip>
-      <mat-chip class="meta-chip">
-        <mat-icon>security</mat-icon> 15+ RBL Feeds
-      </mat-chip>
-      <mat-chip class="meta-chip">
-        <mat-icon>lock</mat-icon> 100% Private
-      </mat-chip>
-    </div>
-
-    <!-- Hero Action Buttons -->
-    <div class="hero-actions">
-      <a mat-flat-button color="primary" class="cta-primary-btn" href="#quickstart">
-        <mat-icon>rocket_launch</mat-icon> Quick Start
-      </a>
-      <a mat-stroked-button class="cta-secondary-btn" href="#screenshots">
-        <mat-icon>visibility</mat-icon> View UI Preview
-      </a>
-      <a mat-stroked-button class="cta-secondary-btn" href="https://github.com/liberatti/ipxa" target="_blank"
-        rel="noopener">
-        <mat-icon>star</mat-icon> Star on GitHub
-      </a>
-    </div>
+    <p class="hero-subtitle" [innerHTML]="'HERO.SUBTITLE' | translate"></p>
 
     <!-- Quick Metric Cards -->
     <div class="metrics-grid">
-      <mat-card *ngFor="let m of metrics" class="minimal-card metric-card">
+      @for (m of metrics; track m.labelKey) {
+      <mat-card class="minimal-card metric-card">
         <mat-card-content>
           <div class="metric-value">{{ m.value }}</div>
-          <div class="metric-label">{{ m.label }}</div>
-          <div class="metric-caption">{{ m.caption }}</div>
+          <div class="metric-label" [translate]="m.labelKey"></div>
+          <div class="metric-caption" [translate]="m.captionKey"></div>
         </mat-card-content>
       </mat-card>
+      }
     </div>
   </section>
 
   <!-- Screenshots & UI Preview Section -->
   <section class="section-wrapper" id="screenshots">
     <div class="section-header">
-      <span class="section-badge">UI & Observability</span>
-      <h2>Intuitive Management & Query Interfaces</h2>
-      <p>High-contrast administrative dashboard, multi-workspace isolation, and threat feed orchestration.</p>
+      <span class="section-badge" translate="SCREENSHOTS.BADGE"></span>
+      <h2 translate="SCREENSHOTS.TITLE"></h2>
+      <p translate="SCREENSHOTS.SUBTITLE"></p>
     </div>
 
     <mat-card class="minimal-card gallery-card">
-      <mat-tab-group animationDuration="200ms" mat-stretch-tabs="false">
-        <mat-tab *ngFor="let s of screenshots">
+      <mat-tab-group animationDuration="250ms" mat-stretch-tabs="false">
+        @for (s of screenshots; track s.id) {
+        <mat-tab>
           <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">photo_camera</mat-icon>
-            {{ s.title }}
+            <mat-icon class="tab-icon">{{ s.icon }}</mat-icon>
+            <span [translate]="s.titleKey"></span>
           </ng-template>
 
           <div class="tab-content-panel">
-            <div class="tab-meta">
-              <h3>{{ s.title }}</h3>
-              <p class="tab-subtitle">{{ s.subtitle }}</p>
-              <p class="tab-description">{{ s.description }}</p>
+            <div class="tab-meta-header">
+              <div class="tab-meta-info">
+                <h3 [translate]="s.titleKey"></h3>
+                <p class="tab-subtitle" [translate]="s.subtitleKey"></p>
+                <p class="tab-description" [translate]="s.descriptionKey"></p>
+              </div>
+
+
             </div>
 
-            <div class="image-frame">
-              <img [src]="s.image" [alt]="s.title" class="screenshot-img" loading="lazy">
+            <!-- Sleek Window Mockup Frame -->
+            <div class="window-mockup">
+              <div class="window-topbar">
+                <div class="window-dots">
+                  <span class="dot dot-close"></span>
+                  <span class="dot dot-minimize"></span>
+                  <span class="dot dot-maximize"></span>
+                </div>
+                <div class="window-address-bar">
+                  <mat-icon class="address-lock">lock</mat-icon>
+                  <span class="address-url" [translate]="s.urlKey"></span>
+                </div>
+              </div>
+
+              <div class="image-viewport">
+                <a [href]="s.image" target="_blank" rel="noopener" class="screenshot-link"
+                  [matTooltip]="'SCREENSHOTS.OPEN_ORIGINAL' | translate">
+                  <img [src]="s.image" [alt]="s.titleKey | translate" class="screenshot-img" loading="lazy">
+                  <div class="screenshot-overlay">
+                    <mat-icon>zoom_in</mat-icon>
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
         </mat-tab>
+        }
       </mat-tab-group>
     </mat-card>
   </section>
@@ -129,67 +151,71 @@
   <!-- Core Features Grid -->
   <section class="section-wrapper" id="features">
     <div class="section-header">
-      <span class="section-badge">Capabilities</span>
-      <h2>Core Engine Features</h2>
-      <p>Engineered for high-throughput traffic inspection, absolute privacy, and zero external dependency latency.</p>
+      <span class="section-badge" translate="FEATURES.BADGE"></span>
+      <h2 translate="FEATURES.TITLE"></h2>
+      <p translate="FEATURES.SUBTITLE"></p>
     </div>
 
     <div class="features-grid">
-      <mat-card *ngFor="let f of features" class="minimal-card feature-card">
+      @for (f of features; track f.icon) {
+      <mat-card class="minimal-card feature-card">
         <mat-card-header>
           <div mat-card-avatar class="feature-icon-wrapper">
             <mat-icon color="primary">{{ f.icon }}</mat-icon>
           </div>
-          <mat-card-title>{{ f.title }}</mat-card-title>
+          <mat-card-title [translate]="f.titleKey"></mat-card-title>
           <mat-card-subtitle>
-            <mat-chip class="feature-badge">{{ f.badge }}</mat-chip>
+            <mat-chip class="feature-badge" [translate]="f.badgeKey"></mat-chip>
           </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <p>{{ f.description }}</p>
+          <p [translate]="f.descriptionKey"></p>
         </mat-card-content>
       </mat-card>
+      }
     </div>
   </section>
 
   <!-- Server Hooks & Edge Integrations Section -->
   <section class="section-wrapper" id="integrations">
     <div class="section-header">
-      <span class="section-badge">Edge Enforcement</span>
-      <h2>Server Integrations & Middleware Hooks</h2>
-      <p>Native, high-performance middleware hooks for Apache and OpenResty / Nginx to block malicious traffic at the edge.</p>
+      <span class="section-badge" translate="HOOKS.BADGE"></span>
+      <h2 translate="HOOKS.TITLE"></h2>
+      <p translate="HOOKS.SUBTITLE"></p>
     </div>
 
     <div class="architecture-grid">
       <mat-card class="minimal-card snippet-card">
         <mat-card-header>
           <mat-icon mat-card-avatar color="primary">settings_ethernet</mat-icon>
-          <mat-card-title>Apache / Nginx Lua Hooks</mat-card-title>
-          <mat-card-subtitle>Sub-millisecond access control</mat-card-subtitle>
+          <mat-card-title translate="HOOKS.CARD_TITLE"></mat-card-title>
+          <mat-card-subtitle translate="HOOKS.CARD_SUBTITLE"></mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <mat-tab-group animationDuration="200ms">
-            <mat-tab label="Apache (mod_lua)">
+            <mat-tab [label]="'HOOKS.TAB_APACHE' | translate">
               <div class="code-tab-panel">
-                <p class="panel-desc">Evaluate incoming client IPs in Apache using <code>mod_lua</code> and standard error handlers:</p>
-                <pre class="terminal-block"><code>{{ apacheHookCode }}</code></pre>
-                <div class="tab-action-bar">
-                  <button mat-flat-button color="primary" (click)="copyApache()">
+                <p class="panel-desc" [innerHTML]="'HOOKS.APACHE_DESC' | translate"></p>
+                <div class="code-wrapper">
+                  <pre class="terminal-block"><code>{{ apacheHookCode }}</code></pre>
+                  <button mat-icon-button class="code-copy-btn" (click)="copyApache()"
+                    [matTooltip]="(copiedApache ? 'HOOKS.COPIED' : 'HOOKS.BTN_COPY_APACHE') | translate"
+                    [attr.aria-label]="(copiedApache ? 'HOOKS.COPIED' : 'HOOKS.BTN_COPY_APACHE') | translate">
                     <mat-icon>{{ copiedApache ? 'check' : 'content_copy' }}</mat-icon>
-                    {{ copiedApache ? 'Copied' : 'Copy Apache Config' }}
                   </button>
                 </div>
               </div>
             </mat-tab>
 
-            <mat-tab label="OpenResty / Nginx">
+            <mat-tab [label]="'HOOKS.TAB_NGINX' | translate">
               <div class="code-tab-panel">
-                <p class="panel-desc">Ultra-low latency IP inspection with shared in-memory dictionary caching:</p>
-                <pre class="terminal-block"><code>{{ nginxHookCode }}</code></pre>
-                <div class="tab-action-bar">
-                  <button mat-flat-button color="primary" (click)="copyNginx()">
+                <p class="panel-desc" [innerHTML]="'HOOKS.NGINX_DESC' | translate"></p>
+                <div class="code-wrapper">
+                  <pre class="terminal-block"><code>{{ nginxHookCode }}</code></pre>
+                  <button mat-icon-button class="code-copy-btn" (click)="copyNginx()"
+                    [matTooltip]="(copiedNginx ? 'HOOKS.COPIED' : 'HOOKS.BTN_COPY_NGINX') | translate"
+                    [attr.aria-label]="(copiedNginx ? 'HOOKS.COPIED' : 'HOOKS.BTN_COPY_NGINX') | translate">
                     <mat-icon>{{ copiedNginx ? 'check' : 'content_copy' }}</mat-icon>
-                    {{ copiedNginx ? 'Copied' : 'Copy Nginx Config' }}
                   </button>
                 </div>
               </div>
@@ -202,30 +228,30 @@
         <mat-card class="minimal-card step-card">
           <mat-card-header>
             <div mat-card-avatar class="step-badge">1</div>
-            <mat-card-title>Edge Request Interception</mat-card-title>
+            <mat-card-title translate="HOOKS.STEP1.TITLE"></mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Every incoming connection is matched against local in-memory cache and IPXA core endpoints before reaching application workers.</p>
+            <p translate="HOOKS.STEP1.DESCRIPTION"></p>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="minimal-card step-card">
           <mat-card-header>
             <div mat-card-avatar class="step-badge">2</div>
-            <mat-card-title>Dynamic RBL & Bypass Scoring</mat-card-title>
+            <mat-card-title translate="HOOKS.STEP2.TITLE"></mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>IPs evaluated against custom allowlists, verified bots, and 15+ threat feeds (FireHOL, Cisco Talos, Abuse.ch, Spamhaus) to compute a weighted risk score.</p>
+            <p translate="HOOKS.STEP2.DESCRIPTION"></p>
           </mat-card-content>
         </mat-card>
 
         <mat-card class="minimal-card step-card">
           <mat-card-header>
             <div mat-card-avatar class="step-badge">3</div>
-            <mat-card-title>Standardized JSON Error Handlers</mat-card-title>
+            <mat-card-title translate="HOOKS.STEP3.TITLE"></mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Blocked requests receive a clean JSON payload with a unique <code>request_id</code> for observability and security auditing:</p>
+            <p [innerHTML]="'HOOKS.STEP3.DESCRIPTION' | translate"></p>
             <pre class="terminal-block mini-terminal"><code>{{ errorResponseCode }}</code></pre>
           </mat-card-content>
         </mat-card>
@@ -236,9 +262,9 @@
   <!-- REST API Reference Section -->
   <section class="section-wrapper" id="api">
     <div class="section-header">
-      <span class="section-badge">API Reference</span>
-      <h2>Specialized REST Endpoints</h2>
-      <p>High-speed endpoints tailored for deep analysis, security checks, or high-throughput header scoring.</p>
+      <span class="section-badge" translate="API_REF.BADGE"></span>
+      <h2 translate="API_REF.TITLE"></h2>
+      <p translate="API_REF.SUBTITLE"></p>
     </div>
 
     <mat-card class="minimal-card gallery-card">
@@ -246,14 +272,16 @@
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon class="tab-icon">data_object</mat-icon>
-            1. Full IP Info (/api/ip/info)
+            <span translate="API_REF.TAB_INFO"></span>
           </ng-template>
           <div class="code-tab-panel">
-            <p class="panel-desc">Returns exhaustive GeoIP, ASN description, coordinates, risk score, and matched RBL reasons.</p>
-            <pre class="terminal-block"><code>{{ apiInfoCode }}</code></pre>
-            <div class="tab-action-bar">
-              <button mat-flat-button color="primary" (click)="copyApi(apiInfoCode)">
-                <mat-icon>content_copy</mat-icon> Copy Example
+            <p class="panel-desc" translate="API_REF.INFO_DESC"></p>
+            <div class="code-wrapper">
+              <pre class="terminal-block"><code>{{ apiInfoCode }}</code></pre>
+              <button mat-icon-button class="code-copy-btn" (click)="copyApi(apiInfoCode)"
+                [matTooltip]="(copiedApi ? 'API_REF.COPIED' : 'API_REF.BTN_COPY') | translate"
+                [attr.aria-label]="(copiedApi ? 'API_REF.COPIED' : 'API_REF.BTN_COPY') | translate">
+                <mat-icon>{{ copiedApi ? 'check' : 'content_copy' }}</mat-icon>
               </button>
             </div>
           </div>
@@ -262,14 +290,16 @@
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon class="tab-icon">security</mat-icon>
-            2. Security Check (/api/ip/check)
+            <span translate="API_REF.TAB_CHECK"></span>
           </ng-template>
           <div class="code-tab-panel">
-            <p class="panel-desc">Simplified response focused strictly on threat reputation, risk score, and feed trigger list.</p>
-            <pre class="terminal-block"><code>{{ apiCheckCode }}</code></pre>
-            <div class="tab-action-bar">
-              <button mat-flat-button color="primary" (click)="copyApi(apiCheckCode)">
-                <mat-icon>content_copy</mat-icon> Copy Example
+            <p class="panel-desc" translate="API_REF.CHECK_DESC"></p>
+            <div class="code-wrapper">
+              <pre class="terminal-block"><code>{{ apiCheckCode }}</code></pre>
+              <button mat-icon-button class="code-copy-btn" (click)="copyApi(apiCheckCode)"
+                [matTooltip]="(copiedApi ? 'API_REF.COPIED' : 'API_REF.BTN_COPY') | translate"
+                [attr.aria-label]="(copiedApi ? 'API_REF.COPIED' : 'API_REF.BTN_COPY') | translate">
+                <mat-icon>{{ copiedApi ? 'check' : 'content_copy' }}</mat-icon>
               </button>
             </div>
           </div>
@@ -278,14 +308,16 @@
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon class="tab-icon">speed</mat-icon>
-            3. Quick Decision (/api/ip/quick)
+            <span translate="API_REF.TAB_QUICK"></span>
           </ng-template>
           <div class="code-tab-panel">
-            <p class="panel-desc">Optimized for firewalls and proxies. Returns risk score in JSON body and <code>x-risk-score</code>, <code>x-country-code</code> headers.</p>
-            <pre class="terminal-block"><code>{{ apiQuickCode }}</code></pre>
-            <div class="tab-action-bar">
-              <button mat-flat-button color="primary" (click)="copyApi(apiQuickCode)">
-                <mat-icon>content_copy</mat-icon> Copy Example
+            <p class="panel-desc" [innerHTML]="'API_REF.QUICK_DESC' | translate"></p>
+            <div class="code-wrapper">
+              <pre class="terminal-block"><code>{{ apiQuickCode }}</code></pre>
+              <button mat-icon-button class="code-copy-btn" (click)="copyApi(apiQuickCode)"
+                [matTooltip]="(copiedApi ? 'API_REF.COPIED' : 'API_REF.BTN_COPY') | translate"
+                [attr.aria-label]="(copiedApi ? 'API_REF.COPIED' : 'API_REF.BTN_COPY') | translate">
+                <mat-icon>{{ copiedApi ? 'check' : 'content_copy' }}</mat-icon>
               </button>
             </div>
           </div>
@@ -297,53 +329,54 @@
   <!-- Quick Start & Compose Section -->
   <section class="section-wrapper" id="quickstart">
     <div class="section-header">
-      <span class="section-badge">Deployment</span>
-      <h2>Quick Start with Docker Compose</h2>
-      <p>Deploy the complete IPXA engine in seconds with containerized isolation.</p>
+      <span class="section-badge" translate="QUICKSTART.BADGE"></span>
+      <h2 translate="QUICKSTART.TITLE"></h2>
+      <p translate="QUICKSTART.SUBTITLE"></p>
     </div>
 
     <div class="quickstart-grid">
       <mat-card class="minimal-card compose-card">
         <mat-card-header>
           <mat-icon mat-card-avatar color="primary">docker</mat-icon>
-          <mat-card-title>docker-compose.yml</mat-card-title>
-          <mat-card-subtitle>IPXA core engine</mat-card-subtitle>
+          <mat-card-title translate="QUICKSTART.COMPOSE_TITLE"></mat-card-title>
+          <mat-card-subtitle translate="QUICKSTART.COMPOSE_SUBTITLE"></mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <pre class="terminal-block compose-pre"><code>{{ composeCode }}</code></pre>
+          <div class="code-wrapper">
+            <pre class="terminal-block compose-pre"><code>{{ composeCode }}</code></pre>
+            <button mat-icon-button class="code-copy-btn" (click)="copyCompose()"
+              [matTooltip]="(copiedCompose ? 'QUICKSTART.COPIED' : 'QUICKSTART.BTN_COPY') | translate"
+              [attr.aria-label]="(copiedCompose ? 'QUICKSTART.COPIED' : 'QUICKSTART.BTN_COPY') | translate">
+              <mat-icon>{{ copiedCompose ? 'check' : 'content_copy' }}</mat-icon>
+            </button>
+          </div>
         </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-flat-button color="primary" (click)="copyCompose()">
-            <mat-icon>{{ copiedCompose ? 'check' : 'content_copy' }}</mat-icon>
-            {{ copiedCompose ? 'Copied' : 'Copy docker-compose.yml' }}
-          </button>
-        </mat-card-actions>
       </mat-card>
 
       <div class="sidebar-cards">
         <mat-card class="minimal-card access-card">
           <mat-card-header>
             <mat-icon mat-card-avatar color="accent">lock_open</mat-icon>
-            <mat-card-title>Default Access Points</mat-card-title>
+            <mat-card-title translate="QUICKSTART.ACCESS_TITLE"></mat-card-title>
           </mat-card-header>
           <mat-card-content class="creds-list">
             <div class="cred-row">
-              <span class="cred-name">Admin Dashboard</span>
+              <span class="cred-name" translate="QUICKSTART.ACCESS_ADMIN"></span>
               <code class="cred-code">http://localhost:5001/admin</code>
             </div>
             <mat-divider></mat-divider>
             <div class="cred-row">
-              <span class="cred-name">Admin Email</span>
+              <span class="cred-name" translate="QUICKSTART.ACCESS_EMAIL"></span>
               <code class="cred-code">admin&#64;local</code>
             </div>
             <mat-divider></mat-divider>
             <div class="cred-row">
-              <span class="cred-name">Admin Password</span>
+              <span class="cred-name" translate="QUICKSTART.ACCESS_PASSWORD"></span>
               <code class="cred-code">admin</code>
             </div>
             <mat-divider></mat-divider>
             <div class="cred-row">
-              <span class="cred-name">Default API Key</span>
+              <span class="cred-name" translate="QUICKSTART.ACCESS_API_KEY"></span>
               <code class="cred-code">dev</code>
             </div>
           </mat-card-content>
@@ -352,10 +385,10 @@
         <mat-card class="minimal-card privacy-card">
           <mat-card-header>
             <mat-icon mat-card-avatar color="primary">privacy_tip</mat-icon>
-            <mat-card-title>100% Private & On-Premise</mat-card-title>
+            <mat-card-title translate="QUICKSTART.PRIVACY_TITLE"></mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>IPXA processes all IP inquiries against local datasets and cached RBL feeds. <strong>Zero queries, IP addresses, or metadata leave your infrastructure.</strong> Air-gap friendly and subscription free.</p>
+            <p [innerHTML]="'QUICKSTART.PRIVACY_DESC' | translate"></p>
           </mat-card-content>
         </mat-card>
       </div>
@@ -370,24 +403,24 @@
     <div class="footer-brand-side">
       <div class="footer-logo">
         <img src="assets/logo.png" alt="IPXA Logo" class="footer-brand-logo">
-        <span class="footer-title">IPXA</span>
+        <span class="footer-title">{{ title }}</span>
       </div>
-      <p class="footer-desc">IP Reputation and Network Intelligence Monitoring. Licensed under Apache 2.0.</p>
+      <p class="footer-desc" translate="FOOTER.DESCRIPTION"></p>
     </div>
 
     <div class="footer-author-side">
-      <p>Developed with <span class="heart-icon">❤️</span> by <strong>Gustavo Liberatti</strong></p>
+      <p [innerHTML]="'FOOTER.DEVELOPED_BY' | translate"></p>
     </div>
 
     <div class="footer-actions">
       <a mat-button href="https://github.com/liberatti/ipxa" target="_blank" rel="noopener">
-        <mat-icon>code</mat-icon> GitHub
+        <mat-icon>code</mat-icon> <span translate="FOOTER.GITHUB"></span>
       </a>
       <a mat-button href="https://github.com/liberatti/nxguard" target="_blank" rel="noopener">
-        <mat-icon>shield</mat-icon> NXGuard
+        <mat-icon>shield</mat-icon> <span translate="FOOTER.NXGUARD"></span>
       </a>
       <a mat-button color="warn" href="https://github.com/sponsors/liberatti" target="_blank" rel="noopener">
-        <mat-icon>favorite</mat-icon> Sponsor
+        <mat-icon>favorite</mat-icon> <span translate="FOOTER.SPONSOR"></span>
       </a>
     </div>
   </div>
