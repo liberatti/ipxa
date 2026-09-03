@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:5000
+@baseUrl = http://localhost:5000/ipxa
 #@ip = 172.20.0.1
 @ip = 14.152.94.1
 @mail = admin@local

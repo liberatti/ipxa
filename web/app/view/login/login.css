@@ -9,7 +9,7 @@
   padding: 24px;
 }
 
-/* Futuristic background with cyber grid and ambient glowing orbs */
+/* Background grid */
 .login-background {
   position: absolute;
   top: 0;
@@ -29,53 +29,8 @@
   background-image: 
     linear-gradient(var(--border-dim) 1px, transparent 1px),
     linear-gradient(to right, var(--border-dim) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-  opacity: 0.7;
-}
-
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.18;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.blob-1 {
-  width: 520px;
-  height: 520px;
-  background: var(--accent-blue);
-  top: -120px;
-  right: -100px;
-  animation: floatOrb 22s infinite alternate ease-in-out;
-}
-
-.blob-2 {
-  width: 440px;
-  height: 440px;
-  background: var(--accent-purple);
-  bottom: -120px;
-  left: -100px;
-  animation: floatOrb 18s infinite alternate-reverse ease-in-out;
-}
-
-.blob-3 {
-  width: 320px;
-  height: 320px;
-  background: var(--accent-cyan);
-  top: 40%;
-  left: 30%;
-  opacity: 0.1;
-  animation: floatOrb 25s infinite alternate ease-in-out;
-}
-
-@keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(40px, 60px) scale(1.08); }
-  100% { transform: translate(-30px, 30px) scale(0.95); }
+  background-size: 32px 32px;
+  opacity: 0.4;
 }
 
 .lang-icon {
@@ -91,21 +46,19 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 460px;
+  max-width: 440px;
 }
 
 .login-card {
-  padding: 44px 36px 36px !important;
-  border-radius: 28px !important;
+  padding: 36px 32px !important;
+  border-radius: 16px !important;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   background: var(--background-card) !important;
   border: 1px solid var(--border-color) !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 35px var(--primary-glow) !important;
-  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-premium) !important;
   position: relative;
-  overflow: hidden;
 }
 
 .login-progress {
@@ -113,7 +66,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
 }
 
 /* Brand Section */
@@ -122,62 +75,42 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .logo-box {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   background: var(--accent-blue-dim);
   border: 1px solid var(--border-color);
-  border-radius: 20px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 24px var(--accent-blue-glow);
+  margin-bottom: 12px;
 }
 
 .logo-img {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   object-fit: contain;
   position: relative;
   z-index: 2;
-}
-
-.logo-pulse {
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  border-radius: 22px;
-  border: 1.5px solid var(--accent-blue);
-  opacity: 0.5;
-  animation: pulseLogo 3s infinite;
-  pointer-events: none;
-}
-
-@keyframes pulseLogo {
-  0% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.08); opacity: 0.1; }
-  100% { transform: scale(1); opacity: 0.5; }
 }
 
 .badge-tag {
   display: inline-block;
   background: var(--accent-blue-dim);
   color: var(--accent-blue);
-  border: 1px solid var(--accent-blue-glow);
-  padding: 3px 12px;
-  border-radius: 100px;
-  font-size: 10.5px;
+  border: 1px solid var(--border-color);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .brand-section h1 {
