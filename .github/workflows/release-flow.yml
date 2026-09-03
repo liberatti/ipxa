@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get_version.outputs.version }}
+      branch: ${{ steps.get_version.outputs.branch }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -62,7 +63,8 @@ jobs:
         with:
           images: liberatti/ipxa
           tags: |
-            type=raw,value=${{ needs.publish-tag.outputs.version }}
+            type=raw,value=${{ needs.checkout.outputs.version }}
+            type=raw,value=latest
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -98,6 +100,7 @@ jobs:
           images: liberatti/ipxa-resty
           tags: |
             type=raw,value=${{ needs.checkout.outputs.version }}
+            type=raw,value=latest
 
       - name: Build and push ipxa-resty
         uses: docker/build-push-action@v6
