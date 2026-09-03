@@ -9,15 +9,19 @@
 
     <span class="toolbar-spacer"></span>
 
+    <!-- Text Links (Desktop) -->
     <nav class="nav-links">
       <a mat-button href="#features" class="nav-link-item" translate="NAVBAR.FEATURES"></a>
       <a mat-button href="#screenshots" class="nav-link-item" translate="NAVBAR.SCREENSHOTS"></a>
       <a mat-button href="#integrations" class="nav-link-item" translate="NAVBAR.INTEGRATIONS"></a>
       <a mat-button href="#api" class="nav-link-item" translate="NAVBAR.API"></a>
       <a mat-button href="#quickstart" class="nav-link-item" translate="NAVBAR.QUICKSTART"></a>
+    </nav>
 
-      <div class="nav-divider"></div>
+    <div class="nav-divider nav-divider-desktop"></div>
 
+    <!-- Right Actions: Language Selector & Social Group (Always Visible on Mobile & Desktop) -->
+    <div class="nav-right-controls">
       <!-- Language Menu Selector -->
       <button mat-button [matMenuTriggerFor]="langMenu" class="lang-menu-btn"
         [attr.aria-label]="'NAVBAR.SELECT_LANG' | translate">
@@ -37,8 +41,6 @@
         }
       </mat-menu>
 
-      <div class="nav-divider"></div>
-
       <!-- Grouped Actions (Sponsor & GitHub) -->
       <div class="nav-actions-group">
         <a mat-icon-button href="https://github.com/sponsors/liberatti" target="_blank" rel="noopener"
@@ -52,7 +54,7 @@
           <img src="assets/github-mark.png" alt="GitHub" class="github-mark-img">
         </a>
       </div>
-    </nav>
+    </div>
   </div>
 </mat-toolbar>
 
