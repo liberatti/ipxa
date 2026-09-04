@@ -42,6 +42,7 @@ def __should_update(feed):
         except Exception:
             try:
                 from email.utils import parsedate_to_datetime
+
                 updated_on = parsedate_to_datetime(updated_on)
             except Exception:
                 return True
@@ -118,7 +119,7 @@ def update_task(override_existing=False):
             if override_existing or __should_update(feed):
                 try:
                     provider = feed.get("provider")
-                    logger.info(f"Processing feed {provider} : {feed['name']}")
+                    # logger.info(f"Processing feed {provider} : {feed['name']}")
                     match provider:
                         case "ipverse":
                             feed_tool.update_ipverse(feed)

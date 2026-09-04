@@ -207,7 +207,7 @@ def update_ipinfo(IPINFO_TOKEN: str, feed: Dict):
                         batch.append(r)
                         i += 1
                         if i % 1000 == 0:
-                            logger.info(f"Processing {i} records from ipinfo")
+                            # logger.info(f"Processing {i} records from ipinfo")
                             dao.persist_many(batch)
                             batch = []
                     except Exception:
