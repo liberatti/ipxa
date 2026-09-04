@@ -14,6 +14,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe, TranslateDirective, TranslateService } from '@ngx-translate/core';
 import { OAuthService } from 'app/services/oauth.service';
+import { ThemeService } from 'app/services/theme.service';
 import { HttpClient } from '@angular/common/http';
 import { REST_API_URL } from 'app/app.config';
 import { environment } from 'environments/environment';
@@ -59,6 +60,7 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: OAuthService,
+    private themeService: ThemeService,
     private router: Router,
     private httpClient: HttpClient,
     private translate: TranslateService,
@@ -74,6 +76,14 @@ export class LoginComponent {
   setLanguage(lang: string) {
     this.translate.use(lang);
     this.currentLang.set(lang);
+  }
+
+  isDarkTheme(): boolean {
+    return this.themeService.isDark();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 
   ngOnInit() {

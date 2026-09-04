@@ -1,14 +1,14 @@
 <div class="admin-view-header">
   <div class="header-title-group">
-    <h2 class="gradient-text" translate="FEEDS.LIST.TITLE"></h2>
+    <h2 class="view-title" translate="FEEDS.LIST.TITLE"></h2>
   </div>
   <div class="header-actions">
     <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
       <mat-icon matPrefix class="search-icon">search</mat-icon>
       <input matInput [placeholder]="'FEEDS.LIST.SEARCH_PLACEHOLDER' | translate" [value]="searchQuery()" (input)="applyFilter($event)" [attr.aria-label]="'FEEDS.LIST.SEARCH_ARIA' | translate">
       @if (searchQuery()) {
-        <button mat-icon-button matSuffix (click)="clearFilter()" [attr.aria-label]="'ACTIONS.CLEAR' | translate">
-          <mat-icon>clear</mat-icon>
+        <button mat-icon-button matSuffix (click)="clearFilter()" class="clear-btn" [attr.aria-label]="'ACTIONS.CLEAR' | translate">
+          <mat-icon>close</mat-icon>
         </button>
       }
     </mat-form-field>
@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<mat-card class="glass-card">
+<mat-card class="flat-table-card">
   <div class="table-responsive">
     <table mat-table [dataSource]="feedDS" class="admin-table">
       <ng-container matColumnDef="name">
@@ -74,10 +74,10 @@
         <th mat-header-cell *matHeaderCellDef translate="FEEDS.LIST.COL_ACTIONS"></th>
         <td mat-cell *matCellDef="let feed">
           @if (feed.type !== 'geo') {
-            <button mat-icon-button color="primary" (click)="openForm(feed)" [attr.aria-label]="'FEEDS.LIST.BTN_EDIT' | translate">
+            <button mat-icon-button color="primary" (click)="openForm(feed)" class="action-btn" [attr.aria-label]="'FEEDS.LIST.BTN_EDIT' | translate">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="onRemove(feed._id)" [attr.aria-label]="'FEEDS.LIST.BTN_DELETE' | translate">
+            <button mat-icon-button color="warn" (click)="onRemove(feed._id)" class="action-btn" [attr.aria-label]="'FEEDS.LIST.BTN_DELETE' | translate">
               <mat-icon>delete</mat-icon>
             </button>
           }

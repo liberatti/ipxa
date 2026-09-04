@@ -2,7 +2,7 @@
 
 > **High-Performance Threat Intelligence, GeoIP & RBL Orchestration Platform**
 
-**IPXA** is a private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP lookups, and integration with 15+ Real-time Blackhole Lists (RBLs), running entirely on your own infrastructure with zero cloud dependencies and sub-5ms response times.
+**IPXA** is a private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP lookups, and integration with 20+ Real-time Blackhole Lists (RBLs) & threat feeds, running entirely on your own infrastructure with zero cloud dependencies and sub-5ms response times.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-liberatti%2Fipxa-2496ED.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
@@ -22,7 +22,7 @@
 - 🚀 **Ultra-low Latency**: Sub-5ms local reputation and GeoIP lookups.
 - 🔒 **100% Private & On-Premise**: No queries, metadata, or IP addresses ever leave your network. Air-gap friendly.
 - 💰 **Zero Cost & No Rate Limits**: Self-hosted alternative to expensive SaaS IP intelligence APIs.
-- 🛡️ **RBL Threat Orchestration**: Dynamic ingestion of 15+ curated threat feeds (FireHOL 1-4, Cisco Talos, Abuse.ch Feodo, Spamhaus DROP, Emerging Threats, Blocklist.de, GreenSnow).
+- 🛡️ **RBL Threat Orchestration**: Dynamic ingestion of 20+ curated threat and intelligence feeds (FireHOL 1, Cisco Talos, Abuse.ch Feodo & SSLBL, Spamhaus DROP, Emerging Threats, Blocklist.de, GreenSnow, Binary Defense, SANS DShield, Tor Exit Nodes, Cymru Bogons).
 - 🔌 **Edge Server Integrations**: Native Lua middleware hooks for Apache (`mod_lua`) and OpenResty / Nginx.
 - 🌓 **Modern Material UI**: High-contrast Dark and Light modes with Angular Material M3 tokens.
 - 🌐 **Multi-Language (i18n)**: Full runtime internationalization supporting English (`en_US`) and Portuguese (`pt_BR`).
@@ -237,12 +237,15 @@ Feeds can be configured via JSON files in `config/` or dynamically edited in the
 
 ## 📦 Integrated Threat Feeds
 
-- **FireHOL Level 1-4**: Curated threat and attack aggregation lists.
+- **FireHOL Level 1**: Curated threat and attack aggregation lists.
 - **Cisco Talos & DShield**: Global IP blacklists and telemetry.
-- **Abuse.ch Feodo Tracker**: Active botnet Command & Control servers.
+- **Abuse.ch Feodo & SSLBL**: Active botnet Command & Control servers and malicious SSL IPs.
 - **Spamhaus DROP**: Don't Route Or Peer advisory blocks.
-- **Emerging Threats**: Known compromised hosts and bot scanners.
+- **Emerging Threats & CI Army**: Known compromised hosts and malicious scanners.
 - **Blocklist.de & GreenSnow**: SSH, mail, and brute-force attacker IPs.
+- **Binary Defense & BruteForceBlocker**: Honeypot attackers and SSH brute-force lists.
+- **Tor Project & Cymru Bogons**: Tor exit nodes and unallocated/bogon IP ranges.
+- **GeoIP & ASN Feeds**: MaxMind GeoLite2, IPInfo Lite, IPverse, and IPtoASN.
 
 ---
 

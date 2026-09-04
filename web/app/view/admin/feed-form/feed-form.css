@@ -1,26 +1,34 @@
+.dialog-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  margin: 0 !important;
+}
+
 .form-grid {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding-top: 16px;
+  gap: 12px;
+  padding-top: 12px;
   min-width: 500px;
 }
 
 .form-row {
   display: flex;
-  gap: 16px;
+  gap: 12px;
 }
 
-.form-row mat-form-field {
+.form-row .form-group {
   flex: 1;
+  min-width: 0;
 }
 
 .form-toggle-row {
-  padding: 8px 0;
+  padding: 6px 0;
 }
 
 textarea {
-  resize: none;
+  resize: vertical;
 }
 
 .button-spinner {

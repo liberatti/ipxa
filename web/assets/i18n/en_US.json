@@ -39,7 +39,7 @@
       "SEARCH_PLACEHOLDER": "Search by name, provider or source...",
       "SEARCH_ARIA": "Search feeds by name, provider or source",
       "NO_MATCHING_DATA": "No feeds match the search criteria",
-      "BTN_CREATE": "Create Feed",
+      "BTN_CREATE": "Create",
       "COL_NAME": "Name",
       "COL_PROVIDER": "Provider",
       "COL_TYPE": "Type",
@@ -48,12 +48,12 @@
       "COL_UPDATED_ON": "Last Updated",
       "COL_ACTIONS": "Actions",
       "NEVER_UPDATED": "Never",
-      "BTN_EDIT": "Edit feed",
-      "BTN_DELETE": "Delete feed"
+      "BTN_EDIT": "Edit",
+      "BTN_DELETE": "Delete"
     },
     "FORM": {
-      "TITLE_NEW": "New Feed",
-      "TITLE_EDIT": "Edit Feed",
+      "TITLE_NEW": "New",
+      "TITLE_EDIT": "Edit",
       "NAME_LABEL": "Name",
       "NAME_PLACEHOLDER": "Ex: Spamhaus SBL",
       "NAME_REQUIRED": "Name is required",
@@ -80,7 +80,7 @@
       "DATA_RAW_REQUIRED": "IP List is required for embedded format",
       "DESCRIPTION_LABEL": "Description",
       "BTN_CANCEL": "Cancel",
-      "BTN_SAVE": "Save Feed"
+      "BTN_SAVE": "Save"
     }
   },
   "IP_LOOKUP": {

@@ -39,7 +39,7 @@
       "SEARCH_PLACEHOLDER": "Buscar por nome, provedor ou origem...",
       "SEARCH_ARIA": "Buscar feeds por nome, provedor ou origem",
       "NO_MATCHING_DATA": "Nenhum feed correspondente aos critérios de busca",
-      "BTN_CREATE": "Novo Feed",
+      "BTN_CREATE": "Novo",
       "COL_NAME": "Nome",
       "COL_PROVIDER": "Provedor",
       "COL_TYPE": "Tipo",
@@ -48,12 +48,12 @@
       "COL_UPDATED_ON": "Última Atualização",
       "COL_ACTIONS": "Ações",
       "NEVER_UPDATED": "Nunca",
-      "BTN_EDIT": "Editar feed",
-      "BTN_DELETE": "Excluir feed"
+      "BTN_EDIT": "Editar",
+      "BTN_DELETE": "Excluir"
     },
     "FORM": {
-      "TITLE_NEW": "Novo Feed",
-      "TITLE_EDIT": "Editar Feed",
+      "TITLE_NEW": "Novo",
+      "TITLE_EDIT": "Editar",
       "NAME_LABEL": "Nome",
       "NAME_PLACEHOLDER": "Ex: Spamhaus SBL",
       "NAME_REQUIRED": "O nome é obrigatório",
@@ -80,7 +80,7 @@
       "DATA_RAW_REQUIRED": "A lista de IPs é obrigatória para o formato embutido",
       "DESCRIPTION_LABEL": "Descrição",
       "BTN_CANCEL": "Cancelar",
-      "BTN_SAVE": "Salvar Feed"
+      "BTN_SAVE": "Salvar"
     }
   },
   "IP_LOOKUP": {
