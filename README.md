@@ -4,10 +4,9 @@
 
 **IPXA** is a private-by-design platform for threat intelligence aggregation. It provides instant IP reputation queries, GeoIP lookups, and integration with 20+ Real-time Blackhole Lists (RBLs) & threat feeds, running entirely on your own infrastructure with zero cloud dependencies and sub-5ms response times.
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Docker](https://img.shields.io/badge/Docker-liberatti%2Fipxa-2496ED.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/liberatti/ipxa)
-[![Documentation](https://img.shields.io/badge/Docs-GitHub%20Pages-22c55e.svg)](https://liberatti.github.io/ipxa/)
-[![Sponsor](https://img.shields.io/badge/Sponsor-♥-ea4aaa?style=flat&logo=github)](https://github.com/sponsors/liberatti)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
+![Docker Pulls](https://img.shields.io/docker/pulls/liberatti/ipxa?style=flat-square&logo=docker&logoColor=white&color=2496ED)
+[![Sponsor](https://img.shields.io/badge/Sponsor-♥-ea4aaa?style=flat-square&logo=github)](https://github.com/sponsors/liberatti)
 
 ![Feeds Dashboard](.github/pages/src/assets/screenshot-01.png)
 *Manage threat feeds, reputation scores, CIDRs, and allowlists through the administrative dashboard.*
