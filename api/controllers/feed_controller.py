@@ -51,7 +51,7 @@ def save() -> Response:
             if dao.persist(feed):
                 try:
                     update_feed(feed)
-                except Exception as e:
+                except Exception:
                     pass
                 return response_ok("Record created")
     except sqlite3.IntegrityError as e:
@@ -85,7 +85,7 @@ def update(id: int) -> Response:
             dao.update_by_id(id, feed)
         try:
             update_feed(feed)
-        except Exception as e:
+        except Exception:
             pass
         return response_ok("Record updated")
     except sqlite3.IntegrityError as e:

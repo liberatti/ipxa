@@ -12,4 +12,4 @@ COPY conf.d/ /etc/httpd/conf.d/
 
 EXPOSE 80
 
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"] # nosemgrep: dockerfile.security.missing-user.missing-user

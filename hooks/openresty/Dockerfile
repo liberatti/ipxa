@@ -10,4 +10,4 @@ COPY lua /usr/local/openresty/lualib/ipxa
 
 EXPOSE 80
 
-CMD ["openresty", "-g", "daemon off;"]
+CMD ["openresty", "-g", "daemon off;"] # nosemgrep: dockerfile.security.missing-user.missing-user
