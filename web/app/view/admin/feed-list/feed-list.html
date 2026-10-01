@@ -5,11 +5,13 @@
   <div class="header-actions">
     <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
       <mat-icon matPrefix class="search-icon">search</mat-icon>
-      <input matInput [placeholder]="'FEEDS.LIST.SEARCH_PLACEHOLDER' | translate" [value]="searchQuery()" (input)="applyFilter($event)" [attr.aria-label]="'FEEDS.LIST.SEARCH_ARIA' | translate">
+      <input matInput [placeholder]="'FEEDS.LIST.SEARCH_PLACEHOLDER' | translate" [value]="searchQuery()"
+        (input)="applyFilter($event)" [attr.aria-label]="'FEEDS.LIST.SEARCH_ARIA' | translate">
       @if (searchQuery()) {
-        <button mat-icon-button matSuffix (click)="clearFilter()" class="clear-btn" [attr.aria-label]="'ACTIONS.CLEAR' | translate">
-          <mat-icon>close</mat-icon>
-        </button>
+      <button mat-icon-button matSuffix (click)="clearFilter()" class="clear-btn"
+        [attr.aria-label]="'ACTIONS.CLEAR' | translate">
+        <mat-icon>close</mat-icon>
+      </button>
       }
     </mat-form-field>
     <button mat-flat-button color="primary" (click)="openForm()" class="btn-create">
@@ -26,11 +28,16 @@
         <th mat-header-cell *matHeaderCellDef translate="FEEDS.LIST.COL_NAME"></th>
         <td mat-cell *matCellDef="let feed">
           <div class="feed-name-cell">
+            @if (feed.type !== 'geo') {
+            <a [href]="getFeedUrl(feed.name)" target="_blank" class="feed-name feed-link">{{feed.name}}</a>
+            } @else {
             <span class="feed-name">{{feed.name}}</span>
+            }
             <small class="feed-slug">{{feed.slug}}</small>
           </div>
         </td>
       </ng-container>
+
 
       <ng-container matColumnDef="provider">
         <th mat-header-cell *matHeaderCellDef translate="FEEDS.LIST.COL_PROVIDER"></th>
@@ -53,33 +60,36 @@
         <th mat-header-cell *matHeaderCellDef translate="FEEDS.LIST.COL_SCORE"></th>
         <td mat-cell *matCellDef="let feed">
           @if (feed.type === 'geo') {
-            <span class="risk-indicator risk-low">
-              {{feed.geo_score}}
-            </span>
+          <span class="risk-indicator risk-low">
+            {{feed.geo_score}}
+          </span>
           } @else {
-            <span class="risk-indicator" [class.risk-high]="feed.risk_score > 7"
-              [class.risk-medium]="feed.risk_score > 3 && feed.risk_score <= 7" [class.risk-low]="feed.risk_score <= 3">
-              {{feed.risk_score}}
-            </span>
+          <span class="risk-indicator" [class.risk-high]="feed.risk_score > 7"
+            [class.risk-medium]="feed.risk_score > 3 && feed.risk_score <= 7" [class.risk-low]="feed.risk_score <= 3">
+            {{feed.risk_score}}
+          </span>
           }
         </td>
       </ng-container>
 
       <ng-container matColumnDef="updated_on">
         <th mat-header-cell *matHeaderCellDef translate="FEEDS.LIST.COL_UPDATED_ON"></th>
-        <td mat-cell *matCellDef="let feed"> {{ (feed.updated_on | date: 'medium') || ('FEEDS.LIST.NEVER_UPDATED' | translate) }} </td>
+        <td mat-cell *matCellDef="let feed"> {{ (feed.updated_on | date: 'medium') || ('FEEDS.LIST.NEVER_UPDATED' |
+          translate) }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef translate="FEEDS.LIST.COL_ACTIONS"></th>
         <td mat-cell *matCellDef="let feed">
           @if (feed.type !== 'geo') {
-            <button mat-icon-button color="primary" (click)="openForm(feed)" class="action-btn" [attr.aria-label]="'FEEDS.LIST.BTN_EDIT' | translate">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="onRemove(feed._id)" class="action-btn" [attr.aria-label]="'FEEDS.LIST.BTN_DELETE' | translate">
-              <mat-icon>delete</mat-icon>
-            </button>
+          <button mat-icon-button color="primary" (click)="openForm(feed)" class="action-btn"
+            [attr.aria-label]="'FEEDS.LIST.BTN_EDIT' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onRemove(feed._id)" class="action-btn"
+            [attr.aria-label]="'FEEDS.LIST.BTN_DELETE' | translate">
+            <mat-icon>delete</mat-icon>
+          </button>
           }
         </td>
       </ng-container>

@@ -137,4 +137,8 @@ export class FeedListComponent implements OnInit {
     this.updateGridTable();
   }
 
+  getFeedUrl(name: string): string {
+    return this.feedService.getFeedContentUrl(name);
+  }
 }
+

@@ -69,9 +69,18 @@ class FeedDao(SQLite3DAO):
                 vo["data_json"] = None
 
         valid_columns = {
-            "name", "slug", "provider", "type", "source", "description",
-            "format", "update_interval", "updated_on", "risk_score",
-            "geo_score", "data_json"
+            "name",
+            "slug",
+            "provider",
+            "type",
+            "source",
+            "description",
+            "format",
+            "update_interval",
+            "updated_on",
+            "risk_score",
+            "geo_score",
+            "data_json",
         }
         filtered = {k: v for k, v in vo.items() if k in valid_columns}
         return super().from_dict(filtered)
@@ -146,3 +155,19 @@ class FeedDao(SQLite3DAO):
             "metadata": pagination,
             "data": rows,
         }
+
+    def get_by_name(self, name: str):
+        """
+        Retrieves a feed entry by its name or slug.
+
+        Args:
+            name (str): The name or slug of the feed.
+
+        Returns:
+            dict or None: The feed dictionary if found, None otherwise.
+        """
+        sql = f"SELECT * FROM {self.table_name} WHERE name = ? OR slug = ? LIMIT 1"
+        rs = self._query(sql, params=(name, name), fetch=True)
+        if rs and rs[0]:
+            return self.to_dict(dict(rs[0]))
+        return None
