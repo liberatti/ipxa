@@ -1,6 +1,5 @@
 import sys
-from urllib.request import urlopen
-
+import requests
 from api.tasks import install_task, update_task
 import config
 
