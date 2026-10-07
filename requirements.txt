@@ -6,6 +6,5 @@ geoip2>=5.0.1
 cachetools>=7.0.0
 pycountry
 pycountry-convert
-bson
 nxcore[web,sqlite] @ git+https://github.com/liberatti/nxcore@v1.0.5
 bcrypt

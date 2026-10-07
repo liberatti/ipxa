@@ -248,7 +248,36 @@ Feeds can be configured via JSON files in `config/` or dynamically edited in the
 
 ---
 
-## 🛠️ Testing with `api.rest`
+## 🧪 Testing
+
+IPXA includes automated unit tests and end-to-end (E2E) browser tests powered by `pytest` and `playwright`.
+
+### 1. Unit Tests
+
+Fast, isolated tests for backend utilities and validation logic without browser or external service dependencies:
+
+```bash
+pytest -m unit -v
+```
+
+### 2. End-to-End (E2E) Tests
+
+Playwright-driven browser tests validating user journeys (authentication, dashboard navigation, UI error feedback, and
+IP inspection):
+
+> **Prerequisite:** Ensure the IPXA application is running (default: `http://localhost:5000` or via `APP_BASE_URL`).
+
+```bash
+pytest -m e2e -v
+
+# Video and trace
+pytest -m e2e --video on --tracing on --output=test-results/
+
+# Run with a visible browser window
+pytest tests/e2e/ -v --headed
+```
+
+### 3. API Testing with `api.rest`
 
 IPXA includes an [api.rest](api.rest) file for testing endpoints directly in VS Code / IDEs using the REST Client extension.
 

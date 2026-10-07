@@ -1,0 +1,6 @@
+playwright
+pytest
+pytest-playwright
+pytest-html
+flake8
+semgrep
