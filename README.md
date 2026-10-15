@@ -265,7 +265,14 @@ pytest -m unit -v
 Playwright-driven browser tests validating user journeys (authentication, dashboard navigation, UI error feedback, and
 IP inspection):
 
+> **Recording:** 
+```commandline
+playwright codegen http://localhost:5000/ipxa/login --target pytho
+```
+
 > **Prerequisite:** Ensure the IPXA application is running (default: `http://localhost:5000` or via `APP_BASE_URL`).
+
+
 
 ```bash
 pytest -m e2e -v
