@@ -1,0 +1,10 @@
+{
+  "name": "uptimerobot",
+  "slug": "uptimerobot",
+  "provider": "uptimerobot",
+  "type": "bypass",
+  "source": "https://uptimerobot.com/inc/files/ips/IPv4.txt",
+  "format": "cdir_text",
+  "description": "UptimeRobot external probe locations",
+  "risk_score": 0
+}
