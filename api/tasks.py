@@ -120,7 +120,7 @@ def update_task(override_existing=False):
 
         if os.path.isdir(config_dir):
             for filename in sorted(os.listdir(config_dir)):
-                if filename.endswith(".json"):
+                if filename.endswith(".json") and filename.startswith("feed-"):
                     file_path = os.path.join(config_dir, filename)
                     try:
                         with open(file_path, "r", encoding="utf-8") as f:
