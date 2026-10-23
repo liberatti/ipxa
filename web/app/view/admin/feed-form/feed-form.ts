@@ -6,8 +6,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { TranslatePipe, TranslateDirective, TranslateService } from '@ngx-translate/core';
 import { Feed } from 'app/models/feed';
 import { FeedService } from 'app/services/feed.service';
@@ -24,8 +26,10 @@ import { NotificationService } from 'app/services/notification.service';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
+    MatIconModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
+    TextFieldModule,
     TranslatePipe,
     TranslateDirective
   ],
@@ -38,6 +42,11 @@ export class FeedFormComponent implements OnInit {
   types = ['reputation', 'bypass'];
   intervals = ['hourly', 'daily'];
   isLoading = signal(false);
+
+  get ipCount(): number {
+    const raw = this.form?.get('data_raw')?.value || '';
+    return raw.split('\n').filter((l: string) => l.trim().length > 0).length;
+  }
 
   constructor(
     private fb: FormBuilder,

@@ -1,48 +1,63 @@
 <div class="login-page">
   <div class="login-background">
+    <div class="radial-glow"></div>
     <div class="grid-overlay"></div>
   </div>
 
-  <div class="login-container animate-in">
+  <!-- Top Navigation Header -->
+  <header class="login-topbar">
+    <div class="topbar-brand">
+      <span class="topbar-title" translate="AUTH.LOGIN.TITLE"></span>
+      <span class="topbar-divider">/</span>
+      <span class="topbar-subtitle" translate="AUTH.LOGIN.CLIENT_SUBTITLE"></span>
+    </div>
+
+    <div class="topbar-actions">
+      <button type="button" [matMenuTriggerFor]="langMenu" class="topbar-action-btn"
+        [attr.aria-label]="'AUTH.LOGIN.SELECT_LANG' | translate">
+        <mat-icon class="action-icon">language</mat-icon>
+        <span class="lang-text">{{ currentLang() === 'en_US' ? 'EN' : 'PT' }}</span>
+        <mat-icon class="chevron-icon">arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #langMenu="matMenu" class="compact-menu">
+        @for (lang of languages; track lang.code) {
+        <button mat-menu-item (click)="setLanguage(lang.code)" [class.active-item]="currentLang() === lang.code">
+          <span [translate]="lang.labelKey"></span>
+        </button>
+        }
+      </mat-menu>
+
+      <button type="button" (click)="toggleTheme()" class="topbar-icon-btn"
+        [attr.aria-label]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate"
+        [matTooltip]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate">
+        <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <!-- Login Card Container -->
+  <main class="login-container animate-in">
     <mat-card class="login-card">
-      <div class="card-header">
-        <div class="brand-group">
-          <div class="logo-box">
-            <img src="assets/logo.png" [alt]="'AUTH.LOGIN.TITLE' | translate" class="logo-img">
-          </div>
-          <div class="brand-info">
-            <h1 class="brand-title" translate="AUTH.LOGIN.TITLE"></h1>
-          </div>
-        </div>
-
-        <div class="header-actions">
-          <button type="button" [matMenuTriggerFor]="langMenu" class="header-action-btn"
-            [attr.aria-label]="'AUTH.LOGIN.SELECT_LANG' | translate">
-            <mat-icon class="action-icon">language</mat-icon>
-            <span class="lang-text">{{ currentLang() === 'en_US' ? 'EN' : 'PT' }}</span>
-            <mat-icon class="chevron-icon">arrow_drop_down</mat-icon>
-          </button>
-          <mat-menu #langMenu="matMenu" class="compact-menu">
-            @for (lang of languages; track lang.code) {
-            <button mat-menu-item (click)="setLanguage(lang.code)" [class.active-item]="currentLang() === lang.code">
-              <span [translate]="lang.labelKey"></span>
-            </button>
-            }
-          </mat-menu>
-
-          <button type="button" (click)="toggleTheme()" class="header-icon-btn"
-            [attr.aria-label]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate"
-            [matTooltip]="(isDarkTheme() ? 'NAVBAR.THEME_LIGHT' : 'NAVBAR.THEME_DARK') | translate">
-            <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-          </button>
-        </div>
-      </div>
-
-      <div class="header-divider"></div>
+      <div class="card-accent-bar"></div>
 
       @if (isLoading()) {
       <mat-progress-bar mode="indeterminate" class="login-progress"></mat-progress-bar>
       }
+
+      <div class="card-header">
+        <div class="logo-box">
+          <img src="assets/logo.png" [alt]="'AUTH.LOGIN.TITLE' | translate" class="logo-img">
+        </div>
+        <div class="brand-text-block">
+          <h1 class="brand-title" translate="AUTH.LOGIN.TITLE"></h1>
+          <span class="brand-subtitle" translate="AUTH.LOGIN.CLIENT_SUBTITLE"></span>
+        </div>
+      </div>
+
+      <div class="card-lead">
+        <h2 class="sign-in-title" translate="AUTH.LOGIN.SIGN_IN_TITLE"></h2>
+        <p class="sign-in-subtitle" translate="AUTH.LOGIN.SIGN_IN_SUBTITLE"></p>
+      </div>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
         @if (errorMessage()) {
@@ -55,7 +70,7 @@
         <div class="form-group">
           <label class="form-label" for="login-email" translate="AUTH.LOGIN.EMAIL_LABEL"></label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic" class="form-field">
-            <mat-icon matPrefix>alternate_email</mat-icon>
+            <mat-icon matPrefix class="field-icon">account_circle</mat-icon>
             <input id="login-email" matInput type="email" formControlName="email"
               [placeholder]="'AUTH.LOGIN.EMAIL_PLACEHOLDER' | translate" autocomplete="username">
           </mat-form-field>
@@ -67,10 +82,10 @@
         <div class="form-group">
           <label class="form-label" for="login-password" translate="AUTH.LOGIN.PASSWORD_LABEL"></label>
           <mat-form-field appearance="outline" subscriptSizing="dynamic" class="form-field">
-            <mat-icon matPrefix>lock_outline</mat-icon>
+            <mat-icon matPrefix class="field-icon">lock_outline</mat-icon>
             <input id="login-password" matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password"
               [placeholder]="'AUTH.LOGIN.PASSWORD_PLACEHOLDER' | translate" autocomplete="current-password">
-            <button mat-icon-button matSuffix (click)="togglePassword()" type="button"
+            <button mat-icon-button matSuffix (click)="togglePassword()" type="button" class="btn-toggle-pw"
               [attr.aria-label]="(showPassword() ? 'AUTH.LOGIN.PASSWORD_HIDE' : 'AUTH.LOGIN.PASSWORD_SHOW') | translate"
               [attr.aria-pressed]="showPassword()">
               <mat-icon>{{ showPassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
@@ -85,22 +100,26 @@
           <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isLoading()"
             class="btn-login">
             @if (!isLoading()) {
-            <mat-icon class="btn-icon">lock_open</mat-icon>
+            <mat-icon class="btn-icon">arrow_forward</mat-icon>
             }
             <span>
               {{ (isLoading() ? 'AUTH.LOGIN.BTN_AUTHENTICATING' : 'AUTH.LOGIN.BTN_LOGIN') | translate }}
             </span>
           </button>
         </div>
+
+        <div class="card-footer-meta">
+          <span class="version-tag">{{ version }}</span>
+        </div>
       </form>
     </mat-card>
 
-    <div class="copyright">
-      <div class="platform-badge" translate="AUTH.LOGIN.SECURITY_BADGE"></div>
+    <!-- Bottom Footer -->
+    <footer class="login-footer">
       <div class="copyright-row">
         <span>{{ 'AUTH.LOGIN.FOOTER' | translate:{ year: currentYear } }}</span>
-        <span class="version-tag">{{ version }}</span>
+        <span class="footer-separator">·</span>
       </div>
-    </div>
-  </div>
+    </footer>
+  </main>
 </div>

@@ -21,6 +21,63 @@
   </div>
 </div>
 
+@if (stats(); as s) {
+<div class="stats-overview-grid">
+  <mat-card class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label" translate="FEEDS.STATS.CACHE_ACTIVE_SIZE"></span>
+      <div class="stat-icon-wrapper cache">
+        <mat-icon>memory</mat-icon>
+      </div>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-value">{{ s.cache_size | number }}</div>
+    </div>
+  </mat-card>
+
+  <mat-card class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label" translate="FEEDS.STATS.FEEDS"></span>
+      <div class="stat-icon-wrapper feeds">
+        <mat-icon>dynamic_feed</mat-icon>
+      </div>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-value">{{ (s.feeds_reputation + s.feeds_bypass) | number }}</div>
+      <div class="stat-subtext">
+        <span class="badge reputation">{{ 'FEEDS.STATS.REP_COUNT' | translate:{ count: s.feeds_reputation } }}</span>
+        <span class="badge bypass">{{ 'FEEDS.STATS.BYPASS_COUNT' | translate:{ count: s.feeds_bypass } }}</span>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label" translate="FEEDS.STATS.REPUTATION_FEEDS_SIZE"></span>
+      <div class="stat-icon-wrapper rbl">
+        <mat-icon>security</mat-icon>
+      </div>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-value">{{ s.rbl_size | number }}</div>
+      <div class="stat-subtext text-muted" translate="FEEDS.STATS.TOTAL_ITEMS"></div>
+    </div>
+  </mat-card>
+
+  <mat-card class="stat-card">
+    <div class="stat-card-header">
+      <span class="stat-label" translate="FEEDS.STATS.GEOIP_LOCAL_ENTRIES"></span>
+      <div class="stat-icon-wrapper geoip">
+        <mat-icon>public</mat-icon>
+      </div>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-value">{{ s.geoip_entries | number }}</div>
+    </div>
+  </mat-card>
+</div>
+}
+
 <mat-card class="flat-table-card">
   <div class="table-responsive">
     <table mat-table [dataSource]="feedDS" class="admin-table">

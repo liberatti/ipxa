@@ -70,7 +70,9 @@ def install_task():
         dao.create_schema()
     with FeedDao() as dao:
         dao.create_schema()
-        for c in os.listdir(config.APP_BASE + "/config"):
+        for c in sorted(os.listdir(config.APP_BASE + "/config")):
+            if not c.startswith("feed-") or not c.endswith(".json"):
+                continue
             with open(config.APP_BASE + "/config/" + c) as f:
                 feed = json.load(f)
                 logger.info(f"Install feed {feed['provider']} : {feed['name']}")

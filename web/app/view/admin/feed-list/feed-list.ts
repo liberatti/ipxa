@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslatePipe, TranslateDirective, TranslateService } from '@ngx-translate/core';
 import { FeedService } from '../../../services/feed.service';
+import { ConfigService, ConfigStats } from '../../../services/config.service';
 import { Feed } from '../../../models/feed';
 import { FeedFormComponent } from '../feed-form/feed-form';
 import { DefaultPageMeta, PageMeta } from 'app/models/shared';
@@ -40,9 +41,11 @@ export class FeedListComponent implements OnInit {
   feedDS: MatTableDataSource<Feed>;
   feedPA: PageMeta;
   searchQuery = signal<string>('');
+  stats = signal<ConfigStats | null>(null);
 
   constructor(
     private feedService: FeedService,
+    private configService: ConfigService,
     private dialog: MatDialog,
     private translate: TranslateService,
     private notificationService: NotificationService
@@ -76,6 +79,14 @@ export class FeedListComponent implements OnInit {
 
   ngOnInit() {
     this.updateGridTable();
+    this.loadStats();
+  }
+
+  loadStats() {
+    this.configService.getStats().subscribe({
+      next: (data) => this.stats.set(data),
+      error: () => {}
+    });
   }
 
   updateGridTable() {
@@ -93,13 +104,14 @@ export class FeedListComponent implements OnInit {
   openForm(feed?: Feed) {
     const dialogRef = this.dialog.open(FeedFormComponent, {
       data: feed || null,
-      width: '600px',
+      width: '640px',
       panelClass: 'custom-dialog-container'
     });
 
     dialogRef.afterClosed().subscribe(saved => {
       if (saved) {
         this.updateGridTable();
+        this.loadStats();
       }
     });
   }
@@ -123,6 +135,7 @@ export class FeedListComponent implements OnInit {
           next: () => {
             this.notificationService.openSnackBar(this.translate.instant('NOTIFICATIONS.SUCCESS_DELETE'));
             this.updateGridTable();
+            this.loadStats();
           },
           error: (err) => {
             this.notificationService.openSnackBar(err.error?.message || this.translate.instant('NOTIFICATIONS.ERROR_GENERIC'));

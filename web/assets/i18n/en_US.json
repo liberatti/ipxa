@@ -15,6 +15,9 @@
     "LOGIN": {
       "TITLE": "ipxa",
       "SUBTITLE": "Restricted Dashboard Access",
+      "CLIENT_SUBTITLE": "Host Management Client",
+      "SIGN_IN_TITLE": "Sign In",
+      "SIGN_IN_SUBTITLE": "Enter your credentials to access the console",
       "SECURITY_BADGE": "Enterprise Intelligence Platform",
       "SYSTEM_STATUS": "System Operational · TLS Encrypted",
       "SELECT_LANG": "Switch Language",
@@ -34,6 +37,15 @@
     }
   },
   "FEEDS": {
+    "STATS": {
+      "CACHE_ACTIVE_SIZE": "Active Cache Size",
+      "FEEDS": "Feeds",
+      "REP_COUNT": "{{ count }} rep",
+      "BYPASS_COUNT": "{{ count }} bypass",
+      "REPUTATION_FEEDS_SIZE": "Reputation Feeds Size",
+      "TOTAL_ITEMS": "Total items",
+      "GEOIP_LOCAL_ENTRIES": "GeoIP Local Entries"
+    },
     "LIST": {
       "TITLE": "Feeds Management",
       "SEARCH_PLACEHOLDER": "Search by name, provider or source...",
@@ -52,8 +64,10 @@
       "BTN_DELETE": "Delete"
     },
     "FORM": {
-      "TITLE_NEW": "New",
-      "TITLE_EDIT": "Edit",
+      "TITLE_NEW": "New Feed",
+      "TITLE_EDIT": "Edit Feed",
+      "SUBTITLE_DESC": "Configure feed parameters and threat rules",
+      "IP_COUNT": "{{ count }} IP(s)",
       "NAME_LABEL": "Name",
       "NAME_PLACEHOLDER": "Ex: Spamhaus SBL",
       "NAME_REQUIRED": "Name is required",
