@@ -29,7 +29,7 @@ def get_geo_countries() -> Response:
         Response: A Flask Response object containing the geo countries.
     """
     data = []
-    with open(f"{config.APP_PATH}/config/config-geo.json", "r") as f:
+    with open(f"{config.APP_BASE}/config/config-geo.json", "r") as f:
         data = json.load(f)
     return response_data(data)
 
