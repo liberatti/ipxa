@@ -1,4 +1,4 @@
-:root {
+:root, body.dark-theme {
     /* Base & Surface Hierarchy (Dark Mode - Flat) */
     --background-dark: #0f172a;
     --background-darker: #090e1a;
@@ -87,6 +87,22 @@
     /* Flat Transitions (No motion bounce) */
     --transition-standard: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
     --transition-smooth: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+
+    /* Angular Material MDC / Component Token Overrides (Dark) */
+    --mat-table-background-color: var(--background-card);
+    --mat-table-header-headline-color: var(--text-muted);
+    --mat-table-row-item-label-text-color: var(--text-primary);
+    --mat-table-row-item-outline-color: var(--border-dim);
+    --mat-card-elevated-container-color: var(--background-card);
+    --mat-card-outlined-container-color: var(--background-card);
+    --mat-card-filled-container-color: var(--background-card);
+    --mat-paginator-container-background-color: var(--background-card);
+    --mat-paginator-container-text-color: var(--text-secondary);
+    --mat-form-field-outlined-input-text-placeholder-color: var(--text-muted);
+    --mat-form-field-filled-input-text-placeholder-color: var(--text-muted);
+    --mat-select-panel-background-color: var(--background-dark);
+    --mat-menu-container-color: var(--background-card);
+    --mat-dialog-container-color: var(--background-card);
 }
 
 body.light-theme {
@@ -168,6 +184,22 @@ body.light-theme {
 
     /* Flat Elevation */
     --shadow-premium: 0 1px 3px 0 rgba(0, 0, 0, 0.06);
+
+    /* Angular Material MDC / Component Token Overrides (Light) */
+    --mat-table-background-color: var(--background-card);
+    --mat-table-header-headline-color: var(--text-muted);
+    --mat-table-row-item-label-text-color: var(--text-primary);
+    --mat-table-row-item-outline-color: var(--border-dim);
+    --mat-card-elevated-container-color: var(--background-card);
+    --mat-card-outlined-container-color: var(--background-card);
+    --mat-card-filled-container-color: var(--background-card);
+    --mat-paginator-container-background-color: var(--background-card);
+    --mat-paginator-container-text-color: var(--text-secondary);
+    --mat-form-field-outlined-input-text-placeholder-color: var(--text-muted);
+    --mat-form-field-filled-input-text-placeholder-color: var(--text-muted);
+    --mat-select-panel-background-color: #ffffff;
+    --mat-menu-container-color: #ffffff;
+    --mat-dialog-container-color: #ffffff;
 }
 
 body {

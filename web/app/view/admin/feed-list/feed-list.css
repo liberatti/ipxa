@@ -76,7 +76,7 @@
 }
 
 .flat-table-card {
-  background: var(--background-card);
+  background: var(--background-card) !important;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   box-shadow: none !important;
@@ -85,6 +85,12 @@
 
 .admin-table {
   width: 100%;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.flat-table-card mat-paginator {
+  background: transparent !important;
 }
 
 .admin-table th.mat-mdc-header-cell {

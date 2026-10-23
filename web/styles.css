@@ -404,12 +404,6 @@ h1, h2, h3, h4, b, strong {
     width: 16px !important;
     height: 16px !important;
     margin: 0 !important;
-.mat-mdc-form-field:has(textarea) .mat-mdc-form-field-infix,
-.mat-mdc-form-field.has-textarea .mat-mdc-form-field-infix {
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-    height: auto !important;
-    min-height: auto !important;
 }
 
 .mat-mdc-form-field input.mdc-text-field__input {
@@ -567,8 +561,14 @@ h1, h2, h3, h4, b, strong {
     box-shadow: none !important;
 }
 
-.mat-mdc-table {
+.mat-mdc-table,
+.mat-mdc-table tbody,
+.mat-mdc-table tfoot,
+.mat-mdc-table thead,
+.mat-mdc-row,
+.mat-mdc-header-row {
     background: transparent !important;
+    background-color: transparent !important;
 }
 
 .mat-mdc-header-cell {
