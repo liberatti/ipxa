@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, Response
-from nxcore.controllers.base_controller import response_data
+from api.middleware.controllers.base_controller import response_data
 import config
 from api.repository.feed_model import FeedDao
 from api.repository.geoip_model import GeoIpDao

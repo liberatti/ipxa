@@ -1,12 +1,12 @@
 import sqlite3
 from flask import Blueprint, request, Response
-from nxcore.controllers.base_controller import (
+from api.middleware.controllers.base_controller import (
     response_data,
     response_ok,
     get_pagination,
     response_error,
 )
-from nxcore.controllers.base_controller import has_any_authority
+from api.middleware.controllers.base_controller import has_any_authority
 from api.repository.feed_model import FeedDao
 from api.repository.rbl_model import RBLDao
 from api.tools.feed_tool import update_feed

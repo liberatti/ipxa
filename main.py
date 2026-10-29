@@ -6,14 +6,13 @@ from flask_cors import CORS
 from flask_restful import Api
 
 import config
-import nxcore.config as nxcore_config
-from nxcore.controllers.base_controller import response_error_404, response_error_500
-from nxcore.middleware.logging_manager import logger, LoggingManager
-from nxcore.middleware.jwt_manager import JWTManager
+from api.middleware.controllers.base_controller import response_error_404, response_error_500
+from api.middleware.logging_manager import logger, LoggingManager
+from api.middleware.jwt_manager import JWTManager
 
 from api.routes import register as register_api_routes
 
-nxcore_config.init(
+config.init(
     {
         "LOGLEVEL": config.LOGLEVEL,
         "JWT_SECRET_KEY": config.JWT_SECRET_KEY,

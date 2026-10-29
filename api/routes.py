@@ -1,5 +1,5 @@
 from flask import render_template, current_app
-from nxcore.controllers.base_controller import response_error_404
+from api.middleware.controllers.base_controller import response_error_404
 import config
 from api.controllers.ip_controller import routes as ip_routes
 from api.controllers.oauth_controller import routes as oauth_routes

@@ -2,10 +2,10 @@ import json
 import os
 import traceback
 from datetime import timedelta, datetime
-
-from nxcore.middleware.logging_manager import logger
-
 import bcrypt
+
+from api.middleware.logging_manager import logger
+
 import config
 from api.repository.feed_model import FeedDao
 from api.repository.geoip_model import GeoIpDao

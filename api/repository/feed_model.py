@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 import json
-from nxcore.repository.sqlite3_dao import SQLite3DAO
+from api.middleware.repository.sqlite3_dao import SQLite3DAO
 
 import config
 
