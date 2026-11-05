@@ -285,13 +285,30 @@
 .bg-medium { background: var(--warning-color); }
 .bg-high { background: var(--danger-color); }
 
+.tags-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
 .threat-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-/* .threat-tag moved to styles.css */
+.threat-tag.trust {
+  background: var(--success-bg);
+  border-color: var(--success-dim);
+  color: var(--success-color);
+}
+
+.threat-tag.rbl {
+  background: var(--danger-bg);
+  border-color: var(--danger-dim);
+  color: var(--danger-color);
+}
 
 .small-icon { font-size: 14px; width: 14px; height: 14px; }
 
