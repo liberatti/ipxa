@@ -24,6 +24,7 @@
           "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist/",
+            "baseHref": "/ipxa/",
             "index": "index.html",
             "main": "main.ts",
             "polyfills": [

@@ -40,11 +40,19 @@ def register(app, bp):
         if path.startswith(api_prefix) or path.startswith("api"):
             return response_error_404()
 
-        if "." in path and not path.endswith("/"):
+        context_prefix = config.APP_CONTEXT.strip("/") if config.APP_CONTEXT else ""
+        static_path = path
+        if context_prefix and (path == context_prefix or path.startswith(f"{context_prefix}/")):
+            static_path = path[len(context_prefix):].lstrip("/")
+
+        if "." in static_path and not static_path.endswith("/"):
             try:
-                return current_app.send_static_file(path)
+                return current_app.send_static_file(static_path)
             except Exception:
-                pass
+                try:
+                    return current_app.send_static_file(path)
+                except Exception:
+                    pass
         return render_template("index.html")
 
     for route, url_prefix in routes:
