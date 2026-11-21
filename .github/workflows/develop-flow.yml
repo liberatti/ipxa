@@ -74,22 +74,6 @@ jobs:
           cache-from: type=gha,scope=v-branches-${{ matrix.arch }}
           cache-to: ${{ github.event_name == 'push' && format('type=gha,mode=max,scope=v-branches-{0}', matrix.arch) || '' }}
 
-      - name: Export RPMs from Docker build
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: ${{ matrix.platform }}
-          target: rpms
-          outputs: type=local,dest=./dist/rpms
-          cache-from: type=gha,scope=v-branches-${{ matrix.arch }}
-
-      - name: Upload RPM Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: nxguard-rpms-el10-${{ matrix.arch }}
-          path: ./dist/rpms/**/*.rpm
-          retention-days: 14
-
       - name: Export digest
         if: github.event_name == 'push'
         run: |

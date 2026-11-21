@@ -83,22 +83,6 @@ jobs:
           cache-from: type=gha,scope=main-${{ matrix.arch }}
           cache-to: type=gha,mode=max,scope=main-${{ matrix.arch }}
 
-      - name: Export RPMs from Docker build
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          platforms: ${{ matrix.platform }}
-          target: rpms
-          outputs: type=local,dest=./dist/rpms
-          cache-from: type=gha,scope=main-${{ matrix.arch }}
-
-      - name: Upload RPM Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: nxguard-rpms-${{ needs.checkout.outputs.version }}-${{ matrix.arch }}
-          path: ./dist/rpms/**/*.rpm
-          retention-days: 30
-
       - name: Export digest
         run: |
           mkdir -p ${{ runner.temp }}/digests
