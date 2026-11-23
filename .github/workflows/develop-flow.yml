@@ -72,7 +72,9 @@ jobs:
           target: main
           platforms: ${{ matrix.platform }}
           outputs: ${{ github.event_name == 'push' && 'type=image,name=liberatti/nxguard,push-by-digest=true,name-canonical=true,push=true' || 'type=image,name=liberatti/nxguard,push=false' }}
-          cache-from: type=gha,scope=v-branches-${{ matrix.arch }}
+          cache-from: |
+            type=gha,scope=main-${{ matrix.arch }}
+            type=gha,scope=v-branches-${{ matrix.arch }}
           cache-to: ${{ github.event_name == 'push' && format('type=gha,mode=max,scope=v-branches-{0}', matrix.arch) || '' }}
 
       - name: Export digest
