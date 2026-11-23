@@ -80,7 +80,7 @@ jobs:
           context: .
           target: main
           platforms: ${{ matrix.platform }}
-          outputs: type=image,name=liberatti/nxguard,push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=liberatti/ipxa,push-by-digest=true,name-canonical=true,push=true
           cache-from: |
             type=gha,scope=main-${{ matrix.arch }}
             type=gha,scope=v-branches-${{ matrix.arch }}
@@ -111,13 +111,6 @@ jobs:
         with:
           path: ${{ runner.temp }}/digests
           pattern: digests-*
-          merge-multiple: true
-
-      - name: Download all RPM Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: nxguard-rpms-*
-          path: ./dist/rpms
           merge-multiple: true
 
       - name: Generate release notes from milestone
@@ -268,18 +261,18 @@ jobs:
         run: |
           DIGESTS=""
           for digest in *; do
-            DIGESTS="$DIGESTS liberatti/nxguard@sha256:$digest"
+            DIGESTS="$DIGESTS liberatti/ipxa@sha256:$digest"
           done
           docker buildx imagetools create \
-            -t "liberatti/nxguard:$VERSION" \
-            -t liberatti/nxguard:latest \
+            -t "liberatti/ipxa:$VERSION" \
+            -t liberatti/ipxa:latest \
             $DIGESTS
 
       - name: Inspect final multi-arch image
         env:
           VERSION: ${{ needs.checkout.outputs.version }}
         run: |
-          docker buildx imagetools inspect "liberatti/nxguard:$VERSION"
+          docker buildx imagetools inspect "liberatti/ipxa:$VERSION"
 
       - name: Create and push tag
         env:
