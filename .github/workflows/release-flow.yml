@@ -158,7 +158,7 @@ jobs:
             "repos/$GH_REPO/issues?milestone=$MILESTONE_NUMBER&state=closed&per_page=100" \
             > "$RUNNER_TEMP/release-issues-pages.json"
           jq -cer '
-            [.[[]] | select(.pull_request == null)]
+            [.[][] | select(.pull_request == null)]
             | map({
                 number,
                 title,
