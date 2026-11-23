@@ -1,0 +1,17 @@
+{
+  "name": "pingdom",
+  "slug": "pingdom",
+  "provider": "pingdom",
+  "type": "bypass",
+  "data": [
+    "72.44.34.0/24",
+    "72.44.35.0/24",
+    "104.247.216.0/24",
+    "108.62.115.0/24",
+    "173.244.209.0/24",
+    "209.58.131.0/24"
+  ],
+  "description": "SolarWinds Pingdom global monitoring probes",
+  "format": "embedded",
+  "risk_score": 0
+}

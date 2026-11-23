@@ -1,6 +1,6 @@
 import os
 
-from nxcore.controllers.base_controller import response_data, has_any_authority
+from api.middleware.controllers.base_controller import response_data, has_any_authority
 from flask import Blueprint, Response
 from geoip2 import database
 

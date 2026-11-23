@@ -3,9 +3,10 @@
   align-items: center;
   gap: 0;
   background: var(--background-glass);
-  border: 1.5px solid var(--border-color);
-  border-radius: 14px;
-  padding: 6px 6px 6px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 2px 4px 2px 10px;
+  height: 34px;
   transition: var(--transition-standard);
   backdrop-filter: var(--glass-blur);
   position: relative;
@@ -16,7 +17,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 14px;
+  border-radius: 6px;
   opacity: 0;
   transition: opacity 0.3s ease;
   background: linear-gradient(135deg, var(--accent-blue-ghost) 0%, var(--accent-purple-ghost) 100%);
@@ -30,7 +31,7 @@
 
 .ip-input-wrapper.focused {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px var(--accent-glow), 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
 .ip-input-wrapper.hovered:not(.focused) {
@@ -43,7 +44,7 @@
 
 .ip-input-wrapper.valid.focused {
   border-color: var(--success-color);
-  box-shadow: 0 0 0 3px var(--success-bg);
+  box-shadow: 0 0 0 2px var(--success-bg);
 }
 
 .ip-input-wrapper.invalid {
@@ -52,24 +53,26 @@
 
 .ip-input-wrapper.invalid.focused {
   border-color: var(--danger-color);
-  box-shadow: 0 0 0 3px var(--danger-bg);
+  box-shadow: 0 0 0 2px var(--danger-bg);
 }
 
 /* Large variant */
 .ip-input-wrapper.size-large {
-  padding: 10px 10px 10px 20px;
-  border-radius: 16px;
-  border-width: 1.5px;
+  padding: 3px 6px 3px 12px;
+  border-radius: 6px;
+  border-width: 1px;
+  height: 38px;
 }
 
 .ip-input-wrapper.size-large .ip-input-field {
-  font-size: 17px;
+  font-size: 14px;
 }
 
 .ip-input-wrapper.size-large .ip-search-btn {
-  padding: 12px 22px;
-  font-size: 15px;
-  border-radius: 12px;
+  padding: 0 14px;
+  height: 28px;
+  font-size: 12px;
+  border-radius: 4px;
 }
 
 .ip-icon {
@@ -99,9 +102,9 @@
   border: none;
   outline: none;
   color: var(--text-primary);
-  font-size: 15px;
+  font-size: 13px;
   font-family: 'JetBrains Mono', 'Courier New', monospace;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   min-width: 0;
   caret-color: var(--accent-color);
 }
@@ -110,23 +113,24 @@
   color: var(--text-muted);
   font-family: 'Inter', sans-serif;
   letter-spacing: normal;
+  font-size: 12px;
 }
 
 .ip-badges {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 0 8px;
+  gap: 4px;
+  margin: 0 6px;
   flex-shrink: 0;
 }
 
 .ip-version-badge {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
-  padding: 2px 7px;
-  border-radius: 20px;
-  letter-spacing: 0.5px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
   background: var(--accent-blue-dim);
   color: var(--accent-color);
   border: 1px solid var(--border-hover);
@@ -142,8 +146,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
 }
 
@@ -165,7 +169,7 @@
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 4px;
+  padding: 2px;
   border-radius: 50%;
   transition: all 0.2s ease;
   line-height: 1;
@@ -179,26 +183,24 @@
 .ip-search-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+  gap: 4px;
+  background: var(--primary-color);
   border: none;
-  border-radius: 10px;
+  border-radius: 4px;
   color: #fff;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   font-family: 'Inter', sans-serif;
-  padding: 10px 18px;
+  padding: 0 12px;
+  height: 26px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
   white-space: nowrap;
   flex-shrink: 0;
-  letter-spacing: 0.2px;
 }
 
 .ip-search-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--accent-violet) 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px var(--accent-violet-glow);
+  background: var(--primary-hover);
 }
 
 .ip-search-btn:active:not(:disabled) {

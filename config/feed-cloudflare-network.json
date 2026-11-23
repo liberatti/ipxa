@@ -1,0 +1,10 @@
+{
+  "name": "cloudflare",
+  "slug": "cloudflare",
+  "provider": "cloudflare",
+  "type": "bypass",
+  "source": "https://www.cloudflare.com/ips-v4",
+  "format": "cdir_text",
+  "description": "Official Cloudflare reverse proxy edge IPs",
+  "risk_score": 0
+}

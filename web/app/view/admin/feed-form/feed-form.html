@@ -1,118 +1,200 @@
-<h2 mat-dialog-title class="gradient-text">
-  {{ (data ? 'FEEDS.FORM.TITLE_EDIT' : 'FEEDS.FORM.TITLE_NEW') | translate }}
-</h2>
-<mat-dialog-content>
+<div class="dialog-header">
+  <div class="header-main">
+    <div class="header-icon-box">
+      <mat-icon>{{ data ? 'tune' : 'add_circle_outline' }}</mat-icon>
+    </div>
+    <div class="header-text">
+      <h2 class="dialog-title">
+        {{ (data ? 'FEEDS.FORM.TITLE_EDIT' : 'FEEDS.FORM.TITLE_NEW') | translate }}
+      </h2>
+      <span class="dialog-subtitle">
+        @if (data) {
+        {{ data.name }} <code class="slug-badge">{{ data.slug }}</code>
+        } @else {
+        {{ 'FEEDS.FORM.SUBTITLE_DESC' | translate }}
+        }
+      </span>
+    </div>
+  </div>
+  <button mat-icon-button type="button" (click)="onCancel()" class="close-btn" [attr.aria-label]="'ACTIONS.CLOSE' | translate">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="custom-dialog-content">
   <form [formGroup]="form" class="form-grid">
     <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label translate="FEEDS.FORM.NAME_LABEL"></mat-label>
-        <input matInput formControlName="name" [placeholder]="'FEEDS.FORM.NAME_PLACEHOLDER' | translate">
-        @if (form.get('name')?.hasError('required')) {
-          <mat-error translate="FEEDS.FORM.NAME_REQUIRED"></mat-error>
+      <div class="form-group">
+        <label class="form-label" for="feed-name">
+          <span translate="FEEDS.FORM.NAME_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input id="feed-name" matInput formControlName="name"
+            [placeholder]="'FEEDS.FORM.NAME_PLACEHOLDER' | translate">
+        </mat-form-field>
+        @if (form.get('name')?.touched && form.get('name')?.hasError('required')) {
+        <div class="form-error" translate="FEEDS.FORM.NAME_REQUIRED"></div>
         }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label translate="FEEDS.FORM.SLUG_LABEL"></mat-label>
-        <input matInput formControlName="slug" [placeholder]="'FEEDS.FORM.SLUG_PLACEHOLDER' | translate">
-        @if (form.get('slug')?.hasError('required')) {
-          <mat-error translate="FEEDS.FORM.SLUG_REQUIRED"></mat-error>
+      <div class="form-group">
+        <label class="form-label" for="feed-slug">
+          <span translate="FEEDS.FORM.SLUG_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input id="feed-slug" matInput formControlName="slug"
+            [placeholder]="'FEEDS.FORM.SLUG_PLACEHOLDER' | translate">
+        </mat-form-field>
+        @if (form.get('slug')?.touched && form.get('slug')?.hasError('required')) {
+        <div class="form-error" translate="FEEDS.FORM.SLUG_REQUIRED"></div>
         }
-      </mat-form-field>
+      </div>
     </div>
 
     <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label translate="FEEDS.FORM.PROVIDER_LABEL"></mat-label>
-        <input matInput formControlName="provider" [placeholder]="'FEEDS.FORM.PROVIDER_PLACEHOLDER' | translate">
-        @if (form.get('provider')?.hasError('required')) {
-          <mat-error translate="FEEDS.FORM.PROVIDER_REQUIRED"></mat-error>
+      <div class="form-group">
+        <label class="form-label" for="feed-provider">
+          <span translate="FEEDS.FORM.PROVIDER_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input id="feed-provider" matInput formControlName="provider"
+            [placeholder]="'FEEDS.FORM.PROVIDER_PLACEHOLDER' | translate">
+        </mat-form-field>
+        @if (form.get('provider')?.touched && form.get('provider')?.hasError('required')) {
+        <div class="form-error" translate="FEEDS.FORM.PROVIDER_REQUIRED"></div>
         }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label translate="FEEDS.FORM.RISK_SCORE_LABEL"></mat-label>
-        <input matInput type="number" formControlName="risk_score">
-        @if (form.get('risk_score')?.hasError('min')) {
-          <mat-error translate="FEEDS.FORM.RISK_SCORE_MIN"></mat-error>
+      <div class="form-group">
+        <label class="form-label" for="feed-risk-score">
+          <span translate="FEEDS.FORM.RISK_SCORE_LABEL"></span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input id="feed-risk-score" matInput type="number" formControlName="risk_score">
+        </mat-form-field>
+        @if (form.get('risk_score')?.touched && form.get('risk_score')?.hasError('min')) {
+        <div class="form-error" translate="FEEDS.FORM.RISK_SCORE_MIN"></div>
         }
-        @if (form.get('risk_score')?.hasError('max')) {
-          <mat-error translate="FEEDS.FORM.RISK_SCORE_MAX"></mat-error>
+        @if (form.get('risk_score')?.touched && form.get('risk_score')?.hasError('max')) {
+        <div class="form-error" translate="FEEDS.FORM.RISK_SCORE_MAX"></div>
         }
-      </mat-form-field>
+      </div>
     </div>
 
     <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label translate="FEEDS.FORM.TYPE_LABEL"></mat-label>
-        <mat-select formControlName="type">
-          @for (t of types; track t) {
+      <div class="form-group">
+        <label class="form-label" for="feed-type">
+          <span translate="FEEDS.FORM.TYPE_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-select id="feed-type" formControlName="type">
+            @for (t of types; track t) {
             <mat-option [value]="t">{{ t | titlecase }}</mat-option>
-          }
-        </mat-select>
-        @if (form.get('type')?.hasError('required')) {
-          <mat-error translate="FEEDS.FORM.TYPE_REQUIRED"></mat-error>
+            }
+          </mat-select>
+        </mat-form-field>
+        @if (form.get('type')?.touched && form.get('type')?.hasError('required')) {
+        <div class="form-error" translate="FEEDS.FORM.TYPE_REQUIRED"></div>
         }
-      </mat-form-field>
+      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label translate="FEEDS.FORM.FORMAT_LABEL"></mat-label>
-        <mat-select formControlName="format">
-          @for (f of formats; track f) {
+      <div class="form-group">
+        <label class="form-label" for="feed-format">
+          <span translate="FEEDS.FORM.FORMAT_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-select id="feed-format" formControlName="format">
+            @for (f of formats; track f) {
             <mat-option [value]="f">{{ f }}</mat-option>
-          }
-        </mat-select>
-        @if (form.get('format')?.hasError('required')) {
-          <mat-error translate="FEEDS.FORM.FORMAT_REQUIRED"></mat-error>
+            }
+          </mat-select>
+        </mat-form-field>
+        @if (form.get('format')?.touched && form.get('format')?.hasError('required')) {
+        <div class="form-error" translate="FEEDS.FORM.FORMAT_REQUIRED"></div>
         }
-      </mat-form-field>
+      </div>
     </div>
 
     @if (form.get('format')?.value !== 'embedded') {
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label translate="FEEDS.FORM.SOURCE_LABEL"></mat-label>
-          <input matInput formControlName="source" [placeholder]="'FEEDS.FORM.SOURCE_PLACEHOLDER' | translate">
-          @if (form.get('source')?.hasError('required')) {
-            <mat-error translate="FEEDS.FORM.SOURCE_REQUIRED"></mat-error>
-          }
+    <div class="form-row">
+      <div class="form-group flex-2">
+        <label class="form-label" for="feed-source">
+          <span translate="FEEDS.FORM.SOURCE_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input id="feed-source" matInput formControlName="source"
+            [placeholder]="'FEEDS.FORM.SOURCE_PLACEHOLDER' | translate">
         </mat-form-field>
+        @if (form.get('source')?.touched && form.get('source')?.hasError('required')) {
+        <div class="form-error" translate="FEEDS.FORM.SOURCE_REQUIRED"></div>
+        }
+      </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label translate="FEEDS.FORM.INTERVAL_LABEL"></mat-label>
-          <mat-select formControlName="update_interval">
+      <div class="form-group flex-1">
+        <label class="form-label" for="feed-interval">
+          <span translate="FEEDS.FORM.INTERVAL_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-select id="feed-interval" formControlName="update_interval">
             @for (i of intervals; track i) {
-              <mat-option [value]="i">{{ i | titlecase }}</mat-option>
+            <mat-option [value]="i">{{ i | titlecase }}</mat-option>
             }
           </mat-select>
-          @if (form.get('update_interval')?.hasError('required')) {
-            <mat-error translate="FEEDS.FORM.INTERVAL_REQUIRED"></mat-error>
-          }
         </mat-form-field>
+        @if (form.get('update_interval')?.touched && form.get('update_interval')?.hasError('required')) {
+        <div class="form-error" translate="FEEDS.FORM.INTERVAL_REQUIRED"></div>
+        }
       </div>
+    </div>
     }
 
     @if (form.get('format')?.value === 'embedded') {
-      <mat-form-field appearance="outline">
-        <mat-label translate="FEEDS.FORM.DATA_RAW_LABEL"></mat-label>
-        <textarea matInput formControlName="data_raw" rows="5" [placeholder]="'FEEDS.FORM.DATA_RAW_PLACEHOLDER' | translate"></textarea>
-        @if (form.get('data_raw')?.hasError('required')) {
-          <mat-error translate="FEEDS.FORM.DATA_RAW_REQUIRED"></mat-error>
-        }
+    <div class="form-group">
+      <div class="form-label-row">
+        <label class="form-label" for="feed-data-raw">
+          <span translate="FEEDS.FORM.DATA_RAW_LABEL"></span>
+          <span class="required-mark">*</span>
+        </label>
+        <span class="ip-count-badge">{{ 'FEEDS.FORM.IP_COUNT' | translate:{ count: ipCount } }}</span>
+      </div>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="textarea-field has-textarea">
+        <textarea id="feed-data-raw" matInput formControlName="data_raw" cdkTextareaAutosize
+          cdkAutosizeMinRows="5" cdkAutosizeMaxRows="10"
+          [placeholder]="'FEEDS.FORM.DATA_RAW_PLACEHOLDER' | translate"></textarea>
       </mat-form-field>
+      @if (form.get('data_raw')?.touched && form.get('data_raw')?.hasError('required')) {
+      <div class="form-error" translate="FEEDS.FORM.DATA_RAW_REQUIRED"></div>
+      }
+    </div>
     }
 
-    <mat-form-field appearance="outline">
-      <mat-label translate="FEEDS.FORM.DESCRIPTION_LABEL"></mat-label>
-      <textarea matInput formControlName="description" rows="2"></textarea>
-    </mat-form-field>
+    <div class="form-group">
+      <label class="form-label" for="feed-description">
+        <span translate="FEEDS.FORM.DESCRIPTION_LABEL"></span>
+      </label>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="textarea-field has-textarea">
+        <textarea id="feed-description" matInput formControlName="description" cdkTextareaAutosize
+          cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"></textarea>
+      </mat-form-field>
+    </div>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button type="button" [disabled]="isLoading()" (click)="onCancel()" translate="FEEDS.FORM.BTN_CANCEL"></button>
-  <button mat-flat-button color="primary" type="button" [disabled]="isLoading()" (click)="onSave()">
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button type="button" [disabled]="isLoading()" (click)="onCancel()" class="btn-cancel"
+    translate="FEEDS.FORM.BTN_CANCEL"></button>
+  <button mat-flat-button color="primary" type="button" [disabled]="isLoading()" (click)="onSave()" class="btn-save">
     @if (isLoading()) {
-      <mat-spinner diameter="18" class="button-spinner"></mat-spinner>
+    <mat-spinner diameter="16" class="button-spinner"></mat-spinner>
+    } @else {
+    <mat-icon class="save-icon">check</mat-icon>
     }
     <span translate="FEEDS.FORM.BTN_SAVE"></span>
   </button>

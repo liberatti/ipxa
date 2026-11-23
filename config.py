@@ -59,3 +59,13 @@ CORS = {
         "max_age": 3600,
     }
 }
+
+
+def get(key, default=None):
+    return globals().get(key, default)
+
+
+def init(values: dict = None):
+    if values:
+        globals().update(values)
+

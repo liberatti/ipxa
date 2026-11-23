@@ -1,7 +1,7 @@
 from typing import Dict, Any, Optional
 
-from nxcore.middleware.logging_manager import logger
-from nxcore.repository.sqlite3_dao import SQLite3DAO
+from api.middleware.logging_manager import logger
+from api.middleware.repository.sqlite3_dao import SQLite3DAO
 from marshmallow import EXCLUDE, Schema, fields
 
 import config as config

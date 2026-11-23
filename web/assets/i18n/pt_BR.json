@@ -15,6 +15,9 @@
     "LOGIN": {
       "TITLE": "ipxa",
       "SUBTITLE": "Acesso Restrito ao Painel",
+      "CLIENT_SUBTITLE": "Host Management Client",
+      "SIGN_IN_TITLE": "Acessar Plataforma",
+      "SIGN_IN_SUBTITLE": "Insira suas credenciais para acessar o console",
       "SECURITY_BADGE": "Plataforma de Inteligência Corporativa",
       "SYSTEM_STATUS": "Sistema Operacional · Criptografia TLS",
       "SELECT_LANG": "Alternar Idioma",
@@ -34,12 +37,21 @@
     }
   },
   "FEEDS": {
+    "STATS": {
+      "CACHE_ACTIVE_SIZE": "Tamanho do Cache Ativo",
+      "FEEDS": "Feeds",
+      "REP_COUNT": "{{ count }} rep",
+      "BYPASS_COUNT": "{{ count }} bypass",
+      "REPUTATION_FEEDS_SIZE": "Tamanho dos Feeds de Reputação",
+      "TOTAL_ITEMS": "Total de itens",
+      "GEOIP_LOCAL_ENTRIES": "Entradas Locais GeoIP"
+    },
     "LIST": {
       "TITLE": "Gerenciamento de Feeds",
       "SEARCH_PLACEHOLDER": "Buscar por nome, provedor ou origem...",
       "SEARCH_ARIA": "Buscar feeds por nome, provedor ou origem",
       "NO_MATCHING_DATA": "Nenhum feed correspondente aos critérios de busca",
-      "BTN_CREATE": "Novo Feed",
+      "BTN_CREATE": "Novo",
       "COL_NAME": "Nome",
       "COL_PROVIDER": "Provedor",
       "COL_TYPE": "Tipo",
@@ -48,12 +60,14 @@
       "COL_UPDATED_ON": "Última Atualização",
       "COL_ACTIONS": "Ações",
       "NEVER_UPDATED": "Nunca",
-      "BTN_EDIT": "Editar feed",
-      "BTN_DELETE": "Excluir feed"
+      "BTN_EDIT": "Editar",
+      "BTN_DELETE": "Excluir"
     },
     "FORM": {
       "TITLE_NEW": "Novo Feed",
       "TITLE_EDIT": "Editar Feed",
+      "SUBTITLE_DESC": "Configure os parâmetros e regras do feed",
+      "IP_COUNT": "{{ count }} IP(s)",
       "NAME_LABEL": "Nome",
       "NAME_PLACEHOLDER": "Ex: Spamhaus SBL",
       "NAME_REQUIRED": "O nome é obrigatório",
@@ -80,7 +94,7 @@
       "DATA_RAW_REQUIRED": "A lista de IPs é obrigatória para o formato embutido",
       "DESCRIPTION_LABEL": "Descrição",
       "BTN_CANCEL": "Cancelar",
-      "BTN_SAVE": "Salvar Feed"
+      "BTN_SAVE": "Salvar"
     }
   },
   "IP_LOOKUP": {

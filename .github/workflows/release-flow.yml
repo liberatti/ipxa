@@ -1,4 +1,4 @@
-name: Release Tag
+name: CI / main
 
 on:
   pull_request:
@@ -9,6 +9,9 @@ on:
 
 permissions:
   contents: write
+  issues: write
+  pull-requests: read
+  actions: write
 
 jobs:
   checkout:
@@ -17,6 +20,7 @@ jobs:
     outputs:
       version: ${{ steps.get_version.outputs.version }}
       branch: ${{ steps.get_version.outputs.branch }}
+      milestone_version: ${{ steps.get_version.outputs.milestone_version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,24 +28,39 @@ jobs:
 
       - name: Extract version from branch name
         id: get_version
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          if [[ "$BRANCH_NAME" =~ ^v(.*)-(rc|fix)$ ]]; then
-            if [[ "$BRANCH_NAME" =~ -fix$ ]]; then
-              VERSION="${BRANCH_NAME%-fix}-hotfix-$(date +%Y%m%d%H%M%S)"
+          BRANCH_NAME="$HEAD_REF"
+          if [[ "$BRANCH_NAME" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)-(rc|fix)$ ]]; then
+            MILESTONE_VERSION="v${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+            RELEASE_TYPE="${BASH_REMATCH[4]}"
+            if [[ "$RELEASE_TYPE" == "fix" ]]; then
+              VERSION="$MILESTONE_VERSION-hotfix-$(date +%Y%m%d%H%M%S)"
             else
-              VERSION="${BRANCH_NAME%-rc}"
+              VERSION="$MILESTONE_VERSION"
             fi
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            echo "milestone_version=$MILESTONE_VERSION" >> $GITHUB_OUTPUT
           else
-            echo "Branch $BRANCH_NAME does not match v*-rc or v*-fix pattern"
+            echo "Branch must match vMAJOR.MINOR.PATCH-rc or vMAJOR.MINOR.PATCH-fix; got: $BRANCH_NAME"
             exit 1
           fi
 
   build-app-image:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
     needs: checkout
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+            arch: x86_64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            arch: aarch64
     steps:
       - uses: actions/checkout@v4
 
@@ -51,87 +70,245 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Extract image metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: liberatti/ipxa
-          tags: |
-            type=raw,value=${{ needs.checkout.outputs.version }}
-            type=raw,value=latest
-
-      - name: Build and push Docker image
+      - name: Build and push Docker image by digest
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          target: main
+          platforms: ${{ matrix.platform }}
+          outputs: type=image,name=liberatti/nxguard,push-by-digest=true,name-canonical=true,push=true
+          cache-from: |
+            type=gha,scope=main-${{ matrix.arch }}
+            type=gha,scope=v-branches-${{ matrix.arch }}
 
-  build-hooks-image:
-    runs-on: ubuntu-latest
-    needs: checkout
-    steps:
-      - uses: actions/checkout@v4
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Extract ipxa-resty metadata
-        id: meta-openresty
-        uses: docker/metadata-action@v5
-        with:
-          images: liberatti/ipxa-resty
-          tags: |
-            type=raw,value=${{ needs.checkout.outputs.version }}
-            type=raw,value=latest
-
-      - name: Build and push ipxa-resty
-        uses: docker/build-push-action@v6
-        with:
-          context: hooks/openresty
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ steps.meta-openresty.outputs.tags }}
-          labels: ${{ steps.meta-openresty.outputs.labels }}
+          name: digests-${{ matrix.arch }}
+          path: ${{ runner.temp }}/digests/*
+          retention-days: 1
 
   publish-tag:
-    needs: checkout
+    needs: [checkout, build-app-image]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Download all RPM Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: nxguard-rpms-*
+          path: ./dist/rpms
+          merge-multiple: true
+
+      - name: Generate release notes from milestone
+        id: release_notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_VERSION: ${{ needs.checkout.outputs.version }}
+          MILESTONE_VERSION: ${{ needs.checkout.outputs.milestone_version }}
+        run: |
+          mkdir -p ./dist
+          gh api --paginate --slurp \
+            "repos/$GH_REPO/milestones?state=all&per_page=100" \
+            > "$RUNNER_TEMP/milestones.json"
+
+          MILESTONE=$(jq -cer --arg version "$MILESTONE_VERSION" '
+            [
+              .[][] |
+              select(
+                .title == $version or
+                (.title | startswith($version + " ")) or
+                (.title | startswith($version + "-")) or
+                (.title | startswith($version + ":"))
+              )
+            ] as $matches |
+            if ($matches | length) == 0 then
+              error("No milestone found for release version " + $version)
+            elif ($matches | length) > 1 then
+              error("More than one milestone matches release version " + $version)
+            else
+              $matches[0]
+            end
+          ' "$RUNNER_TEMP/milestones.json")
+          MILESTONE_NUMBER=$(jq -r '.number' <<< "$MILESTONE")
+          MILESTONE_TITLE=$(jq -r '.title' <<< "$MILESTONE")
+
+          gh api --paginate --slurp \
+            "repos/$GH_REPO/issues?milestone=$MILESTONE_NUMBER&state=closed&per_page=100" \
+            > "$RUNNER_TEMP/release-issues-pages.json"
+          jq -cer '
+            [.[][] | select(.pull_request == null)]
+            | map({
+                number,
+                title,
+                url: .html_url,
+                body
+              })
+          ' "$RUNNER_TEMP/release-issues-pages.json" \
+            > "$RUNNER_TEMP/release-issues.json"
+          gh pr list \
+            --repo "$GH_REPO" \
+            --search "milestone:\"$MILESTONE_TITLE\" is:merged" \
+            --limit 1000 \
+            --json number,title,url,body \
+            > "$RUNNER_TEMP/release-pull-requests.json"
+
+          : > "$RUNNER_TEMP/release-pull-requests-with-commits.json"
+          jq -c '.[]' "$RUNNER_TEMP/release-pull-requests.json" |
+          while IFS= read -r pull_request; do
+            PR_NUMBER=$(jq -r '.number' <<< "$pull_request")
+            gh api --paginate --slurp \
+              "repos/$GH_REPO/pulls/$PR_NUMBER/commits?per_page=100" \
+              > "$RUNNER_TEMP/pull-request-$PR_NUMBER-commits.json"
+
+            jq -cn \
+              --argjson pr "$pull_request" \
+              --slurpfile pages "$RUNNER_TEMP/pull-request-$PR_NUMBER-commits.json" '
+                $pr + {
+                  commits: [
+                    $pages[0][][] |
+                    {
+                      sha,
+                      short_sha: (.sha[0:7]),
+                      title: ((.commit.message // "") | split("\n")[0]),
+                      url: .html_url
+                    }
+                  ]
+                }
+              ' >> "$RUNNER_TEMP/release-pull-requests-with-commits.json"
+          done
+          jq -s '.' "$RUNNER_TEMP/release-pull-requests-with-commits.json" \
+            > "$RUNNER_TEMP/release-pull-requests-detailed.json"
+
+          jq -nr \
+            --arg version "$RELEASE_VERSION" \
+            --slurpfile issues "$RUNNER_TEMP/release-issues.json" \
+            --slurpfile prs "$RUNNER_TEMP/release-pull-requests-detailed.json" '
+              def render_items($items; $empty_message):
+                if ($items | length) == 0 then
+                  $empty_message
+                else
+                  $items
+                  | sort_by(.number)
+                  | map(
+                      "### [#\(.number) \(.title)](\(.url))\n\n" +
+                      ((.body // "") |
+                        if length > 0 then . else "_No description provided._" end)
+                    )
+                  | join("\n\n")
+                end;
+
+              def render_pr_commits($prs):
+                if ($prs | length) == 0 then
+                  "_No merged pull requests assigned to this milestone._"
+                else
+                  $prs
+                  | sort_by(.number)
+                  | map(
+                      "### [#\(.number) \(.title)](\(.url))\n\n" +
+                      (
+                        if (.commits | length) == 0 then
+                          "_No source commits found._"
+                        else
+                          (.commits
+                            | map("- [`\(.short_sha)`](\(.url)) \(.title)")
+                            | join("\n"))
+                        end
+                      )
+                    )
+                  | join("\n\n")
+                end;
+
+              "# Release \($version)\n\n" +
+              "## Merged pull requests\n\n" +
+              render_items($prs[0]; "_No merged pull requests assigned to this milestone._") +
+              "\n\n" +
+              "## Commits from merge request sources\n\n" +
+              render_pr_commits($prs[0]) +
+              "\n\n## Closed issues\n\n" +
+              render_items($issues[0]; "_No closed issues assigned to this milestone._")
+            ' > ./dist/release-notes.md
+
+          echo "milestone_number=$MILESTONE_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create multi-platform manifest and push
+        working-directory: ${{ runner.temp }}/digests
+        env:
+          VERSION: ${{ needs.checkout.outputs.version }}
+        run: |
+          DIGESTS=""
+          for digest in *; do
+            DIGESTS="$DIGESTS liberatti/nxguard@sha256:$digest"
+          done
+          docker buildx imagetools create \
+            -t "liberatti/nxguard:$VERSION" \
+            -t liberatti/nxguard:latest \
+            $DIGESTS
+
+      - name: Inspect final multi-arch image
+        env:
+          VERSION: ${{ needs.checkout.outputs.version }}
+        run: |
+          docker buildx imagetools inspect "liberatti/nxguard:$VERSION"
+
       - name: Create and push tag
+        env:
+          VERSION: ${{ needs.checkout.outputs.version }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git tag ${{ needs.checkout.outputs.version }}
-          git push origin ${{ needs.checkout.outputs.version }}
+          git tag "$VERSION"
+          git push origin "$VERSION"
 
       - name: Create GitHub Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.checkout.outputs.version }}
         run: |
-          gh release create ${{ needs.checkout.outputs.version }} --title "${{ needs.checkout.outputs.version }}" --generate-notes
+          shopt -s globstar nullglob
+          RPM_FILES=(./dist/rpms/**/*.rpm)
+          gh release create "$VERSION" "${RPM_FILES[@]}" --title "$VERSION" --notes-file ./dist/release-notes.md
 
       - name: Delete source branch
+        env:
+          BRANCH: ${{ needs.checkout.outputs.branch }}
         run: |
-          git push origin --delete ${{ needs.checkout.outputs.branch }}
+          git push origin --delete "$BRANCH"
+
+      - name: Close Milestone
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          MILESTONE_NUMBER: ${{ steps.release_notes.outputs.milestone_number }}
+        run: |
+          gh api -X PATCH "repos/$GH_REPO/milestones/$MILESTONE_NUMBER" -f state=closed
