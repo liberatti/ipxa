@@ -4,7 +4,7 @@ ENV TZ=UTC
 
 RUN microdnf install -y \
     ca-certificates epel-release \
-    && microdnf install -y httpd mod_lua lua-socket \
+    && microdnf install -y httpd mod_lua lua-socket curl \
     && microdnf clean all
 
 COPY lua/ /etc/httpd/lua/
@@ -12,4 +12,7 @@ COPY conf.d/ /etc/httpd/conf.d/
 
 EXPOSE 80
 
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost/ || exit 1
+
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"] # nosemgrep: dockerfile.security.missing-user.missing-user

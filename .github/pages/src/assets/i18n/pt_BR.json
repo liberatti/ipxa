@@ -15,11 +15,11 @@
     "BADGE": "Plataforma de Reputação de IP e Inteligência de Rede",
     "TITLE_PREFIX": "Inteligência de Ameaças de Alta Performance com",
     "TITLE_GRADIENT": "Orquestração de GeoIP & RBL",
-    "SUBTITLE": "O <strong>IPXA</strong> é uma plataforma focada em privacidade para agregação de inteligência contra ameaças. Consultas instantâneas de reputação de IP, GeoIP e integração com mais de 15 listas RBL (Real-time Blackhole Lists), rodando 100% na sua própria infraestrutura.",
+    "SUBTITLE": "O <strong>IPXA</strong> é uma plataforma focada em privacidade para agregação de inteligência contra ameaças. Consultas instantâneas de reputação de IP, GeoIP e integração com mais de 20 listas RBL (Real-time Blackhole Lists) e feeds de ameaças, rodando 100% na sua própria infraestrutura.",
     "CHIP_LICENSE": "Apache 2.0",
     "CHIP_DOCKER": "Pronto para Docker",
     "CHIP_LATENCY": "Latência < 5ms",
-    "CHIP_FEEDS": "+15 Feeds RBL",
+    "CHIP_FEEDS": "+20 Feeds RBL",
     "CHIP_PRIVATE": "100% Privado",
     "BTN_QUICKSTART": "Início Rápido",
     "BTN_PREVIEW": "Ver Telas da UI",
@@ -83,8 +83,8 @@
     },
     "RBL": {
       "TITLE": "Orquestração de Ameaças RBL",
-      "BADGE": "+15 Fontes de Feed",
-      "DESCRIPTION": "Gerenciamento dinâmico de feeds de inteligência de ameaças (FireHOL 1-4, Cisco Talos, DShield, Abuse.ch Feodo, Spamhaus DROP, Emerging Threats e Blocklist.de)."
+      "BADGE": "+20 Fontes de Feed",
+      "DESCRIPTION": "Gerenciamento dinâmico de feeds de inteligência de ameaças (FireHOL, Cisco Talos, DShield, Abuse.ch Feodo & SSLBL, Spamhaus DROP, Emerging Threats, Blocklist.de, Binary Defense, Tor Nodes, Bogons)."
     },
     "API_FLAVORS": {
       "TITLE": "Múltiplos Formatos de API",
@@ -126,7 +126,7 @@
     },
     "STEP2": {
       "TITLE": "Pontuação Dinâmica de RBL & Bypass",
-      "DESCRIPTION": "IPs avaliados contra allowlists customizadas, bots verificados e mais de 15 feeds de ameaças (FireHOL, Cisco Talos, Abuse.ch, Spamhaus) para calcular a pontuação de risco ponderada."
+      "DESCRIPTION": "IPs avaliados contra allowlists customizadas, bots verificados e mais de 20 feeds de ameaças (FireHOL, Cisco Talos, Abuse.ch, Spamhaus, etc.) para calcular a pontuação de risco ponderada."
     },
     "STEP3": {
       "TITLE": "Manipuladores de Erro JSON Padronizados",

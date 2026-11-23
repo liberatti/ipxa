@@ -1,4 +1,5 @@
 FROM --platform=$BUILDPLATFORM node:lts AS build_frontend
+ENV NG_DISABLE_VERSION_CHECK=1
 
 WORKDIR /app/web
 

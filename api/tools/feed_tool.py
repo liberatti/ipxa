@@ -9,7 +9,7 @@ import traceback
 from typing import Dict
 
 import requests
-from nxcore.middleware.logging_manager import logger
+from api.middleware.logging_manager import logger
 
 import config
 from api.repository.geoip_model import GeoIpDao
@@ -207,7 +207,7 @@ def update_ipinfo(IPINFO_TOKEN: str, feed: Dict):
                         batch.append(r)
                         i += 1
                         if i % 1000 == 0:
-                            logger.info(f"Processing {i} records from ipinfo")
+                            # logger.info(f"Processing {i} records from ipinfo")
                             dao.persist_many(batch)
                             batch = []
                     except Exception:

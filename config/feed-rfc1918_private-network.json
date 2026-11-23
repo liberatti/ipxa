@@ -1,0 +1,14 @@
+{
+  "name": "rfc1918_private",
+  "slug": "rfc1918_private",
+  "provider": "iana",
+  "type": "bypass",
+  "data": [
+    "10.0.0.0/8",
+    "172.16.0.0/12",
+    "192.168.0.0/16"
+  ],
+  "description": "RFC1918 standard private network allocations",
+  "format": "embedded",
+  "risk_score": 0
+}

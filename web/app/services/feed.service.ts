@@ -12,4 +12,9 @@ export class FeedService extends APIService<Feed, number> {
     ) {
         super(injector, 'feed');
     }
+
+    getFeedContentUrl(name: string): string {
+        return `${this.END_POINT}/${encodeURIComponent(name)}`;
+    }
 }
+

@@ -1,0 +1,15 @@
+{
+  "name": "applebot",
+  "slug": "applebot",
+  "provider": "apple",
+  "type": "bypass",
+  "data": [
+    "17.58.96.0/22",
+    "17.58.100.0/24",
+    "17.121.112.0/20",
+    "17.121.128.0/20"
+  ],
+  "description": "Verified AppleBot search crawler pool",
+  "format": "embedded",
+  "risk_score": 0
+}

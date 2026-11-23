@@ -1,0 +1,14 @@
+{
+  "name": "loopback_vpn",
+  "slug": "loopback_vpn",
+  "provider": "custom",
+  "type": "bypass",
+  "data": [
+    "127.0.0.0/8",
+    "10.8.0.0/16",
+    "10.9.0.0/16"
+  ],
+  "description": "Localhost and authorized VPN client pools",
+  "format": "embedded",
+  "risk_score": 0
+}

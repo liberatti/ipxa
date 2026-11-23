@@ -1,0 +1,14 @@
+{
+  "name": "internal_networks",
+  "slug": "internal_networks",
+  "provider": "custom",
+  "type": "bypass",
+  "data": [
+    "100.64.0.0/10",
+    "198.18.0.0/15",
+    "169.254.0.0/16"
+  ],
+  "description": "Internal corporate and enterprise subnets",
+  "format": "embedded",
+  "risk_score": 0
+}

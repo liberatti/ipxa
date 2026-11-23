@@ -1,12 +1,12 @@
 import sqlite3
 from flask import Blueprint, request, Response
-from nxcore.controllers.base_controller import (
+from api.middleware.controllers.base_controller import (
     response_data,
     response_ok,
     get_pagination,
     response_error,
 )
-from nxcore.controllers.base_controller import has_any_authority
+from api.middleware.controllers.base_controller import has_any_authority
 from api.repository.feed_model import FeedDao
 from api.repository.rbl_model import RBLDao
 from api.tools.feed_tool import update_feed
@@ -35,6 +35,64 @@ def get_all() -> Response:
         )
 
 
+@routes.route("/<string:name>", methods=["GET"])
+def get_by_name(name: str) -> Response:
+    """
+    Retrieves a feed by name or slug and returns it in plain text format (txt),
+    with metadata attributes commented with '#' and the feed IP/CIDR contents.
+
+    Args:
+        name (str): The name or slug of the feed.
+
+    Returns:
+        Response: Plain text response containing feed metadata comments and content.
+    """
+    with FeedDao() as dao:
+        feed = dao.get_by_name(name)
+
+    if not feed:
+        return Response("Feed not found", status=404, mimetype="text/plain")
+
+    lines = []
+    attributes = [
+        "name",
+        "slug",
+        "provider",
+        "type",
+        "format",
+        "source",
+        "update_interval",
+        "updated_on",
+        "risk_score",
+        "geo_score",
+        "description",
+    ]
+    for attr in attributes:
+        val = feed.get(attr)
+        if val is not None and val != "":
+            lines.append(f"# {attr}: {val}")
+
+    data = feed.get("data")
+    if data:
+        if isinstance(data, list):
+            for item in data:
+                lines.append(str(item))
+        elif isinstance(data, str):
+            lines.extend(data.splitlines())
+    else:
+        with RBLDao() as rbl_dao:
+            rs = rbl_dao._query(
+                "SELECT network, prefix FROM rbl WHERE feed = ? ORDER BY network",
+                params=(feed.get("name"),),
+                fetch=True,
+            )
+            if rs:
+                for r in rs:
+                    lines.append(f"{r['network']}/{r['prefix']}")
+
+    return Response("\n".join(lines) + "\n", mimetype="text/plain")
+
+
 @routes.route("", methods=["POST"])
 @has_any_authority(authorities=["superuser"], _internal=True)
 def save() -> Response:
@@ -51,7 +109,7 @@ def save() -> Response:
             if dao.persist(feed):
                 try:
                     update_feed(feed)
-                except Exception as e:
+                except Exception:
                     pass
                 return response_ok("Record created")
     except sqlite3.IntegrityError as e:
@@ -85,7 +143,7 @@ def update(id: int) -> Response:
             dao.update_by_id(id, feed)
         try:
             update_feed(feed)
-        except Exception as e:
+        except Exception:
             pass
         return response_ok("Record updated")
     except sqlite3.IntegrityError as e:

@@ -95,19 +95,6 @@
               </div>
             </div>
 
-            @if (data.security.reasons.length) {
-              <div class="tags-container">
-                <span class="label small" translate="IP_DETAILS.IDENTIFIED_FEEDS"></span>
-                <div class="threat-tags">
-                  @for (reason of data.security.reasons; track reason) {
-                    <span class="threat-tag">
-                      <mat-icon class="small-icon">flag</mat-icon>
-                      <span class="feed-name">{{ reason }}</span>
-                    </span>
-                  }
-                </div>
-              </div>
-            }
           } @else {
             <div class="security-card safe">
               <div class="card-icon">
@@ -126,6 +113,23 @@
                 <span class="status-desc" translate="IP_DETAILS.CLEAN_DESC"></span>
               </div>
             </div>
+          }
+
+          @if (data.security.reasons.length) {
+            <div class="tags-container">
+              <span class="label small" translate="IP_DETAILS.IDENTIFIED_FEEDS"></span>
+              <div class="threat-tags">
+                @for (reason of data.security.reasons; track reason) {
+                  <span class="threat-tag" [class.trust]="reason.startsWith('trust:')" [class.rbl]="!reason.startsWith('trust:')">
+                    <mat-icon class="small-icon">{{ reason.startsWith('trust:') ? 'verified' : 'flag' }}</mat-icon>
+                    <span class="feed-name">{{ reason.replace('rbl:', '').replace('trust:', '') }}</span>
+                  </span>
+                }
+              </div>
+            </div>
+          }
+
+          @if (riskScore() === 0) {
             <div class="data-item mt-auto">
               <span class="label" translate="IP_DETAILS.RECOMMENDED_ACTION"></span>
               <span class="value success-tag">{{ data.security.action }}</span>

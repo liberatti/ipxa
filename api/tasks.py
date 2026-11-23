@@ -2,10 +2,10 @@ import json
 import os
 import traceback
 from datetime import timedelta, datetime
-
-from nxcore.middleware.logging_manager import logger
-
 import bcrypt
+
+from api.middleware.logging_manager import logger
+
 import config
 from api.repository.feed_model import FeedDao
 from api.repository.geoip_model import GeoIpDao
@@ -42,6 +42,7 @@ def __should_update(feed):
         except Exception:
             try:
                 from email.utils import parsedate_to_datetime
+
                 updated_on = parsedate_to_datetime(updated_on)
             except Exception:
                 return True
@@ -69,7 +70,9 @@ def install_task():
         dao.create_schema()
     with FeedDao() as dao:
         dao.create_schema()
-        for c in os.listdir(config.APP_BASE + "/config"):
+        for c in sorted(os.listdir(config.APP_BASE + "/config")):
+            if not c.startswith("feed-") or not c.endswith(".json"):
+                continue
             with open(config.APP_BASE + "/config/" + c) as f:
                 feed = json.load(f)
                 logger.info(f"Install feed {feed['provider']} : {feed['name']}")
@@ -113,12 +116,33 @@ def update_task(override_existing=False):
                 dao.update_by_id(user["_id"], user)
 
     with FeedDao() as fdao:
+        config_dir = os.path.join(config.APP_BASE, "config")
+        existing_feeds = fdao.get_all().get("data", [])
+        existing_slugs = {f.get("slug") for f in existing_feeds if f.get("slug")}
+
+        if os.path.isdir(config_dir):
+            for filename in sorted(os.listdir(config_dir)):
+                if filename.endswith(".json") and filename.startswith("feed-"):
+                    file_path = os.path.join(config_dir, filename)
+                    try:
+                        with open(file_path, "r", encoding="utf-8") as f:
+                            feed_data = json.load(f)
+                            slug = feed_data.get("slug") or feed_data.get("name")
+                            if slug and slug not in existing_slugs:
+                                logger.info(
+                                    f"Install feed {feed_data.get('provider')} : {feed_data.get('name')}"
+                                )
+                                fdao.persist(feed_data)
+                                existing_slugs.add(slug)
+                    except Exception as e:
+                        logger.error(f"Failed to load feed config {filename}: %s", e)
+
         feeds = fdao.get_all()["data"]
         for feed in feeds:
             if override_existing or __should_update(feed):
                 try:
                     provider = feed.get("provider")
-                    logger.info(f"Processing feed {provider} : {feed['name']}")
+                    # logger.info(f"Processing feed {provider} : {feed['name']}")
                     match provider:
                         case "ipverse":
                             feed_tool.update_ipverse(feed)

@@ -106,7 +106,7 @@ export class AppComponent {
 
   readonly metrics: MetricItem[] = [
     { labelKey: 'METRICS.LATENCY.LABEL', value: '< 5ms', captionKey: 'METRICS.LATENCY.CAPTION' },
-    { labelKey: 'METRICS.FEEDS.LABEL', value: '15+ RBLs', captionKey: 'METRICS.FEEDS.CAPTION' },
+    { labelKey: 'METRICS.FEEDS.LABEL', value: '20+ Feeds', captionKey: 'METRICS.FEEDS.CAPTION' },
     { labelKey: 'METRICS.PRIVATE.LABEL', value: '100% Private', captionKey: 'METRICS.PRIVATE.CAPTION' },
     { labelKey: 'METRICS.HOOKS.LABEL', value: 'Apache & Nginx', captionKey: 'METRICS.HOOKS.CAPTION' }
   ];
@@ -182,12 +182,14 @@ export class AppComponent {
   ];
 
   readonly feeds: FeedItem[] = [
-    { name: 'FireHOL Level 1-4', description: 'Highly curated threat aggregation lists', type: 'Reputation' },
+    { name: 'FireHOL Level 1', description: 'Highly curated threat aggregation lists', type: 'Reputation' },
     { name: 'Cisco Talos & DShield', description: 'Global IP blacklists and attack telemetry', type: 'Reputation' },
-    { name: 'Abuse.ch Feodo Tracker', description: 'Active botnet Command & Control servers', type: 'Reputation' },
+    { name: 'Abuse.ch Feodo & SSLBL', description: 'Active botnet C2 servers and malicious SSL IPs', type: 'Reputation' },
     { name: 'Spamhaus DROP', description: 'Don\'t Route Or Peer advisory blocks', type: 'Reputation' },
-    { name: 'Emerging Threats', description: 'Known compromised hosts and bot scanners', type: 'Reputation' },
-    { name: 'Blocklist.de & GreenSnow', description: 'SSH, mail, and brute-force attacker IPs', type: 'Reputation' }
+    { name: 'Emerging Threats & CI Army', description: 'Known compromised hosts and malicious scanners', type: 'Reputation' },
+    { name: 'Blocklist.de & GreenSnow', description: 'SSH, mail, and brute-force attacker IPs', type: 'Reputation' },
+    { name: 'Binary Defense & BruteForce', description: 'Honeypot attackers and SSH brute-force lists', type: 'Reputation' },
+    { name: 'Tor Project & Cymru Bogons', description: 'Tor exit nodes and unallocated IP ranges', type: 'Reputation' }
   ];
 
   readonly composeCode = `volumes:
